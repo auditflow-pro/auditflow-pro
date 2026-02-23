@@ -16,13 +16,14 @@
       --yes:#2e7d32;
       --no:#c62828;
       --na:#6c757d;
+      --chip:#eef2ff;
     }
 
     *{ box-sizing:border-box; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
     body{ margin:0; background:var(--bg); color:var(--ink); }
 
     .app{
-      height:100vh;
+      min-height:100vh;
       display:grid;
       grid-template-columns: 320px 1fr;
     }
@@ -68,26 +69,38 @@
     .section-list{
       display:flex;
       flex-direction:column;
-      gap:2px;
+      gap:6px;
     }
 
     .section{
       padding:12px 10px;
-      border-radius:8px;
+      border-radius:10px;
       cursor:pointer;
       border:1px solid transparent;
       user-select:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
     }
 
-    .section:hover{
-      background:#f2f4f7;
-    }
+    .section:hover{ background:#f2f4f7; }
 
     .section.active{
-      background:#eef2ff;
+      background:var(--chip);
       border-color:#d9ddff;
       color:var(--primary);
       font-weight:650;
+    }
+
+    .badge{
+      font-size:12px;
+      color:var(--muted);
+      background:#f2f4f7;
+      border:1px solid var(--border);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
     }
 
     .meta{
@@ -102,37 +115,66 @@
     }
 
     .content{
-      padding:28px 26px;
+      padding:22px 18px;
       display:flex;
       flex-direction:column;
-      justify-content:center;
-      gap:18px;
+      gap:14px;
+    }
+
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      max-width:980px;
+    }
+
+    .topbar .title{
+      font-size:16px;
+      font-weight:700;
+      color:var(--ink);
+    }
+
+    .topbar .sub{
+      font-size:12px;
+      color:var(--muted);
     }
 
     .card{
       background:var(--panel);
       border:1px solid var(--border);
       border-radius:12px;
-      padding:22px;
-      max-width:900px;
+      padding:18px;
+      max-width:980px;
+    }
+
+    .q-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      color:var(--muted);
+      font-size:12px;
     }
 
     .question{
-      font-size:22px;
+      font-size:20px;
       line-height:1.35;
-      margin:0 0 18px 0;
+      margin:0 0 14px 0;
     }
 
     .responses{
       display:flex;
-      gap:14px;
+      gap:12px;
       flex-wrap:wrap;
     }
 
     button{
       flex:1;
-      min-width:160px;
-      padding:18px 16px;
+      min-width:150px;
+      padding:16px 14px;
       font-size:18px;
       border:none;
       border-radius:10px;
@@ -145,18 +187,35 @@
     .no{ background:var(--no); }
     .na{ background:var(--na); }
 
-    .hint{
+    .nav{
+      display:flex;
+      gap:10px;
       margin-top:14px;
+    }
+
+    .nav button{
+      background:#111827;
+      min-width:auto;
+      flex:0;
+      padding:12px 14px;
+      font-size:14px;
+      border-radius:10px;
+    }
+
+    .nav button:disabled{
+      opacity:0.4;
+      cursor:not-allowed;
+    }
+
+    .hint{
+      margin-top:10px;
       font-size:13px;
       color:var(--muted);
     }
 
     @media (max-width: 900px){
-      .app{ grid-template-columns: 1fr; height:auto; min-height:100vh; }
+      .app{ grid-template-columns: 1fr; }
       .sidebar{ border-right:none; border-bottom:1px solid var(--border); }
-      .meta{ margin-top:0; }
-      .content{ justify-content:flex-start; }
-      button{ min-width:120px; }
     }
   </style>
 </head>
@@ -173,31 +232,59 @@
       <h2>Audit Sections</h2>
 
       <div class="section-list" id="sectionList">
-        <div class="section active" data-section="fire">Fire Safety</div>
-        <div class="section" data-section="electrical">Electrical Safety</div>
-        <div class="section" data-section="environment">Workplace Environment</div>
-        <div class="section" data-section="ppe">PPE & Signage</div>
+        <div class="section active" data-section="fire">
+          <span>Fire Safety</span>
+          <span class="badge" id="badge-fire">0/0</span>
+        </div>
+        <div class="section" data-section="electrical">
+          <span>Electrical Safety</span>
+          <span class="badge" id="badge-electrical">0/0</span>
+        </div>
+        <div class="section" data-section="environment">
+          <span>Workplace Environment</span>
+          <span class="badge" id="badge-environment">0/0</span>
+        </div>
+        <div class="section" data-section="ppe">
+          <span>PPE & Signage</span>
+          <span class="badge" id="badge-ppe">0/0</span>
+        </div>
       </div>
 
       <div class="meta">
-        <div><strong>Mode:</strong> V1 Shell</div>
-        <div><strong>Status:</strong> Section switching enabled</div>
+        <div><strong>Mode:</strong> V1 Engine</div>
+        <div><strong>Status:</strong> Multi-question sections + persistence</div>
       </div>
     </aside>
 
     <main class="content">
+      <div class="topbar">
+        <div>
+          <div class="title" id="sectionTitle">Fire Safety</div>
+          <div class="sub" id="sectionSub">Answer questions on-site. Responses persist on refresh.</div>
+        </div>
+        <div class="badge" id="overallBadge">0 answered</div>
+      </div>
+
       <div class="card">
-        <p class="question" id="questionText">Fire extinguishers present and accessible?</p>
+        <div class="q-meta">
+          <div id="qIndex">Question 1 of 1</div>
+          <div id="qRecorded">No response recorded</div>
+        </div>
+
+        <p class="question" id="questionText">Loading…</p>
 
         <div class="responses">
-          <button class="yes" type="button">Yes</button>
-          <button class="no" type="button">No</button>
-          <button class="na" type="button">N/A</button>
+          <button class="yes" type="button" id="btnYes">Yes</button>
+          <button class="no" type="button" id="btnNo">No</button>
+          <button class="na" type="button" id="btnNa">N/A</button>
         </div>
 
-        <div class="hint" id="hintText">
-          Tap a section to switch questions (demo).
+        <div class="nav">
+          <button type="button" id="btnPrev">Previous</button>
+          <button type="button" id="btnNext">Next</button>
         </div>
+
+        <div class="hint" id="hintText">Engine step: multi-question sections with local persistence.</div>
       </div>
     </main>
 
