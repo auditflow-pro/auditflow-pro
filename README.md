@@ -1,16 +1,15 @@
-## Hi there 👋
+# AuditFlow Pro
 
-<!--
-**auditflow-pro/auditflow-pro** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+AuditFlow Pro is a professional, offline-first audit system for independent consultants.
 
-Here are some ideas to get you started:
+It converts an existing checklist into a structured field audit workflow, generates an action register automatically, and exports clean client-ready reports.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Positioning
+**Audit & Action Reporting for Consultants**
+
+## Status
+Early development (private beta planned).
+
+## Licensing
+This repository is proprietary and provided under a commercial licence.
+See `LICENSE.txt` and `COPYRIGHT.txt`.
