@@ -67,33 +67,6 @@
       text-transform:uppercase;
     }
 
-    .section-list{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .section{
-      padding:12px 10px;
-      border-radius:10px;
-      cursor:pointer;
-      border:1px solid transparent;
-      user-select:none;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-
-    .section:hover{ background:#f2f4f7; }
-
-    .section.active{
-      background:var(--chip);
-      border-color:#d9ddff;
-      color:var(--primary);
-      font-weight:650;
-    }
-
     .badge{
       font-size:12px;
       color:var(--muted);
@@ -104,13 +77,13 @@
       white-space:nowrap;
     }
 
-    .navblock{
+    .navblock, .auditlist, .section-list{
       display:flex;
       flex-direction:column;
       gap:6px;
     }
 
-    .navitem{
+    .navitem, .audititem, .section{
       padding:12px 10px;
       border-radius:10px;
       cursor:pointer;
@@ -122,13 +95,45 @@
       gap:10px;
     }
 
-    .navitem:hover{ background:#f2f4f7; }
+    .navitem:hover, .audititem:hover, .section:hover{ background:#f2f4f7; }
 
-    .navitem.active{
+    .navitem.active, .audititem.active, .section.active{
       background:var(--chip);
       border-color:#d9ddff;
       color:var(--primary);
       font-weight:650;
+    }
+
+    .audit-meta{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+      font-weight:500;
+    }
+
+    .stack{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+
+    .truncate{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .smallbtn{
+      padding:10px 10px;
+      font-size:12px;
+      border-radius:10px;
+      background:var(--dark);
+      color:white;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      width:100%;
     }
 
     .meta{
@@ -143,7 +148,7 @@
     }
 
     .content{
-      padding:22px 18px;
+      padding:18px 16px;
       display:flex;
       flex-direction:column;
       gap:14px;
@@ -152,30 +157,53 @@
     .topbar{
       display:flex;
       flex-wrap:wrap;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
       gap:10px;
-      max-width:980px;
+      max-width:1040px;
     }
 
     .topbar .title{
       font-size:16px;
-      font-weight:700;
+      font-weight:800;
       color:var(--ink);
     }
 
     .topbar .sub{
       font-size:12px;
       color:var(--muted);
+      margin-top:2px;
     }
 
     .card{
       background:var(--panel);
       border:1px solid var(--border);
       border-radius:12px;
-      padding:18px;
-      max-width:980px;
+      padding:16px;
+      max-width:1040px;
     }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .pill{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#f8fafc;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .pill.open{ color:#b45309; background:#fff7ed; border-color:#fed7aa; }
+    .pill.closed{ color:#065f46; background:#ecfdf5; border-color:#a7f3d0; }
 
     .q-meta{
       display:flex;
@@ -199,7 +227,7 @@
       flex-wrap:wrap;
     }
 
-    button{
+    .respbtn{
       flex:1;
       min-width:150px;
       padding:16px 14px;
@@ -208,7 +236,7 @@
       border-radius:10px;
       cursor:pointer;
       color:white;
-      font-weight:650;
+      font-weight:750;
     }
 
     .yes{ background:var(--yes); }
@@ -228,6 +256,10 @@
       padding:12px 14px;
       font-size:14px;
       border-radius:10px;
+      border:none;
+      color:white;
+      font-weight:750;
+      cursor:pointer;
     }
 
     .nav button:disabled{
@@ -239,6 +271,54 @@
       margin-top:10px;
       font-size:13px;
       color:var(--muted);
+    }
+
+    .fieldgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    input{
+      padding:12px 10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      font-size:14px;
+      outline:none;
+      background:white;
+    }
+
+    .primarybtn{
+      background:var(--primary);
+      color:white;
+      border:none;
+      padding:12px 12px;
+      border-radius:10px;
+      font-weight:800;
+      cursor:pointer;
+      width:100%;
+    }
+
+    .dangerbtn{
+      background:#7f1d1d;
+      color:white;
+      border:none;
+      padding:10px 10px;
+      border-radius:10px;
+      font-weight:800;
+      cursor:pointer;
     }
 
     .table{
@@ -255,34 +335,10 @@
       vertical-align:top;
     }
 
-    .pill{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:#f8fafc;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-    }
-
-    .pill.open{ color:#b45309; background:#fff7ed; border-color:#fed7aa; }
-    .pill.closed{ color:#065f46; background:#ecfdf5; border-color:#a7f3d0; }
-
-    .smallbtn{
-      padding:8px 10px;
-      font-size:12px;
-      border-radius:8px;
-      background:var(--dark);
-      color:white;
-      border:none;
-      cursor:pointer;
-      font-weight:650;
-    }
-
     @media (max-width: 900px){
       .app{ grid-template-columns: 1fr; }
       .sidebar{ border-right:none; border-bottom:1px solid var(--border); }
+      .fieldgrid{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -308,43 +364,90 @@
         </div>
       </div>
 
-      <h2>Audit Sections</h2>
+      <h2>Audits</h2>
+      <div class="auditlist" id="auditList"></div>
 
-      <div class="section-list" id="sectionList">
-        <div class="section active" data-section="fire">
-          <span>Fire Safety</span>
-          <span class="badge" id="badge-fire">0/0</span>
-        </div>
-        <div class="section" data-section="electrical">
-          <span>Electrical Safety</span>
-          <span class="badge" id="badge-electrical">0/0</span>
-        </div>
-        <div class="section" data-section="environment">
-          <span>Workplace Environment</span>
-          <span class="badge" id="badge-environment">0/0</span>
-        </div>
-        <div class="section" data-section="ppe">
-          <span>PPE & Signage</span>
-          <span class="badge" id="badge-ppe">0/0</span>
-        </div>
-      </div>
+      <button class="smallbtn" type="button" id="btnNewAudit">+ New Audit</button>
 
       <div class="meta">
         <div><strong>Mode:</strong> V1 Engine</div>
-        <div><strong>Status:</strong> Auto actions on NO + persistence</div>
+        <div><strong>Status:</strong> Multiple audits + auto actions + persistence</div>
       </div>
     </aside>
 
     <main class="content">
       <div class="topbar">
         <div>
-          <div class="title" id="mainTitle">Fire Safety</div>
-          <div class="sub" id="mainSub">Answer questions on-site. “No” creates an action automatically.</div>
+          <div class="title" id="mainTitle">Audit</div>
+          <div class="sub" id="mainSub">Multiple audits. “No” creates an action automatically.</div>
         </div>
+        <div class="pill" id="activeAuditPill">No audit selected</div>
       </div>
 
-      <!-- AUDIT VIEW -->
-      <div class="card" id="viewAudit">
+      <!-- AUDIT IDENTITY VIEW -->
+      <div class="card" id="viewIdentity">
+        <div class="row" style="margin-bottom:10px;">
+          <div style="font-weight:900;">Create Audit</div>
+          <div class="pill">Local-only (V1)</div>
+        </div>
+
+        <div class="fieldgrid">
+          <div class="field">
+            <label for="auditName">Audit name</label>
+            <input id="auditName" type="text" placeholder="e.g., Workplace Safety Audit" />
+          </div>
+
+          <div class="field">
+            <label for="clientName">Client name</label>
+            <input id="clientName" type="text" placeholder="e.g., ABC Engineering Ltd" />
+          </div>
+
+          <div class="field">
+            <label for="auditDate">Audit date</label>
+            <input id="auditDate" type="date" />
+          </div>
+
+          <div class="field">
+            <label>&nbsp;</label>
+            <button class="primarybtn" type="button" id="btnCreateAudit">Create audit</button>
+          </div>
+        </div>
+
+        <div class="hint" id="identityHint">Create an audit to begin answering questions.</div>
+      </div>
+
+      <!-- AUDIT WORK VIEW -->
+      <div class="card" id="viewAudit" style="display:none;">
+        <div class="row" style="margin-bottom:10px;">
+          <div>
+            <div style="font-weight:900;" id="sectionTitle">Fire Safety</div>
+            <div class="audit-meta" id="auditMetaLine">Client • Date • Status</div>
+          </div>
+          <div class="pill" id="progressPill">0/0 answered</div>
+        </div>
+
+        <h2 style="margin:0 0 10px 0; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:0.02em;">Audit Sections</h2>
+        <div class="section-list" id="sectionList">
+          <div class="section active" data-section="fire">
+            <span>Fire Safety</span>
+            <span class="badge" id="badge-fire">0/0</span>
+          </div>
+          <div class="section" data-section="electrical">
+            <span>Electrical Safety</span>
+            <span class="badge" id="badge-electrical">0/0</span>
+          </div>
+          <div class="section" data-section="environment">
+            <span>Workplace Environment</span>
+            <span class="badge" id="badge-environment">0/0</span>
+          </div>
+          <div class="section" data-section="ppe">
+            <span>PPE & Signage</span>
+            <span class="badge" id="badge-ppe">0/0</span>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border); margin:14px 0;">
+
         <div class="q-meta">
           <div id="qIndex">Question 1 of 1</div>
           <div id="qRecorded">No response recorded</div>
@@ -353,23 +456,24 @@
         <p class="question" id="questionText">Loading…</p>
 
         <div class="responses">
-          <button class="yes" type="button" id="btnYes">Yes</button>
-          <button class="no" type="button" id="btnNo">No</button>
-          <button class="na" type="button" id="btnNa">N/A</button>
+          <button class="respbtn yes" type="button" id="btnYes">Yes</button>
+          <button class="respbtn no" type="button" id="btnNo">No</button>
+          <button class="respbtn na" type="button" id="btnNa">N/A</button>
         </div>
 
         <div class="nav">
           <button type="button" id="btnPrev">Previous</button>
           <button type="button" id="btnNext">Next</button>
+          <button type="button" class="dangerbtn" id="btnDeleteAudit" style="margin-left:auto;">Delete audit</button>
         </div>
 
-        <div class="hint" id="hintText">Engine step: auto actions created for “No”.</div>
+        <div class="hint" id="hintText">V1 rule: selecting “No” creates an action (kept even if you later change the answer).</div>
       </div>
 
       <!-- ACTIONS VIEW -->
       <div class="card" id="viewActions" style="display:none;">
-        <div class="q-meta">
-          <div><strong>Action Register</strong></div>
+        <div class="row" style="margin-bottom:8px;">
+          <div style="font-weight:900;">Action Register</div>
           <div class="pill open" id="actionsSummaryPill">0 open</div>
         </div>
 
