@@ -76,6 +76,7 @@
       border-radius:8px;
       cursor:pointer;
       border:1px solid transparent;
+      user-select:none;
     }
 
     .section:hover{
@@ -150,9 +151,8 @@
       color:var(--muted);
     }
 
-    /* Mobile/tablet responsiveness */
     @media (max-width: 900px){
-      .app{ grid-template-columns: 1fr; }
+      .app{ grid-template-columns: 1fr; height:auto; min-height:100vh; }
       .sidebar{ border-right:none; border-bottom:1px solid var(--border); }
       .meta{ margin-top:0; }
       .content{ justify-content:flex-start; }
@@ -172,22 +172,22 @@
 
       <h2>Audit Sections</h2>
 
-      <div class="section-list">
-        <div class="section active">Fire Safety</div>
-        <div class="section">Electrical Safety</div>
-        <div class="section">Workplace Environment</div>
-        <div class="section">PPE & Signage</div>
+      <div class="section-list" id="sectionList">
+        <div class="section active" data-section="fire">Fire Safety</div>
+        <div class="section" data-section="electrical">Electrical Safety</div>
+        <div class="section" data-section="environment">Workplace Environment</div>
+        <div class="section" data-section="ppe">PPE & Signage</div>
       </div>
 
       <div class="meta">
         <div><strong>Mode:</strong> V1 Shell</div>
-        <div><strong>Focus:</strong> Tablet-first, offline-first</div>
+        <div><strong>Status:</strong> Section switching enabled</div>
       </div>
     </aside>
 
     <main class="content">
       <div class="card">
-        <p class="question">Fire extinguishers present and accessible?</p>
+        <p class="question" id="questionText">Fire extinguishers present and accessible?</p>
 
         <div class="responses">
           <button class="yes" type="button">Yes</button>
@@ -195,12 +195,14 @@
           <button class="na" type="button">N/A</button>
         </div>
 
-        <div class="hint">
-          Shell only: no saving, no navigation logic yet.
+        <div class="hint" id="hintText">
+          Tap a section to switch questions (demo).
         </div>
       </div>
     </main>
 
   </div>
+
+  <script src="./app.js"></script>
 </body>
 </html>
