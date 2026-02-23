@@ -3,6 +3,8 @@
   const questionText = document.getElementById("questionText");
   const hintText = document.getElementById("hintText");
 
+  const STORAGE_KEY = "auditflow_v1_responses";
+
   const demoQuestions = {
     fire: "Fire extinguishers present and accessible?",
     electrical: "Electrical cables free from damage?",
@@ -10,17 +12,58 @@
     ppe: "PPE available where required?"
   };
 
-  function setActiveSection(targetSectionKey) {
+  // Load stored responses or initialise
+  function loadResponses() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      return {
+        fire: null,
+        electrical: null,
+        environment: null,
+        ppe: null
+      };
+    }
+
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return {
+        fire: null,
+        electrical: null,
+        environment: null,
+        ppe: null
+      };
+    }
+  }
+
+  function saveResponses() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+  }
+
+  const responses = loadResponses();
+  let activeSection = "fire";
+
+  function setActiveSection(sectionKey) {
+    activeSection = sectionKey;
+
     const sections = sectionList.querySelectorAll(".section");
     sections.forEach((el) => {
       const key = el.getAttribute("data-section");
-      el.classList.toggle("active", key === targetSectionKey);
+      el.classList.toggle("active", key === sectionKey);
     });
 
-    const newQuestion = demoQuestions[targetSectionKey] || "Question not found.";
-    questionText.textContent = newQuestion;
+    questionText.textContent =
+      demoQuestions[sectionKey] || "Question not found.";
 
-    hintText.textContent = `Section set to "${targetSectionKey}". (Demo only)`;
+    const r = responses[sectionKey];
+    const responseText = r ? `Recorded: ${r}` : "No response recorded yet.";
+    hintText.textContent = responseText;
+  }
+
+  function recordResponse(value) {
+    responses[activeSection] = value;
+    saveResponses();
+    setActiveSection(activeSection);
   }
 
   sectionList.addEventListener("click", (e) => {
@@ -31,6 +74,14 @@
     setActiveSection(key);
   });
 
-  // Keep default consistent with the initial HTML active state
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+
+    if (btn.classList.contains("yes")) recordResponse("YES");
+    else if (btn.classList.contains("no")) recordResponse("NO");
+    else if (btn.classList.contains("na")) recordResponse("N/A");
+  });
+
   setActiveSection("fire");
 })();
