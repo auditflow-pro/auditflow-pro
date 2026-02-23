@@ -1,1 +1,7 @@
+AuditFlow Pro
+Copyright (c) 2026 Dan Hadfield
+All rights reserved.
 
+This software and its source code are proprietary and confidential. No part of this software may be copied, modified, published, distributed, sublicensed, or sold without explicit written permission from the copyright owner, except as permitted under the accompanying licence.
+
+Third-party components (if any) remain the property of their respective owners and are subject to their own licences.
