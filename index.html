@@ -1,1 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuditFlow Pro</title>
 
+  <style>
+    :root{
+      --bg:#f5f7fa;
+      --panel:#ffffff;
+      --border:#e3e6ea;
+      --ink:#1b1f24;
+      --muted:#6b7280;
+      --primary:#1f3c88;
+      --yes:#2e7d32;
+      --no:#c62828;
+      --na:#6c757d;
+    }
+
+    *{ box-sizing:border-box; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body{ margin:0; background:var(--bg); color:var(--ink); }
+
+    .app{
+      height:100vh;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+    }
+
+    .sidebar{
+      background:var(--panel);
+      border-right:1px solid var(--border);
+      padding:18px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .brand-title{
+      font-size:20px;
+      font-weight:700;
+      color:var(--primary);
+      line-height:1.1;
+    }
+
+    .brand-subtitle{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .sidebar h2{
+      margin:0;
+      font-size:14px;
+      font-weight:700;
+      color:var(--muted);
+      letter-spacing:0.02em;
+      text-transform:uppercase;
+    }
+
+    .section-list{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .section{
+      padding:12px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      border:1px solid transparent;
+    }
+
+    .section:hover{
+      background:#f2f4f7;
+    }
+
+    .section.active{
+      background:#eef2ff;
+      border-color:#d9ddff;
+      color:var(--primary);
+      font-weight:650;
+    }
+
+    .meta{
+      margin-top:auto;
+      padding-top:12px;
+      border-top:1px solid var(--border);
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .content{
+      padding:28px 26px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:18px;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:22px;
+      max-width:900px;
+    }
+
+    .question{
+      font-size:22px;
+      line-height:1.35;
+      margin:0 0 18px 0;
+    }
+
+    .responses{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      flex:1;
+      min-width:160px;
+      padding:18px 16px;
+      font-size:18px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      color:white;
+      font-weight:650;
+    }
+
+    .yes{ background:var(--yes); }
+    .no{ background:var(--no); }
+    .na{ background:var(--na); }
+
+    .hint{
+      margin-top:14px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    /* Mobile/tablet responsiveness */
+    @media (max-width: 900px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{ border-right:none; border-bottom:1px solid var(--border); }
+      .meta{ margin-top:0; }
+      .content{ justify-content:flex-start; }
+      button{ min-width:120px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-title">AuditFlow Pro</div>
+        <div class="brand-subtitle">Audit & Action Reporting for Consultants</div>
+      </div>
+
+      <h2>Audit Sections</h2>
+
+      <div class="section-list">
+        <div class="section active">Fire Safety</div>
+        <div class="section">Electrical Safety</div>
+        <div class="section">Workplace Environment</div>
+        <div class="section">PPE & Signage</div>
+      </div>
+
+      <div class="meta">
+        <div><strong>Mode:</strong> V1 Shell</div>
+        <div><strong>Focus:</strong> Tablet-first, offline-first</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="card">
+        <p class="question">Fire extinguishers present and accessible?</p>
+
+        <div class="responses">
+          <button class="yes" type="button">Yes</button>
+          <button class="no" type="button">No</button>
+          <button class="na" type="button">N/A</button>
+        </div>
+
+        <div class="hint">
+          Shell only: no saving, no navigation logic yet.
+        </div>
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>
