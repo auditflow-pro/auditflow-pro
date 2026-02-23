@@ -1,1 +1,41 @@
+AUDITFLOW PRO — PROPRIETARY LICENCE (DRAFT)
+Version 1.0 — 2026-02-23
 
+IMPORTANT: This is a draft licence intended to establish proprietary status during development.
+Before any public launch, replace this draft with final terms appropriate to your jurisdiction and commercial model.
+
+1. DEFINITIONS
+"Software" means AuditFlow Pro, including all source code, assets, and documentation contained in this repository.
+"Owner" means Dan Hadfield.
+"User" means any person or entity accessing or using the Software.
+"Licence" means a limited permission to use the Software under these terms.
+
+2. OWNERSHIP
+The Software is proprietary. All rights, title, and interest in and to the Software are owned by the Owner.
+No rights are granted except those expressly stated in this Licence.
+
+3. PERMITTED USE (DEVELOPMENT REPOSITORY)
+Unless and until the Owner grants a paid commercial licence, Users are not permitted to use, copy, modify, distribute, or publish the Software.
+Access to this repository does not grant any licence to use the Software.
+
+4. RESTRICTIONS
+You must not:
+- copy or redistribute the Software or any portion of it
+- modify, reverse engineer, decompile, or create derivative works
+- remove or alter copyright notices
+- use the Software to create a competing product
+- make the Software available to any third party
+
+5. NO WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+6. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE OWNER BE LIABLE FOR ANY DAMAGES ARISING FROM OR RELATED TO THE SOFTWARE OR THIS LICENCE.
+
+7. TERMINATION
+Any breach of this Licence terminates any permission you may have to access the Software. Upon termination you must cease all use.
+
+8. GOVERNING LAW
+This Licence is intended to be governed by the laws of England and Wales, unless the Owner states otherwise in a final commercial licence.
+
+END OF TERMS
