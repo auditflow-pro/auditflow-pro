@@ -12,14 +12,25 @@
   --border:#e5e7eb;
   --ink:#0f172a;
   --muted:#64748b;
+
   --primary:#1e3a8a;
-  --primary-soft:#e0e7ff;
+  --primary2:#2b55d6;
+  --chip:#e0e7ff;
+
   --success:#065f46;
   --success-bg:#ecfdf5;
+
   --warning:#92400e;
   --warning-bg:#fff7ed;
+
   --danger:#7f1d1d;
-  --radius:14px;
+
+  --shadow:0 10px 28px rgba(15,23,42,0.08);
+  --shadow2:0 6px 16px rgba(15,23,42,0.10);
+  --ring:0 0 0 4px rgba(43,85,214,0.14);
+
+  --radius:16px;
+  --radius2:18px;
 }
 
 *{
@@ -36,7 +47,7 @@ body{
 .app{
   min-height:100vh;
   display:grid;
-  grid-template-columns:300px 1fr;
+  grid-template-columns:320px 1fr;
 }
 
 /* SIDEBAR */
@@ -44,30 +55,31 @@ body{
 .sidebar{
   background:var(--panel);
   border-right:1px solid var(--border);
-  padding:24px 18px;
+  padding:22px 16px;
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:16px;
 }
 
 .brand{
   display:flex;
   flex-direction:column;
-  gap:4px;
-  padding-bottom:16px;
+  gap:6px;
+  padding-bottom:14px;
   border-bottom:1px solid var(--border);
 }
 
 .brand-title{
   font-size:22px;
-  font-weight:900;
-  letter-spacing:-0.5px;
+  font-weight:950;
+  letter-spacing:-0.4px;
+  color:var(--primary);
 }
 
 .brand-subtitle{
   font-size:12px;
   color:var(--muted);
-  font-weight:600;
+  font-weight:650;
 }
 
 .sidebar h2{
@@ -76,176 +88,333 @@ body{
   color:var(--muted);
   letter-spacing:0.08em;
   margin:0;
-  font-weight:800;
+  font-weight:850;
 }
 
-.navitem, .audititem{
+.navblock, .auditlist, .section-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.navitem, .audititem, .section{
   padding:12px 12px;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  transition:all 0.15s ease;
-  font-weight:600;
+  border:1px solid transparent;
+  transition:transform 120ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.navitem:hover, .audititem:hover{
-  background:#f1f5f9;
+.navitem:hover, .audititem:hover, .section:hover{
+  background:#eef2ff55;
+  transform:translateY(-1px);
 }
 
-.navitem.active, .audititem.active{
-  background:var(--primary-soft);
+.navitem.active, .audititem.active, .section.active{
+  background:var(--chip);
+  border-color:#c7d2fe;
   color:var(--primary);
+  font-weight:900;
+  box-shadow:0 10px 22px rgba(31,58,138,0.12);
 }
 
 .badge{
   font-size:11px;
-  padding:4px 8px;
+  padding:5px 10px;
   border-radius:999px;
   background:#f1f5f9;
   color:var(--muted);
-  font-weight:700;
-}
-
-.smallbtn{
-  padding:10px 12px;
-  border-radius:12px;
+  font-weight:850;
   border:1px solid var(--border);
-  background:white;
-  font-weight:700;
-  cursor:pointer;
-  transition:all 0.15s ease;
+  white-space:nowrap;
 }
 
-.smallbtn:hover{
-  background:#f8fafc;
+.stack{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+.truncate{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.audit-meta{ font-size:12px; color:var(--muted); font-weight:650; }
+
+/* Premium button (secondary) */
+.smallbtn{
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,#ffffff 0%, #f7f8fd 100%);
+  font-weight:900;
+  cursor:pointer;
+  transition:transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  box-shadow:0 10px 20px rgba(15,23,42,0.06);
 }
+
+.smallbtn:hover{ transform:translateY(-1px); box-shadow:var(--shadow2); border-color:rgba(43,85,214,0.22); }
+.smallbtn:active{ transform:translateY(0px) scale(0.99); }
 
 .meta{
   margin-top:auto;
-  padding-top:16px;
+  padding-top:14px;
   border-top:1px solid var(--border);
   font-size:12px;
   color:var(--muted);
-  font-weight:600;
+  font-weight:650;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
 /* MAIN */
 
 .content{
-  padding:28px 32px;
+  padding:24px 18px 28px;
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:14px;
+  align-items:flex-start;
 }
 
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
+  gap:10px;
+  width:100%;
+  max-width:1040px;
 }
 
 .topbar .title{
-  font-size:20px;
-  font-weight:900;
+  font-size:18px;
+  font-weight:950;
   letter-spacing:-0.3px;
 }
 
 .topbar .sub{
   font-size:13px;
   color:var(--muted);
-  margin-top:4px;
+  margin-top:3px;
+  font-weight:650;
 }
 
 .pill{
-  padding:6px 12px;
+  padding:7px 12px;
   border-radius:999px;
   font-size:12px;
-  font-weight:700;
+  font-weight:900;
+  border:1px solid var(--border);
+  background:#fbfcff;
+  color:var(--muted);
+  white-space:nowrap;
 }
 
-.pill.progress{
-  background:var(--warning-bg);
-  color:var(--warning);
-}
-
-.pill.complete{
-  background:var(--success-bg);
-  color:var(--success);
-}
-
-/* CARD */
+.pill.progress{ background:var(--warning-bg); color:var(--warning); border-color:#fed7aa; }
+.pill.review{ background:#eef2ff; color:var(--primary); border-color:#c7d2fe; }
+.pill.complete{ background:var(--success-bg); color:var(--success); border-color:#a7f3d0; }
 
 .card{
   background:var(--panel);
-  border-radius:var(--radius);
-  padding:24px;
-  box-shadow:0 8px 30px rgba(15,23,42,0.05);
+  border-radius:var(--radius2);
+  padding:18px;
   border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  width:100%;
+  max-width:1040px;
 }
 
-.card h3{
-  margin-top:0;
+.row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+
+.fieldgrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-/* BUTTONS */
+.field{ display:flex; flex-direction:column; gap:6px; }
 
+label{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:900;
+  letter-spacing:0.02em;
+}
+
+input{
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  font-size:14px;
+  outline:none;
+  background:white;
+  font-weight:700;
+  transition:box-shadow 120ms ease, border-color 120ms ease;
+}
+
+input:focus{
+  border-color:rgba(43,85,214,0.35);
+  box-shadow:var(--ring);
+}
+
+/* Primary / danger */
 .primarybtn{
-  background:var(--primary);
+  background:linear-gradient(180deg,var(--primary2) 0%, var(--primary) 100%);
   color:white;
   border:none;
-  padding:14px 16px;
-  border-radius:12px;
-  font-weight:800;
-  font-size:14px;
+  padding:12px 12px;
+  border-radius:14px;
+  font-weight:950;
   cursor:pointer;
-  transition:all 0.15s ease;
   width:100%;
+  box-shadow:0 12px 22px rgba(31,58,138,0.20);
+  transition:transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
 }
 
-.primarybtn:hover{
-  background:#1d4ed8;
-}
+.primarybtn:hover{ transform:translateY(-1px); box-shadow:0 16px 28px rgba(31,58,138,0.22); }
+.primarybtn:active{ transform:translateY(0px) scale(0.99); filter:brightness(0.98); }
 
 .dangerbtn{
-  background:var(--danger);
+  background:linear-gradient(180deg,#b42318 0%, var(--danger) 100%);
   color:white;
   border:none;
-  padding:12px 14px;
-  border-radius:12px;
-  font-weight:800;
+  padding:10px 12px;
+  border-radius:14px;
+  font-weight:950;
   cursor:pointer;
+  box-shadow:0 12px 22px rgba(180,35,24,0.18);
 }
 
-/* TABLE */
+/* Audit Q */
+.q-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:900;
+}
 
+.question{
+  font-size:20px;
+  line-height:1.35;
+  margin:0 0 14px 0;
+  font-weight:950;
+  letter-spacing:-0.2px;
+}
+
+.responses{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.respbtn{
+  flex:1;
+  min-width:150px;
+  padding:16px 14px;
+  font-size:18px;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+  color:white;
+  font-weight:950;
+  box-shadow:0 12px 22px rgba(15,23,42,0.10);
+  transition:transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+}
+
+.respbtn:hover{ transform:translateY(-1px); box-shadow:0 16px 28px rgba(15,23,42,0.12); }
+.respbtn:active{ transform:translateY(0px) scale(0.99); filter:brightness(0.98); }
+
+.yes{ background:linear-gradient(180deg,#2ea043 0%, #1f7a3a 100%); }
+.no{ background:linear-gradient(180deg,#dc2626 0%, #b42318 100%); }
+.na{ background:linear-gradient(180deg,#7c8494 0%, #6b7280 100%); }
+
+.nav{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.nav button{
+  background:linear-gradient(180deg,#111827 0%, #0b1220 100%);
+  border:1px solid rgba(255,255,255,0.10);
+  color:white;
+  font-weight:950;
+  padding:12px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  box-shadow:0 12px 22px rgba(15,23,42,0.10);
+}
+
+.nav button:disabled{ opacity:0.45; cursor:not-allowed; box-shadow:none; }
+
+.hint{
+  margin-top:10px;
+  font-size:13px;
+  color:var(--muted);
+  font-weight:650;
+}
+
+/* Table */
 .table{
   width:100%;
   border-collapse:collapse;
-  margin-top:12px;
+  margin-top:10px;
+  font-size:13px;
 }
 
 .table th{
   text-align:left;
-  font-size:12px;
+  font-size:11px;
   text-transform:uppercase;
   letter-spacing:0.08em;
   color:var(--muted);
-  padding-bottom:8px;
+  padding:10px 8px;
+  border-top:1px solid var(--border);
+  background:#fbfcff;
+  font-weight:950;
 }
 
 .table td{
-  padding:12px 0;
+  padding:12px 8px;
   border-top:1px solid var(--border);
-  font-weight:600;
+  font-weight:700;
+  color:var(--ink);
 }
 
-/* RESPONSIVE */
+.smallactionbtn{
+  padding:10px 12px;
+  font-size:12px;
+  border-radius:12px;
+  background:linear-gradient(180deg,#111827 0%, #0b1220 100%);
+  color:white;
+  border:1px solid rgba(255,255,255,0.10);
+  cursor:pointer;
+  font-weight:950;
+  box-shadow:0 12px 22px rgba(15,23,42,0.10);
+}
+
+/* Error banner */
+.error{
+  display:none;
+  background:linear-gradient(180deg,#b42318 0%, #7f1d1d 100%);
+  color:white;
+  padding:12px 14px;
+  border-radius:16px;
+  font-size:12px;
+  font-weight:950;
+  max-width:1040px;
+  width:100%;
+  box-shadow:0 12px 22px rgba(180,35,24,0.18);
+}
 
 @media(max-width:900px){
-  .app{grid-template-columns:1fr;}
-  .sidebar{border-right:none;border-bottom:1px solid var(--border);}
+  .app{ grid-template-columns:1fr; }
+  .sidebar{ border-right:none; border-bottom:1px solid var(--border); }
+  .fieldgrid{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -253,78 +422,176 @@ body{
 <body>
 <div class="app">
 
-<aside class="sidebar">
-  <div class="brand">
-    <div class="brand-title">AuditFlow Pro</div>
-    <div class="brand-subtitle">Professional Audit Engine</div>
-  </div>
-
-  <h2>Navigation</h2>
-  <div id="navBlock">
-    <div class="navitem active" data-view="audit">
-      <span>Audit</span>
-      <span class="badge" id="overallBadge">0</span>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-title">AuditFlow Pro</div>
+      <div class="brand-subtitle">Client-ready audit records • offline-first engine</div>
     </div>
-    <div class="navitem" data-view="actions">
-      <span>Actions</span>
-      <span class="badge" id="actionsBadge">0</span>
+
+    <h2>Navigation</h2>
+    <div class="navblock" id="navBlock">
+      <div class="navitem active" data-view="audit">
+        <span>Audit</span>
+        <span class="badge" id="overallBadge">0 answered</span>
+      </div>
+      <div class="navitem" data-view="actions">
+        <span>Actions</span>
+        <span class="badge" id="actionsBadge">0 open</span>
+      </div>
+      <div class="navitem" data-view="summary">
+        <span>Summary</span>
+        <span class="badge" id="summaryBadge">—</span>
+      </div>
     </div>
-    <div class="navitem" data-view="summary">
-      <span>Summary</span>
-      <span class="badge" id="summaryBadge">—</span>
+
+    <h2>Audits</h2>
+    <div class="auditlist" id="auditList"></div>
+
+    <button class="smallbtn" type="button" id="btnNewAudit">+ New Audit</button>
+
+    <div class="meta">
+      <div><strong>Engine:</strong> V1</div>
+      <div><strong>Rule:</strong> Complete requires 0 open actions</div>
     </div>
-  </div>
+  </aside>
 
-  <h2>Audits</h2>
-  <div id="auditList"></div>
+  <main class="content">
+    <div class="topbar">
+      <div>
+        <div class="title" id="mainTitle">Audit</div>
+        <div class="sub" id="mainSub">Independent audit record. “No” creates an action.</div>
+      </div>
+      <div class="pill" id="activeAuditPill">No audit selected</div>
+    </div>
 
-  <button class="smallbtn" id="btnNewAudit">+ New Audit</button>
+    <div class="error" id="errorBanner"></div>
 
-  <div class="meta">
-    <div><strong>Mode:</strong> V1 Engine</div>
-    <div><strong>Status:</strong> Multi audits + summary</div>
-  </div>
-</aside>
+    <!-- IDENTITY -->
+    <div class="card" id="viewIdentity">
+      <div class="row" style="margin-bottom:10px;">
+        <div style="font-weight:950;">Create Audit</div>
+        <div class="pill review">Independent record</div>
+      </div>
 
-<main class="content">
+      <div class="fieldgrid">
+        <div class="field">
+          <label for="auditName">Audit name</label>
+          <input id="auditName" type="text" placeholder="e.g., Workplace Safety Audit" />
+        </div>
 
-<div class="topbar">
-  <div>
-    <div class="title" id="mainTitle">Audit</div>
-    <div class="sub" id="mainSub">Structured professional workflow.</div>
-  </div>
-  <div class="pill progress" id="statusPill">In progress</div>
-</div>
+        <div class="field">
+          <label for="clientName">Client name</label>
+          <input id="clientName" type="text" placeholder="e.g., ABC Engineering Ltd" />
+        </div>
 
-<!-- SUMMARY VIEW -->
-<div class="card" id="viewSummary">
-  <h3>Audit Summary</h3>
+        <div class="field">
+          <label for="auditDate">Audit date</label>
+          <input id="auditDate" type="date" />
+        </div>
 
-  <div id="summaryIdentity" style="margin-bottom:14px;color:var(--muted);font-weight:600;"></div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="primarybtn" type="button" id="btnCreateAudit">Create audit</button>
+        </div>
+      </div>
 
-  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
-    <div class="pill progress" id="summaryProgress">0/0 answered</div>
-    <div class="pill progress" id="summaryOpenActions">0 open actions</div>
-  </div>
+      <div class="hint" id="identityHint">Create an audit to begin answering questions.</div>
+    </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Section</th>
-        <th>Answered</th>
-      </tr>
-    </thead>
-    <tbody id="summaryTbody"></tbody>
-  </table>
+    <!-- AUDIT -->
+    <div class="card" id="viewAudit" style="display:none;">
+      <div class="row" style="margin-bottom:10px;">
+        <div>
+          <div style="font-weight:950;" id="sectionTitle">Fire Safety</div>
+          <div class="audit-meta" id="auditMetaLine">Client • Date • Status</div>
+        </div>
+        <div class="pill" id="progressPill">0/0 answered</div>
+      </div>
 
-  <div style="margin-top:18px;">
-    <button class="primarybtn" id="btnToggleComplete">
-      Mark Audit Complete
-    </button>
-  </div>
-</div>
+      <div class="section-list" id="sectionList">
+        <div class="section active" data-section="fire"><span>Fire Safety</span><span class="badge" id="badge-fire">0/0</span></div>
+        <div class="section" data-section="electrical"><span>Electrical Safety</span><span class="badge" id="badge-electrical">0/0</span></div>
+        <div class="section" data-section="environment"><span>Workplace Environment</span><span class="badge" id="badge-environment">0/0</span></div>
+        <div class="section" data-section="ppe"><span>PPE & Signage</span><span class="badge" id="badge-ppe">0/0</span></div>
+      </div>
 
-</main>
+      <hr style="border:none; border-top:1px solid var(--border); margin:14px 0;">
+
+      <div class="q-meta">
+        <div id="qIndex">Question 1 of 1</div>
+        <div id="qRecorded">No response recorded</div>
+      </div>
+
+      <p class="question" id="questionText">Loading…</p>
+
+      <div class="responses">
+        <button class="respbtn yes" type="button" id="btnYes">Yes</button>
+        <button class="respbtn no" type="button" id="btnNo">No</button>
+        <button class="respbtn na" type="button" id="btnNa">N/A</button>
+      </div>
+
+      <div class="nav">
+        <button type="button" id="btnPrev">Previous</button>
+        <button type="button" id="btnNext">Next</button>
+        <button type="button" class="dangerbtn" id="btnDeleteAudit" style="margin-left:auto;">Delete audit</button>
+      </div>
+
+      <div class="hint" id="hintText">V1 rule: selecting “No” creates an action (retained for audit trail).</div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="card" id="viewActions" style="display:none;">
+      <div class="row" style="margin-bottom:8px;">
+        <div style="font-weight:950;">Action Register</div>
+        <div class="pill progress" id="actionsSummaryPill">0 open</div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Section</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="actionsTbody">
+          <tr><td colspan="4" style="color:var(--muted); padding:14px 8px;">No actions yet.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="hint">Close actions to reach “Complete”.</div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="card" id="viewSummary" style="display:none;">
+      <div class="row" style="margin-bottom:8px;">
+        <div style="font-weight:950;">Audit Summary</div>
+        <div class="pill progress" id="statusPill">In progress</div>
+      </div>
+
+      <div class="hint" id="summaryIdentity">—</div>
+
+      <div class="row" style="margin-top:10px;">
+        <div class="pill" id="summaryProgress">0/0 answered</div>
+        <div class="pill progress" id="summaryOpenActions">0 open actions</div>
+      </div>
+
+      <table class="table" style="margin-top:12px;">
+        <thead>
+          <tr><th>Section</th><th>Answered</th></tr>
+        </thead>
+        <tbody id="summaryTbody"></tbody>
+      </table>
+
+      <div style="margin-top:12px;">
+        <button class="primarybtn" type="button" id="btnToggleComplete">Move to Ready for Review</button>
+      </div>
+
+      <div class="hint" id="summaryGateHint"></div>
+    </div>
+
+  </main>
 </div>
 
 <script src="./app.js"></script>
