@@ -1,474 +1,332 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AuditFlow Pro</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AuditFlow Pro</title>
 
-  <style>
-    :root{
-      --bg:#f5f7fa;
-      --panel:#ffffff;
-      --border:#e3e6ea;
-      --ink:#1b1f24;
-      --muted:#6b7280;
-      --primary:#1f3c88;
-      --yes:#2e7d32;
-      --no:#c62828;
-      --na:#6c757d;
-      --chip:#eef2ff;
-      --dark:#111827;
-    }
+<style>
+:root{
+  --bg:#f3f4f8;
+  --panel:#ffffff;
+  --border:#e5e7eb;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --primary:#1e3a8a;
+  --primary-soft:#e0e7ff;
+  --success:#065f46;
+  --success-bg:#ecfdf5;
+  --warning:#92400e;
+  --warning-bg:#fff7ed;
+  --danger:#7f1d1d;
+  --radius:14px;
+}
 
-    *{ box-sizing:border-box; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    body{ margin:0; background:var(--bg); color:var(--ink); }
+*{
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,system-ui,sans-serif;
+}
 
-    .app{
-      min-height:100vh;
-      display:grid;
-      grid-template-columns: 320px 1fr;
-    }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+}
 
-    .sidebar{
-      background:var(--panel);
-      border-right:1px solid var(--border);
-      padding:18px 16px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:300px 1fr;
+}
 
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      padding-bottom:12px;
-      border-bottom:1px solid var(--border);
-    }
+/* SIDEBAR */
 
-    .brand-title{
-      font-size:20px;
-      font-weight:800;
-      color:var(--primary);
-      line-height:1.1;
-    }
+.sidebar{
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  padding:24px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
 
-    .brand-subtitle{
-      font-size:12px;
-      color:var(--muted);
-    }
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
 
-    .sidebar h2{
-      margin:0;
-      font-size:13px;
-      font-weight:800;
-      color:var(--muted);
-      letter-spacing:0.02em;
-      text-transform:uppercase;
-    }
+.brand-title{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-0.5px;
+}
 
-    .badge{
-      font-size:12px;
-      color:var(--muted);
-      background:#f2f4f7;
-      border:1px solid var(--border);
-      padding:4px 8px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
+.brand-subtitle{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:600;
+}
 
-    .navblock, .auditlist, .section-list{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
+.sidebar h2{
+  font-size:12px;
+  text-transform:uppercase;
+  color:var(--muted);
+  letter-spacing:0.08em;
+  margin:0;
+  font-weight:800;
+}
 
-    .navitem, .audititem, .section{
-      padding:12px 10px;
-      border-radius:10px;
-      cursor:pointer;
-      border:1px solid transparent;
-      user-select:none;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
+.navitem, .audititem{
+  padding:12px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:all 0.15s ease;
+  font-weight:600;
+}
 
-    .navitem:hover, .audititem:hover, .section:hover{ background:#f2f4f7; }
-    .navitem.active, .audititem.active, .section.active{
-      background:var(--chip);
-      border-color:#d9ddff;
-      color:var(--primary);
-      font-weight:800;
-    }
+.navitem:hover, .audititem:hover{
+  background:#f1f5f9;
+}
 
-    .stack{ display:flex; flex-direction:column; gap:2px; min-width:0; }
-    .truncate{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .audit-meta{ font-size:12px; color:var(--muted); font-weight:600; }
+.navitem.active, .audititem.active{
+  background:var(--primary-soft);
+  color:var(--primary);
+}
 
-    .smallbtn{
-      padding:10px 10px;
-      font-size:12px;
-      border-radius:10px;
-      background:var(--dark);
-      color:white;
-      border:none;
-      cursor:pointer;
-      font-weight:800;
-      width:100%;
-    }
+.badge{
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#f1f5f9;
+  color:var(--muted);
+  font-weight:700;
+}
 
-    .meta{
-      margin-top:auto;
-      padding-top:12px;
-      border-top:1px solid var(--border);
-      font-size:12px;
-      color:var(--muted);
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
+.smallbtn{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.15s ease;
+}
 
-    .content{
-      padding:18px 16px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
+.smallbtn:hover{
+  background:#f8fafc;
+}
 
-    .topbar{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      max-width:1040px;
-    }
+.meta{
+  margin-top:auto;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color:var(--muted);
+  font-weight:600;
+}
 
-    .topbar .title{ font-size:16px; font-weight:900; color:var(--ink); }
-    .topbar .sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+/* MAIN */
 
-    .pill{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:#f8fafc;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .pill.progress{ color:#b45309; background:#fff7ed; border-color:#fed7aa; }
-    .pill.complete{ color:#065f46; background:#ecfdf5; border-color:#a7f3d0; }
+.content{
+  padding:28px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
 
-    .card{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:16px;
-      max-width:1040px;
-    }
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
 
-    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+.topbar .title{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-0.3px;
+}
 
-    .fieldgrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .field{ display:flex; flex-direction:column; gap:6px; }
+.topbar .sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:4px;
+}
 
-    label{ font-size:12px; color:var(--muted); font-weight:800; }
-    input{
-      padding:12px 10px;
-      border-radius:10px;
-      border:1px solid var(--border);
-      font-size:14px;
-      outline:none;
-      background:white;
-    }
+.pill{
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+}
 
-    .primarybtn{
-      background:var(--primary);
-      color:white;
-      border:none;
-      padding:12px 12px;
-      border-radius:10px;
-      font-weight:900;
-      cursor:pointer;
-      width:100%;
-    }
+.pill.progress{
+  background:var(--warning-bg);
+  color:var(--warning);
+}
 
-    .dangerbtn{
-      background:#7f1d1d;
-      color:white;
-      border:none;
-      padding:10px 10px;
-      border-radius:10px;
-      font-weight:900;
-      cursor:pointer;
-    }
+.pill.complete{
+  background:var(--success-bg);
+  color:var(--success);
+}
 
-    .q-meta{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-    }
+/* CARD */
 
-    .question{ font-size:20px; line-height:1.35; margin:0 0 14px 0; }
+.card{
+  background:var(--panel);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:0 8px 30px rgba(15,23,42,0.05);
+  border:1px solid var(--border);
+}
 
-    .responses{ display:flex; gap:12px; flex-wrap:wrap; }
-    .respbtn{
-      flex:1;
-      min-width:150px;
-      padding:16px 14px;
-      font-size:18px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      color:white;
-      font-weight:900;
-    }
-    .yes{ background:var(--yes); }
-    .no{ background:var(--no); }
-    .na{ background:var(--na); }
+.card h3{
+  margin-top:0;
+}
 
-    .nav{ display:flex; gap:10px; margin-top:14px; }
-    .nav button{
-      background:var(--dark);
-      min-width:auto;
-      flex:0;
-      padding:12px 14px;
-      font-size:14px;
-      border-radius:10px;
-      border:none;
-      color:white;
-      font-weight:900;
-      cursor:pointer;
-    }
-    .nav button:disabled{ opacity:0.4; cursor:not-allowed; }
+/* BUTTONS */
 
-    .hint{ margin-top:10px; font-size:13px; color:var(--muted); font-weight:600; }
+.primarybtn{
+  background:var(--primary);
+  color:white;
+  border:none;
+  padding:14px 16px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  transition:all 0.15s ease;
+  width:100%;
+}
 
-    .table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:13px; }
-    .table th, .table td{
-      text-align:left;
-      border-top:1px solid var(--border);
-      padding:10px 8px;
-      vertical-align:top;
-    }
+.primarybtn:hover{
+  background:#1d4ed8;
+}
 
-    .smallactionbtn{
-      padding:8px 10px;
-      font-size:12px;
-      border-radius:8px;
-      background:var(--dark);
-      color:white;
-      border:none;
-      cursor:pointer;
-      font-weight:900;
-      white-space:nowrap;
-    }
+.dangerbtn{
+  background:var(--danger);
+  color:white;
+  border:none;
+  padding:12px 14px;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+}
 
-    .error{
-      display:none;
-      background:#7f1d1d;
-      color:white;
-      padding:10px 12px;
-      border-radius:10px;
-      font-size:12px;
-      font-weight:800;
-      max-width:1040px;
-    }
+/* TABLE */
 
-    @media (max-width: 900px){
-      .app{ grid-template-columns: 1fr; }
-      .sidebar{ border-right:none; border-bottom:1px solid var(--border); }
-      .fieldgrid{ grid-template-columns: 1fr; }
-    }
-  </style>
+.table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+}
+
+.table th{
+  text-align:left;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+  padding-bottom:8px;
+}
+
+.table td{
+  padding:12px 0;
+  border-top:1px solid var(--border);
+  font-weight:600;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{border-right:none;border-bottom:1px solid var(--border);}
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-title">AuditFlow Pro</div>
-        <div class="brand-subtitle">Audit & Action Reporting for Consultants</div>
-      </div>
+<div class="app">
 
-      <h2>Navigation</h2>
-      <div class="navblock" id="navBlock">
-        <div class="navitem active" data-view="audit">
-          <span>Audit</span>
-          <span class="badge" id="overallBadge">0 answered</span>
-        </div>
-        <div class="navitem" data-view="actions">
-          <span>Actions</span>
-          <span class="badge" id="actionsBadge">0 open</span>
-        </div>
-        <div class="navitem" data-view="summary">
-          <span>Summary</span>
-          <span class="badge" id="summaryBadge">—</span>
-        </div>
-      </div>
-
-      <h2>Audits</h2>
-      <div class="auditlist" id="auditList"></div>
-
-      <button class="smallbtn" type="button" id="btnNewAudit">+ New Audit</button>
-
-      <div class="meta">
-        <div><strong>Mode:</strong> V1 Engine</div>
-        <div><strong>Status:</strong> Multi audits + actions + summary</div>
-      </div>
-    </aside>
-
-    <main class="content">
-      <div class="topbar">
-        <div>
-          <div class="title" id="mainTitle">Audit</div>
-          <div class="sub" id="mainSub">Multiple audits. “No” creates an action automatically.</div>
-        </div>
-        <div class="pill" id="activeAuditPill">No audit selected</div>
-      </div>
-
-      <div class="error" id="errorBanner"></div>
-
-      <!-- IDENTITY -->
-      <div class="card" id="viewIdentity">
-        <div class="row" style="margin-bottom:10px;">
-          <div style="font-weight:900;">Create Audit</div>
-          <div class="pill">Local-only (V1)</div>
-        </div>
-
-        <div class="fieldgrid">
-          <div class="field">
-            <label for="auditName">Audit name</label>
-            <input id="auditName" type="text" placeholder="e.g., Workplace Safety Audit" />
-          </div>
-
-          <div class="field">
-            <label for="clientName">Client name</label>
-            <input id="clientName" type="text" placeholder="e.g., ABC Engineering Ltd" />
-          </div>
-
-          <div class="field">
-            <label for="auditDate">Audit date</label>
-            <input id="auditDate" type="date" />
-          </div>
-
-          <div class="field">
-            <label>&nbsp;</label>
-            <button class="primarybtn" type="button" id="btnCreateAudit">Create audit</button>
-          </div>
-        </div>
-
-        <div class="hint" id="identityHint">Create an audit to begin answering questions.</div>
-      </div>
-
-      <!-- AUDIT -->
-      <div class="card" id="viewAudit" style="display:none;">
-        <div class="row" style="margin-bottom:10px;">
-          <div>
-            <div style="font-weight:900;" id="sectionTitle">Fire Safety</div>
-            <div class="audit-meta" id="auditMetaLine">Client • Date • Status</div>
-          </div>
-          <div class="pill" id="progressPill">0/0 answered</div>
-        </div>
-
-        <h2 style="margin:0 0 10px 0; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:0.02em;">Audit Sections</h2>
-        <div class="section-list" id="sectionList">
-          <div class="section active" data-section="fire"><span>Fire Safety</span><span class="badge" id="badge-fire">0/0</span></div>
-          <div class="section" data-section="electrical"><span>Electrical Safety</span><span class="badge" id="badge-electrical">0/0</span></div>
-          <div class="section" data-section="environment"><span>Workplace Environment</span><span class="badge" id="badge-environment">0/0</span></div>
-          <div class="section" data-section="ppe"><span>PPE & Signage</span><span class="badge" id="badge-ppe">0/0</span></div>
-        </div>
-
-        <hr style="border:none; border-top:1px solid var(--border); margin:14px 0;">
-
-        <div class="q-meta">
-          <div id="qIndex">Question 1 of 1</div>
-          <div id="qRecorded">No response recorded</div>
-        </div>
-
-        <p class="question" id="questionText">Loading…</p>
-
-        <div class="responses">
-          <button class="respbtn yes" type="button" id="btnYes">Yes</button>
-          <button class="respbtn no" type="button" id="btnNo">No</button>
-          <button class="respbtn na" type="button" id="btnNa">N/A</button>
-        </div>
-
-        <div class="nav">
-          <button type="button" id="btnPrev">Previous</button>
-          <button type="button" id="btnNext">Next</button>
-          <button type="button" class="dangerbtn" id="btnDeleteAudit" style="margin-left:auto;">Delete audit</button>
-        </div>
-
-        <div class="hint" id="hintText">V1 rule: selecting “No” creates an action (kept even if you later change the answer).</div>
-      </div>
-
-      <!-- ACTIONS -->
-      <div class="card" id="viewActions" style="display:none;">
-        <div class="row" style="margin-bottom:8px;">
-          <div style="font-weight:900;">Action Register</div>
-          <div class="pill progress" id="actionsSummaryPill">0 open</div>
-        </div>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Issue</th>
-              <th>Section</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="actionsTbody">
-            <tr>
-              <td colspan="4" style="color:var(--muted); padding:14px 8px;">No actions yet.</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="hint">V1: Actions are created automatically when a response is “No”.</div>
-      </div>
-
-      <!-- SUMMARY -->
-      <div class="card" id="viewSummary" style="display:none;">
-        <div class="row" style="margin-bottom:8px;">
-          <div style="font-weight:900;">Audit Summary</div>
-          <div class="pill" id="statusPill">In progress</div>
-        </div>
-
-        <div class="hint" id="summaryIdentity">—</div>
-
-        <div class="row" style="margin-top:10px;">
-          <div class="pill" id="summaryProgress">0/0 answered</div>
-          <div class="pill progress" id="summaryOpenActions">0 open actions</div>
-        </div>
-
-        <table class="table" style="margin-top:12px;">
-          <thead>
-            <tr>
-              <th>Section</th>
-              <th>Answered</th>
-            </tr>
-          </thead>
-          <tbody id="summaryTbody"></tbody>
-        </table>
-
-        <div style="margin-top:12px;">
-          <button class="primarybtn" type="button" id="btnToggleComplete">Mark complete</button>
-        </div>
-      </div>
-
-    </main>
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-title">AuditFlow Pro</div>
+    <div class="brand-subtitle">Professional Audit Engine</div>
   </div>
 
-  <script src="./app.js"></script>
+  <h2>Navigation</h2>
+  <div id="navBlock">
+    <div class="navitem active" data-view="audit">
+      <span>Audit</span>
+      <span class="badge" id="overallBadge">0</span>
+    </div>
+    <div class="navitem" data-view="actions">
+      <span>Actions</span>
+      <span class="badge" id="actionsBadge">0</span>
+    </div>
+    <div class="navitem" data-view="summary">
+      <span>Summary</span>
+      <span class="badge" id="summaryBadge">—</span>
+    </div>
+  </div>
+
+  <h2>Audits</h2>
+  <div id="auditList"></div>
+
+  <button class="smallbtn" id="btnNewAudit">+ New Audit</button>
+
+  <div class="meta">
+    <div><strong>Mode:</strong> V1 Engine</div>
+    <div><strong>Status:</strong> Multi audits + summary</div>
+  </div>
+</aside>
+
+<main class="content">
+
+<div class="topbar">
+  <div>
+    <div class="title" id="mainTitle">Audit</div>
+    <div class="sub" id="mainSub">Structured professional workflow.</div>
+  </div>
+  <div class="pill progress" id="statusPill">In progress</div>
+</div>
+
+<!-- SUMMARY VIEW -->
+<div class="card" id="viewSummary">
+  <h3>Audit Summary</h3>
+
+  <div id="summaryIdentity" style="margin-bottom:14px;color:var(--muted);font-weight:600;"></div>
+
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+    <div class="pill progress" id="summaryProgress">0/0 answered</div>
+    <div class="pill progress" id="summaryOpenActions">0 open actions</div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Section</th>
+        <th>Answered</th>
+      </tr>
+    </thead>
+    <tbody id="summaryTbody"></tbody>
+  </table>
+
+  <div style="margin-top:18px;">
+    <button class="primarybtn" id="btnToggleComplete">
+      Mark Audit Complete
+    </button>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script src="./app.js"></script>
 </body>
 </html>
