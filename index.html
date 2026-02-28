@@ -13,130 +13,173 @@
   --ink:#0f172a;
   --muted:#64748b;
   --primary:#1e3a8a;
-  --primary2:#2b55d6;
   --chip:#e0e7ff;
   --success:#065f46;
+  --success-bg:#ecfdf5;
   --warning:#92400e;
+  --warning-bg:#fff7ed;
   --danger:#7f1d1d;
-  --shadow:0 10px 28px rgba(15,23,42,0.08);
   --radius:16px;
+  --shadow:0 10px 28px rgba(15,23,42,0.08);
 }
 
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;}
-body{margin:0;background:var(--bg);color:var(--ink);}
-.app{min-height:100vh;display:grid;grid-template-columns:320px 1fr;}
+*{
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:280px 1fr;
+}
 
 .sidebar{
   background:var(--panel);
   border-right:1px solid var(--border);
-  padding:22px 16px;
+  padding:20px 14px;
   display:flex;
   flex-direction:column;
   gap:16px;
 }
 
-.brand-title{font-size:22px;font-weight:950;color:var(--primary);}
-.brand-subtitle{font-size:12px;color:var(--muted);font-weight:650;}
+.brand{
+  font-weight:900;
+  font-size:20px;
+  color:var(--primary);
+}
 
-.navitem,.audititem,.section{
-  padding:12px;
-  border-radius:14px;
+.navitem{
+  padding:10px 12px;
+  border-radius:12px;
   cursor:pointer;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  transition:all 0.12s ease;
 }
 
-.navitem.active,.audititem.active,.section.active{
+.navitem.active{
   background:var(--chip);
-  color:var(--primary);
-  font-weight:900;
+  font-weight:800;
 }
 
 .badge{
   font-size:11px;
-  padding:5px 10px;
+  padding:4px 8px;
   border-radius:999px;
   background:#f1f5f9;
-  color:var(--muted);
   border:1px solid var(--border);
 }
 
 .smallbtn{
-  padding:12px;
-  border-radius:14px;
+  padding:10px;
+  border-radius:12px;
   border:1px solid var(--border);
   background:white;
-  font-weight:900;
   cursor:pointer;
+  font-weight:800;
 }
 
 .content{
-  padding:24px 18px;
+  padding:24px;
   display:flex;
   flex-direction:column;
-  gap:14px;
-  align-items:flex-start;
+  gap:16px;
 }
 
 .card{
   background:var(--panel);
-  border-radius:var(--radius);
   padding:18px;
+  border-radius:var(--radius);
   border:1px solid var(--border);
   box-shadow:var(--shadow);
-  width:100%;
-  max-width:1040px;
 }
 
 .context-strip{
   background:#f8fafc;
-  border:1px solid var(--border);
   padding:10px 14px;
   border-radius:12px;
   font-size:13px;
   font-weight:700;
   color:var(--muted);
+  margin-bottom:12px;
+}
+
+.question{
+  font-size:20px;
+  font-weight:900;
   margin-bottom:14px;
 }
 
-.question{font-size:20px;font-weight:950;margin-bottom:14px;}
-
 .responses{
   display:flex;
-  gap:12px;
+  gap:10px;
   flex-wrap:wrap;
 }
 
 .respbtn{
   flex:1;
-  min-width:150px;
-  padding:16px;
-  font-size:18px;
+  min-width:120px;
+  padding:14px;
   border:none;
-  border-radius:16px;
+  border-radius:12px;
   cursor:pointer;
   color:white;
-  font-weight:950;
+  font-weight:900;
 }
 
 .yes{background:#2ea043;}
 .no{background:#dc2626;}
 .na{background:#6b7280;}
 
-.nav{display:flex;gap:10px;margin-top:14px;}
+.nav{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+}
 
 .primarybtn{
+  padding:12px;
+  border:none;
+  border-radius:12px;
   background:var(--primary);
   color:white;
-  border:none;
-  padding:12px;
-  border-radius:14px;
-  font-weight:950;
+  font-weight:900;
   cursor:pointer;
 }
 
+.status-pill{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.progress{background:var(--warning-bg);color:var(--warning);}
+.review{background:#eef2ff;color:var(--primary);}
+.complete{background:var(--success-bg);color:var(--success);}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+}
+
+.table th,.table td{
+  padding:10px;
+  border-top:1px solid var(--border);
+  font-size:13px;
+}
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{border-right:none;border-bottom:1px solid var(--border);}
+}
 </style>
 </head>
 
@@ -144,15 +187,16 @@ body{margin:0;background:var(--bg);color:var(--ink);}
 <div class="app">
 
 <aside class="sidebar">
-  <div>
-    <div class="brand-title">AuditFlow Pro</div>
-    <div class="brand-subtitle">Client-ready audit records</div>
-  </div>
+  <div class="brand">AuditFlow Pro</div>
 
-  <div id="navBlock">
-    <div class="navitem active" data-view="audit">Audit <span class="badge" id="overallBadge">0</span></div>
-    <div class="navitem" data-view="actions">Actions <span class="badge" id="actionsBadge">0</span></div>
-    <div class="navitem" data-view="summary">Summary <span class="badge" id="summaryBadge">—</span></div>
+  <div class="navitem active" data-view="audit">
+    Audit <span class="badge" id="overallBadge">0</span>
+  </div>
+  <div class="navitem" data-view="actions">
+    Actions <span class="badge" id="actionsBadge">0</span>
+  </div>
+  <div class="navitem" data-view="summary">
+    Summary <span class="badge" id="summaryBadge">—</span>
   </div>
 
   <div id="auditList"></div>
@@ -163,11 +207,11 @@ body{margin:0;background:var(--bg);color:var(--ink);}
 
 <div class="card" id="viewAudit">
 
-  <div class="context-strip" id="sectionContext">
-    Section • 0 / 0 answered • 0 open (0 total)
+  <div class="context-strip" id="contextStrip">
+    —
   </div>
 
-  <div class="question" id="questionText">Loading…</div>
+  <div class="question" id="questionText"></div>
 
   <div class="responses">
     <button class="respbtn yes" id="btnYes">Yes</button>
@@ -180,6 +224,25 @@ body{margin:0;background:var(--bg);color:var(--ink);}
     <button id="btnNext">Next</button>
   </div>
 
+</div>
+
+<div class="card" id="viewActions" style="display:none;">
+  <table class="table">
+    <thead>
+      <tr><th>Issue</th><th>Section</th><th>Status</th></tr>
+    </thead>
+    <tbody id="actionsBody"></tbody>
+  </table>
+</div>
+
+<div class="card" id="viewSummary" style="display:none;">
+  <div id="statusPill" class="status-pill progress">In progress</div>
+  <div id="summaryMeta" style="margin-top:10px;"></div>
+  <div style="margin-top:10px;">
+    <button class="primarybtn" id="btnToggleComplete">
+      Move to Ready for Review
+    </button>
+  </div>
 </div>
 
 </main>
