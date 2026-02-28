@@ -1,184 +1,261 @@
-(function () {
+(function(){
 
-  const STORAGE_KEY = "auditflow_v3_store";
+const STORAGE_KEY = "auditflow_global_v1";
 
-  const STATUS = {
-    IN_PROGRESS: "IN_PROGRESS",
-    READY_REVIEW: "READY_REVIEW",
-    COMPLETE: "COMPLETE"
+const STATUS = {
+  IN_PROGRESS:"IN_PROGRESS",
+  READY_REVIEW:"READY_REVIEW",
+  COMPLETE:"COMPLETE"
+};
+
+const TEMPLATE = {
+  site:{
+    title:"Site & Environment",
+    questions:[
+      "Work areas clean and free from hazards?",
+      "Access and egress routes clear?",
+      "Environmental conditions acceptable?",
+      "Emergency arrangements adequate?"
+    ]
+  },
+  equipment:{
+    title:"Equipment & Infrastructure",
+    questions:[
+      "Equipment maintained and inspected?",
+      "Infrastructure structurally sound?",
+      "Safety devices operational?",
+      "Utilities functioning safely?"
+    ]
+  },
+  operations:{
+    title:"Operational Controls",
+    questions:[
+      "Documented procedures available?",
+      "Controls implemented effectively?",
+      "Monitoring mechanisms in place?",
+      "Non-conformance handled correctly?"
+    ]
+  },
+  people:{
+    title:"People & Process",
+    questions:[
+      "Staff trained and competent?",
+      "Responsibilities clearly assigned?",
+      "Incident reporting functional?",
+      "Continuous improvement evident?"
+    ]
+  }
+};
+
+function $(id){return document.getElementById(id);}
+
+function uid(){
+  return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16);
+}
+
+function blankAudit(){
+  const responses={};
+  Object.keys(TEMPLATE).forEach(k=>{
+    responses[k]=Array(TEMPLATE[k].questions.length).fill(null);
+  });
+  return{
+    id:uid(),
+    name:"New Audit",
+    status:STATUS.IN_PROGRESS,
+    activeSection:"site",
+    activeIndex:0,
+    responses,
+    actions:[]
   };
+}
 
-  const TEMPLATE = {
-    fire: {
-      title: "Fire Safety",
-      questions: [
-        "Fire extinguishers present and accessible?",
-        "Fire exits clearly marked and unobstructed?",
-        "Emergency lighting operational?",
-        "Evacuation plan displayed?"
-      ]
-    }
+function load(){
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(!raw)return{audits:[],activeAuditId:null,view:"audit"};
+  try{return JSON.parse(raw);}catch{return{audits:[],activeAuditId:null,view:"audit"};}
+}
+
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+
+let state=load();
+
+function activeAudit(){
+  return state.audits.find(a=>a.id===state.activeAuditId)||null;
+}
+
+function openCount(audit){
+  return audit.actions.filter(a=>a.status==="OPEN").length;
+}
+
+function sectionStats(audit,key){
+  const arr=audit.responses[key];
+  return{
+    answered:arr.filter(Boolean).length,
+    total:arr.length,
+    open:audit.actions.filter(a=>a.sectionKey===key&&a.status==="OPEN").length
   };
+}
 
-  function $(id) {
-    return document.getElementById(id);
+function statusLabel(s){
+  if(s===STATUS.COMPLETE)return"Complete";
+  if(s===STATUS.READY_REVIEW)return"Ready for Review";
+  return"In progress";
+}
+
+function statusClass(s){
+  if(s===STATUS.COMPLETE)return"complete";
+  if(s===STATUS.READY_REVIEW)return"review";
+  return"progress";
+}
+
+function renderNav(){
+  document.querySelectorAll(".navitem").forEach(n=>{
+    n.classList.toggle("active",n.dataset.view===state.view);
+  });
+}
+
+function renderAudit(){
+  const audit=activeAudit();
+  if(!audit)return;
+
+  const section=TEMPLATE[audit.activeSection];
+  const question=section.questions[audit.activeIndex];
+
+  $("questionText").textContent=question;
+
+  const stats=sectionStats(audit,audit.activeSection);
+  const totalOpen=openCount(audit);
+
+  $("contextStrip").textContent=
+    `${section.title} • ${stats.answered}/${stats.total} answered • `+
+    `${stats.open} open in section (${totalOpen} total) • `+
+    `${statusLabel(audit.status)}`;
+
+  save();
+}
+
+function renderActions(){
+  const audit=activeAudit();
+  if(!audit)return;
+
+  const body=$("actionsBody");
+  body.innerHTML="";
+
+  if(audit.actions.length===0){
+    body.innerHTML="<tr><td colspan='3'>No actions</td></tr>";
+    return;
   }
 
-  function uid() {
-    return Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
+  audit.actions.forEach(a=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=
+      `<td>${TEMPLATE[a.sectionKey].questions[a.questionIndex]}</td>`+
+      `<td>${TEMPLATE[a.sectionKey].title}</td>`+
+      `<td>${a.status}</td>`;
+    body.appendChild(tr);
+  });
+}
+
+function renderSummary(){
+  const audit=activeAudit();
+  if(!audit)return;
+
+  const pill=$("statusPill");
+  pill.textContent=statusLabel(audit.status);
+  pill.className="status-pill "+statusClass(audit.status);
+
+  const totalOpen=openCount(audit);
+  $("summaryMeta").textContent=`${totalOpen} open actions`;
+
+  const btn=$("btnToggleComplete");
+
+  if(audit.status===STATUS.IN_PROGRESS){
+    btn.textContent="Move to Ready for Review";
+  }else if(audit.status===STATUS.READY_REVIEW){
+    btn.textContent="Mark Complete";
+  }else{
+    btn.textContent="Reopen Audit";
   }
 
-  function blankAuditRecord({ name }) {
-    return {
-      id: uid(),
-      name,
-      client: "",
-      date: "",
-      status: STATUS.IN_PROGRESS,
-      activeSection: "fire",
-      activeIndex: 0,
-      responses: {
-        fire: Array(TEMPLATE.fire.questions.length).fill(null)
-      },
-      actions: []
-    };
-  }
+  save();
+}
 
-  function blankStore() {
-    return {
-      activeAuditId: null,
-      audits: []
-    };
-  }
+function render(){
+  renderNav();
+  document.getElementById("viewAudit").style.display=state.view==="audit"?"block":"none";
+  document.getElementById("viewActions").style.display=state.view==="actions"?"block":"none";
+  document.getElementById("viewSummary").style.display=state.view==="summary"?"block":"none";
 
-  function loadStore() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return blankStore();
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return blankStore();
-    }
-  }
+  if(state.view==="audit")renderAudit();
+  if(state.view==="actions")renderActions();
+  if(state.view==="summary")renderSummary();
+}
 
-  function saveStore() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }
+function record(value){
+  const audit=activeAudit();
+  if(!audit)return;
 
-  let state = loadStore();
+  audit.responses[audit.activeSection][audit.activeIndex]=value;
 
-  function getActiveAudit() {
-    return state.audits.find(a => a.id === state.activeAuditId) || null;
-  }
-
-  function answeredCountForAudit(audit) {
-    let answered = 0;
-    let total = 0;
-    Object.values(audit.responses).forEach(arr => {
-      total += arr.length;
-      arr.forEach(v => { if (v) answered++; });
+  if(value==="NO"){
+    audit.actions.push({
+      id:uid(),
+      sectionKey:audit.activeSection,
+      questionIndex:audit.activeIndex,
+      status:"OPEN"
     });
-    return { answered, total };
   }
 
-  function sectionStats(audit, sectionKey) {
-    const arr = audit.responses[sectionKey];
-    const total = arr.length;
-    const answered = arr.filter(Boolean).length;
-    const open = audit.actions.filter(a =>
-      a.sectionKey === sectionKey && a.status === "OPEN"
-    ).length;
-    return { answered, total, open };
+  if(audit.status===STATUS.COMPLETE&&openCount(audit)>0){
+    audit.status=STATUS.READY_REVIEW;
   }
 
-  function openActionCount(audit) {
-    return audit.actions.filter(a => a.status === "OPEN").length;
+  render();
+}
+
+function next(delta){
+  const audit=activeAudit();
+  const max=TEMPLATE[audit.activeSection].questions.length-1;
+  audit.activeIndex=Math.max(0,Math.min(max,audit.activeIndex+delta));
+  render();
+}
+
+function toggleCompletion(){
+  const audit=activeAudit();
+  const open=openCount(audit);
+
+  if(audit.status===STATUS.IN_PROGRESS){
+    audit.status=STATUS.READY_REVIEW;
+  }else if(audit.status===STATUS.READY_REVIEW){
+    if(open>0){alert("Close all open actions first.");return;}
+    audit.status=STATUS.COMPLETE;
+  }else{
+    audit.status=STATUS.IN_PROGRESS;
   }
 
-  function renderContextStrip(audit) {
-    const context = $("sectionContext");
-    if (!context) return;
+  render();
+}
 
-    const sectionKey = audit.activeSection;
-    const section = TEMPLATE[sectionKey];
-    const stats = sectionStats(audit, sectionKey);
-    const totalOpen = openActionCount(audit);
+function createAudit(){
+  const a=blankAudit();
+  state.audits.push(a);
+  state.activeAuditId=a.id;
+  state.view="audit";
+  render();
+}
 
-    context.textContent =
-      `${section.title} • ${stats.answered} / ${stats.total} answered • ` +
-      `${stats.open} open in section (${totalOpen} total) • ` +
-      `${statusLabel(audit.status)}`;
-  }
+document.querySelectorAll(".navitem").forEach(n=>{
+  n.onclick=()=>{state.view=n.dataset.view;render();};
+});
 
-  function statusLabel(s) {
-    if (s === STATUS.COMPLETE) return "Complete";
-    if (s === STATUS.READY_REVIEW) return "Ready for Review";
-    return "In progress";
-  }
+$("btnYes").onclick=()=>record("YES");
+$("btnNo").onclick=()=>record("NO");
+$("btnNa").onclick=()=>record("N/A");
+$("btnPrev").onclick=()=>next(-1);
+$("btnNext").onclick=()=>next(1);
+$("btnToggleComplete").onclick=toggleCompletion;
+$("btnNewAudit").onclick=createAudit;
 
-  function renderAudit() {
-    const audit = getActiveAudit();
-    if (!audit) return;
-
-    const question = TEMPLATE.fire.questions[audit.activeIndex];
-    $("questionText").textContent = question;
-
-    renderContextStrip(audit);
-    saveStore();
-  }
-
-  function recordResponse(value) {
-    const audit = getActiveAudit();
-    if (!audit) return;
-
-    audit.responses.fire[audit.activeIndex] = value;
-
-    if (value === "NO") {
-      audit.actions.push({
-        id: uid(),
-        sectionKey: "fire",
-        questionIndex: audit.activeIndex,
-        status: "OPEN"
-      });
-    }
-
-    if (audit.status === STATUS.COMPLETE && openActionCount(audit) > 0) {
-      audit.status = STATUS.READY_REVIEW;
-    }
-
-    renderAudit();
-  }
-
-  function nextQuestion(delta) {
-    const audit = getActiveAudit();
-    if (!audit) return;
-    const total = TEMPLATE.fire.questions.length;
-    audit.activeIndex = Math.max(0, Math.min(total - 1, audit.activeIndex + delta));
-    renderAudit();
-  }
-
-  function createAudit() {
-    const audit = blankAuditRecord({ name: "New Audit" });
-    state.audits.push(audit);
-    state.activeAuditId = audit.id;
-    renderAudit();
-  }
-
-  function init() {
-    $("btnYes").onclick = () => recordResponse("YES");
-    $("btnNo").onclick = () => recordResponse("NO");
-    $("btnNa").onclick = () => recordResponse("N/A");
-    $("btnPrev").onclick = () => nextQuestion(-1);
-    $("btnNext").onclick = () => nextQuestion(1);
-    $("btnNewAudit").onclick = createAudit;
-
-    if (!state.activeAuditId) {
-      createAudit();
-    } else {
-      renderAudit();
-    }
-  }
-
-  init();
+if(!state.activeAuditId)createAudit();else render();
 
 })();
