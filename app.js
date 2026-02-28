@@ -1,6 +1,6 @@
 (function(){
 
-const STORAGE_KEY = "auditflow_global_v2";
+const STORAGE_KEY = "auditflow_global_v3";
 
 const STATUS = {
   IN_PROGRESS:"IN_PROGRESS",
@@ -47,8 +47,8 @@ const TEMPLATE = {
   }
 };
 
-function $(id){return document.getElementById(id);}
-function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16);}
+function $(id){ return document.getElementById(id); }
+function uid(){ return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16); }
 
 function blankAudit(){
   const responses={};
@@ -57,7 +57,9 @@ function blankAudit(){
   });
   return{
     id:uid(),
-    name:"New Audit",
+    name:"",
+    client:"",
+    date:"",
     status:STATUS.IN_PROGRESS,
     activeSection:"site",
     activeIndex:0,
@@ -68,11 +70,12 @@ function blankAudit(){
 
 function load(){
   const raw=localStorage.getItem(STORAGE_KEY);
-  if(!raw)return{audits:[],activeAuditId:null,view:"audit"};
-  try{return JSON.parse(raw);}catch{return{audits:[],activeAuditId:null,view:"audit"};}
+  if(!raw) return {audits:[],activeAuditId:null};
+  try{ return JSON.parse(raw); }
+  catch{ return {audits:[],activeAuditId:null}; }
 }
 
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function save(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
 
 let state=load();
 
@@ -94,74 +97,68 @@ function sectionStats(audit,key){
 }
 
 function statusLabel(s){
-  if(s===STATUS.COMPLETE)return"Complete";
-  if(s===STATUS.READY_REVIEW)return"Ready for Review";
-  return"In progress";
+  if(s===STATUS.COMPLETE) return "Complete";
+  if(s===STATUS.READY_REVIEW) return "Ready for Review";
+  return "In progress";
 }
 
-function render(){
-  document.querySelectorAll(".navitem").forEach(n=>{
-    n.classList.toggle("active",n.dataset.view===state.view);
+function statusClass(s){
+  if(s===STATUS.COMPLETE) return "complete";
+  if(s===STATUS.READY_REVIEW) return "review";
+  return "progress";
+}
+
+function updateIdentityFields(audit){
+  $("auditName").value = audit.name;
+  $("clientName").value = audit.client;
+  $("auditDate").value = audit.date;
+
+  const pill = $("statusPill");
+  pill.textContent = statusLabel(audit.status);
+  pill.className = "status-pill " + statusClass(audit.status);
+}
+
+function updateButtonsState(audit){
+  const disabled = !audit.name.trim();
+  ["btnYes","btnNo","btnNa","btnPrev","btnNext"].forEach(id=>{
+    $(id).disabled = disabled;
   });
 
-  $("viewAudit").style.display=state.view==="audit"?"block":"none";
-  $("viewActions").style.display=state.view==="actions"?"block":"none";
-  $("viewSummary").style.display=state.view==="summary"?"block":"none";
-
-  const audit=activeAudit();
-  if(!audit)return;
-
-  if(state.view==="audit"){
-    const section=TEMPLATE[audit.activeSection];
-    $("questionText").textContent=section.questions[audit.activeIndex];
-
-    const stats=sectionStats(audit,audit.activeSection);
-    const totalOpen=openCount(audit);
-
-    $("contextStrip").textContent=
-      `${section.title} • ${stats.answered}/${stats.total} answered • `+
-      `${stats.open} open in section (${totalOpen} total) • `+
-      `${statusLabel(audit.status)}`;
+  if(disabled){
+    $("contextStrip").textContent = "Audit name required to begin.";
   }
+}
 
-  if(state.view==="actions"){
-    const body=$("actionsBody");
-    body.innerHTML="";
-    if(audit.actions.length===0){
-      body.innerHTML="<tr><td colspan='3'>No actions</td></tr>";
-    }else{
-      audit.actions.forEach(a=>{
-        const tr=document.createElement("tr");
-        tr.innerHTML=
-          `<td>${TEMPLATE[a.sectionKey].questions[a.questionIndex]}</td>`+
-          `<td>${TEMPLATE[a.sectionKey].title}</td>`+
-          `<td>${a.status}</td>`;
-        body.appendChild(tr);
-      });
-    }
-  }
+function renderAudit(){
+  const audit = activeAudit();
+  if(!audit) return;
 
-  if(state.view==="summary"){
-    const pill=$("statusPill");
-    pill.textContent=statusLabel(audit.status);
-    pill.className="status-pill "+
-      (audit.status===STATUS.COMPLETE?"complete":
-       audit.status===STATUS.READY_REVIEW?"review":"progress");
+  updateIdentityFields(audit);
+  updateButtonsState(audit);
 
-    $("summaryMeta").textContent=`${openCount(audit)} open actions`;
+  if(!audit.name.trim()) return;
 
-    const btn=$("btnToggleComplete");
-    if(audit.status===STATUS.IN_PROGRESS)btn.textContent="Move to Ready for Review";
-    else if(audit.status===STATUS.READY_REVIEW)btn.textContent="Mark Complete";
-    else btn.textContent="Reopen Audit";
-  }
+  const section = TEMPLATE[audit.activeSection];
+  const question = section.questions[audit.activeIndex];
+
+  $("questionText").textContent = question;
+
+  const stats = sectionStats(audit,audit.activeSection);
+  const totalOpen = openCount(audit);
+
+  $("contextStrip").textContent =
+    `${section.title} • ${stats.answered}/${stats.total} answered • ` +
+    `${stats.open} open in section (${totalOpen} total) • ` +
+    `${statusLabel(audit.status)}`;
 
   save();
 }
 
 function record(value){
-  const audit=activeAudit();
-  audit.responses[audit.activeSection][audit.activeIndex]=value;
+  const audit = activeAudit();
+  if(!audit || !audit.name.trim()) return;
+
+  audit.responses[audit.activeSection][audit.activeIndex] = value;
 
   if(value==="NO"){
     audit.actions.push({
@@ -172,61 +169,64 @@ function record(value){
     });
   }
 
-  if(audit.status===STATUS.COMPLETE&&openCount(audit)>0){
+  if(audit.status===STATUS.COMPLETE && openCount(audit)>0){
     audit.status=STATUS.READY_REVIEW;
   }
 
-  render();
+  renderAudit();
 }
 
 function next(delta){
-  const audit=activeAudit();
-  const max=TEMPLATE[audit.activeSection].questions.length-1;
-  audit.activeIndex=Math.max(0,Math.min(max,audit.activeIndex+delta));
-  render();
-}
+  const audit = activeAudit();
+  if(!audit || !audit.name.trim()) return;
 
-function toggleCompletion(){
-  const audit=activeAudit();
-  const open=openCount(audit);
-
-  if(audit.status===STATUS.IN_PROGRESS){
-    audit.status=STATUS.READY_REVIEW;
-  }else if(audit.status===STATUS.READY_REVIEW){
-    if(open>0){alert("Close all open actions first.");return;}
-    audit.status=STATUS.COMPLETE;
-  }else{
-    audit.status=STATUS.IN_PROGRESS;
-  }
-
-  render();
+  const max = TEMPLATE[audit.activeSection].questions.length-1;
+  audit.activeIndex = Math.max(0,Math.min(max,audit.activeIndex+delta));
+  renderAudit();
 }
 
 function createAudit(){
-  const a=blankAudit();
+  const a = blankAudit();
   state.audits.push(a);
-  state.activeAuditId=a.id;
-  state.view="audit";
-  render();
+  state.activeAuditId = a.id;
+  renderAudit();
 }
 
-document.querySelectorAll(".navitem").forEach(n=>{
-  n.onclick=()=>{state.view=n.dataset.view;render();};
-});
+function bindIdentityEvents(){
+  $("auditName").addEventListener("input", e=>{
+    const audit = activeAudit();
+    audit.name = e.target.value;
+    renderAudit();
+  });
+
+  $("clientName").addEventListener("input", e=>{
+    const audit = activeAudit();
+    audit.client = e.target.value;
+    save();
+  });
+
+  $("auditDate").addEventListener("change", e=>{
+    const audit = activeAudit();
+    audit.date = e.target.value;
+    save();
+  });
+}
 
 $("btnYes").onclick=()=>record("YES");
 $("btnNo").onclick=()=>record("NO");
 $("btnNa").onclick=()=>record("N/A");
 $("btnPrev").onclick=()=>next(-1);
 $("btnNext").onclick=()=>next(1);
-$("btnToggleComplete").onclick=toggleCompletion;
 $("btnNewAudit").onclick=createAudit;
+
+bindIdentityEvents();
 
 if(!state.activeAuditId){
   const first=blankAudit();
   state.audits.push(first);
   state.activeAuditId=first.id;
 }
-render();
+
+renderAudit();
 
 })();
