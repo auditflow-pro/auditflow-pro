@@ -1,6 +1,6 @@
 (function(){
 
-const STORAGE_KEY = "auditflow_global_v1";
+const STORAGE_KEY = "auditflow_global_v2";
 
 const STATUS = {
   IN_PROGRESS:"IN_PROGRESS",
@@ -48,10 +48,7 @@ const TEMPLATE = {
 };
 
 function $(id){return document.getElementById(id);}
-
-function uid(){
-  return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16);
-}
+function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16);}
 
 function blankAudit(){
   const responses={};
@@ -102,99 +99,68 @@ function statusLabel(s){
   return"In progress";
 }
 
-function statusClass(s){
-  if(s===STATUS.COMPLETE)return"complete";
-  if(s===STATUS.READY_REVIEW)return"review";
-  return"progress";
-}
-
-function renderNav(){
+function render(){
   document.querySelectorAll(".navitem").forEach(n=>{
     n.classList.toggle("active",n.dataset.view===state.view);
   });
-}
 
-function renderAudit(){
+  $("viewAudit").style.display=state.view==="audit"?"block":"none";
+  $("viewActions").style.display=state.view==="actions"?"block":"none";
+  $("viewSummary").style.display=state.view==="summary"?"block":"none";
+
   const audit=activeAudit();
   if(!audit)return;
 
-  const section=TEMPLATE[audit.activeSection];
-  const question=section.questions[audit.activeIndex];
+  if(state.view==="audit"){
+    const section=TEMPLATE[audit.activeSection];
+    $("questionText").textContent=section.questions[audit.activeIndex];
 
-  $("questionText").textContent=question;
+    const stats=sectionStats(audit,audit.activeSection);
+    const totalOpen=openCount(audit);
 
-  const stats=sectionStats(audit,audit.activeSection);
-  const totalOpen=openCount(audit);
-
-  $("contextStrip").textContent=
-    `${section.title} • ${stats.answered}/${stats.total} answered • `+
-    `${stats.open} open in section (${totalOpen} total) • `+
-    `${statusLabel(audit.status)}`;
-
-  save();
-}
-
-function renderActions(){
-  const audit=activeAudit();
-  if(!audit)return;
-
-  const body=$("actionsBody");
-  body.innerHTML="";
-
-  if(audit.actions.length===0){
-    body.innerHTML="<tr><td colspan='3'>No actions</td></tr>";
-    return;
+    $("contextStrip").textContent=
+      `${section.title} • ${stats.answered}/${stats.total} answered • `+
+      `${stats.open} open in section (${totalOpen} total) • `+
+      `${statusLabel(audit.status)}`;
   }
 
-  audit.actions.forEach(a=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=
-      `<td>${TEMPLATE[a.sectionKey].questions[a.questionIndex]}</td>`+
-      `<td>${TEMPLATE[a.sectionKey].title}</td>`+
-      `<td>${a.status}</td>`;
-    body.appendChild(tr);
-  });
-}
+  if(state.view==="actions"){
+    const body=$("actionsBody");
+    body.innerHTML="";
+    if(audit.actions.length===0){
+      body.innerHTML="<tr><td colspan='3'>No actions</td></tr>";
+    }else{
+      audit.actions.forEach(a=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=
+          `<td>${TEMPLATE[a.sectionKey].questions[a.questionIndex]}</td>`+
+          `<td>${TEMPLATE[a.sectionKey].title}</td>`+
+          `<td>${a.status}</td>`;
+        body.appendChild(tr);
+      });
+    }
+  }
 
-function renderSummary(){
-  const audit=activeAudit();
-  if(!audit)return;
+  if(state.view==="summary"){
+    const pill=$("statusPill");
+    pill.textContent=statusLabel(audit.status);
+    pill.className="status-pill "+
+      (audit.status===STATUS.COMPLETE?"complete":
+       audit.status===STATUS.READY_REVIEW?"review":"progress");
 
-  const pill=$("statusPill");
-  pill.textContent=statusLabel(audit.status);
-  pill.className="status-pill "+statusClass(audit.status);
+    $("summaryMeta").textContent=`${openCount(audit)} open actions`;
 
-  const totalOpen=openCount(audit);
-  $("summaryMeta").textContent=`${totalOpen} open actions`;
-
-  const btn=$("btnToggleComplete");
-
-  if(audit.status===STATUS.IN_PROGRESS){
-    btn.textContent="Move to Ready for Review";
-  }else if(audit.status===STATUS.READY_REVIEW){
-    btn.textContent="Mark Complete";
-  }else{
-    btn.textContent="Reopen Audit";
+    const btn=$("btnToggleComplete");
+    if(audit.status===STATUS.IN_PROGRESS)btn.textContent="Move to Ready for Review";
+    else if(audit.status===STATUS.READY_REVIEW)btn.textContent="Mark Complete";
+    else btn.textContent="Reopen Audit";
   }
 
   save();
-}
-
-function render(){
-  renderNav();
-  document.getElementById("viewAudit").style.display=state.view==="audit"?"block":"none";
-  document.getElementById("viewActions").style.display=state.view==="actions"?"block":"none";
-  document.getElementById("viewSummary").style.display=state.view==="summary"?"block":"none";
-
-  if(state.view==="audit")renderAudit();
-  if(state.view==="actions")renderActions();
-  if(state.view==="summary")renderSummary();
 }
 
 function record(value){
   const audit=activeAudit();
-  if(!audit)return;
-
   audit.responses[audit.activeSection][audit.activeIndex]=value;
 
   if(value==="NO"){
@@ -256,6 +222,11 @@ $("btnNext").onclick=()=>next(1);
 $("btnToggleComplete").onclick=toggleCompletion;
 $("btnNewAudit").onclick=createAudit;
 
-if(!state.activeAuditId)createAudit();else render();
+if(!state.activeAuditId){
+  const first=blankAudit();
+  state.audits.push(first);
+  state.activeAuditId=first.id;
+}
+render();
 
 })();
