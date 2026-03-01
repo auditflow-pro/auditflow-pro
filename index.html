@@ -1,262 +1,74 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AuditFlow Pro</title>
-
-<style>
-:root{
-  --bg:#f3f4f8;
-  --panel:#ffffff;
-  --border:#e5e7eb;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --primary:#1e3a8a;
-  --chip:#e0e7ff;
-  --success:#065f46;
-  --success-bg:#ecfdf5;
-  --warning:#92400e;
-  --warning-bg:#fff7ed;
-  --danger:#7f1d1d;
-  --radius:16px;
-  --shadow:0 10px 28px rgba(15,23,42,0.08);
-}
-
-*{
-  box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
-}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-}
-
-.app{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:280px 1fr;
-}
-
-.sidebar{
-  background:var(--panel);
-  border-right:1px solid var(--border);
-  padding:20px 14px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-.brand{
-  font-weight:900;
-  font-size:20px;
-  color:var(--primary);
-}
-
-.navitem{
-  padding:10px 12px;
-  border-radius:12px;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-}
-
-.navitem.active{
-  background:var(--chip);
-  font-weight:800;
-}
-
-.badge{
-  font-size:11px;
-  padding:4px 8px;
-  border-radius:999px;
-  background:#f1f5f9;
-  border:1px solid var(--border);
-}
-
-.smallbtn{
-  padding:10px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:white;
-  cursor:pointer;
-  font-weight:800;
-}
-
-.content{
-  padding:24px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-.card{
-  background:var(--panel);
-  padding:18px;
-  border-radius:var(--radius);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-}
-
-.identity-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr auto;
-  gap:10px;
-  align-items:end;
-  margin-bottom:12px;
-}
-
-.identity-grid input{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-weight:600;
-}
-
-.identity-label{
-  font-size:12px;
-  font-weight:700;
-  color:var(--muted);
-  margin-bottom:4px;
-}
-
-.status-pill{
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-}
-
-.progress{background:var(--warning-bg);color:var(--warning);}
-.review{background:#eef2ff;color:var(--primary);}
-.complete{background:var(--success-bg);color:var(--success);}
-
-.context-strip{
-  background:#f8fafc;
-  padding:10px 14px;
-  border-radius:12px;
-  font-size:13px;
-  font-weight:700;
-  color:var(--muted);
-  margin-bottom:12px;
-}
-
-.question{
-  font-size:20px;
-  font-weight:900;
-  margin-bottom:14px;
-}
-
-.responses{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.respbtn{
-  flex:1;
-  min-width:120px;
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  color:white;
-  font-weight:900;
-}
-
-.respbtn:disabled{
-  opacity:0.4;
-  cursor:not-allowed;
-}
-
-.yes{background:#2ea043;}
-.no{background:#dc2626;}
-.na{background:#6b7280;}
-
-.nav{
-  margin-top:12px;
-  display:flex;
-  gap:8px;
-}
-
-.primarybtn{
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  background:var(--primary);
-  color:white;
-  font-weight:900;
-  cursor:pointer;
-}
-
-@media(max-width:900px){
-  .app{grid-template-columns:1fr;}
-  .sidebar{border-right:none;border-bottom:1px solid var(--border);}
-  .identity-grid{grid-template-columns:1fr;}
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-<div class="app">
 
-<aside class="sidebar">
-  <div class="brand">AuditFlow Pro</div>
+<h1>AuditFlow Pro</h1>
 
+<div class="nav">
   <div class="navitem active" data-view="audit">Audit</div>
   <div class="navitem" data-view="actions">Actions</div>
   <div class="navitem" data-view="summary">Summary</div>
-
-  <button class="smallbtn" id="btnNewAudit">+ New Audit</button>
-</aside>
-
-<main class="content">
-
-<div class="card" id="viewAudit">
-
-  <div class="identity-grid">
-    <div>
-      <div class="identity-label">Audit Name *</div>
-      <input id="auditName" placeholder="Required" />
-    </div>
-    <div>
-      <div class="identity-label">Client</div>
-      <input id="clientName" />
-    </div>
-    <div>
-      <div class="identity-label">Audit Date</div>
-      <input type="date" id="auditDate" />
-    </div>
-    <div>
-      <div class="identity-label">Status</div>
-      <div id="statusPill" class="status-pill progress">In progress</div>
-    </div>
-  </div>
-
-  <div class="context-strip" id="contextStrip">
-    Audit name required to begin.
-  </div>
-
-  <div class="question" id="questionText"></div>
-
-  <div class="responses">
-    <button class="respbtn yes" id="btnYes">Yes</button>
-    <button class="respbtn no" id="btnNo">No</button>
-    <button class="respbtn na" id="btnNa">N/A</button>
-  </div>
-
-  <div class="nav">
-    <button id="btnPrev">Previous</button>
-    <button id="btnNext">Next</button>
-  </div>
-
 </div>
 
-</main>
+<button id="btnNewAudit">+ New Audit</button>
+
+<div id="sectionCompleteBanner" class="section-banner" style="display:none;"></div>
+
+<div id="auditView">
+  <div class="card">
+    <label>Audit Name *</label>
+    <input id="auditName" type="text" placeholder="Required">
+
+    <label>Client</label>
+    <input id="clientName" type="text">
+
+    <label>Audit Date</label>
+    <input id="auditDate" type="date">
+
+    <div id="statusPill" class="status-pill"></div>
+
+    <div id="sectionHeader" class="section-header"></div>
+    <div id="sectionMeta" class="section-meta"></div>
+
+    <div id="questionText" class="question"></div>
+
+    <div class="buttons">
+      <button id="btnYes" class="yes">Yes</button>
+      <button id="btnNo" class="no">No</button>
+      <button id="btnNa" class="na">N/A</button>
+    </div>
+
+    <div class="navbuttons">
+      <button id="btnPrev">Previous</button>
+      <button id="btnNext">Next</button>
+    </div>
+  </div>
 </div>
 
-<script src="./app.js"></script>
+<div id="actionsView" style="display:none;">
+  <div class="card">
+    <h2>Open Actions</h2>
+    <div id="openActions"></div>
+
+    <h2>Closed Actions</h2>
+    <div id="closedActions"></div>
+  </div>
+</div>
+
+<div id="summaryView" style="display:none;">
+  <div class="card">
+    <h2>Audit Summary</h2>
+    <div id="summarySections"></div>
+    <div id="summaryTotals" class="summary-totals"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
