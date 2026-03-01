@@ -21,68 +21,65 @@
 
 <button id="btnNewAudit" class="primary-btn">+ New Audit</button>
 
-<div id="sectionCompleteBanner" class="section-banner" style="display:none;"></div>
+<div id="completionPanel" class="completion-panel" style="display:none;"></div>
 
 <!-- AUDIT VIEW -->
 <div id="auditView">
 
   <div class="card identity-card">
-    <div class="identity-grid">
+    <div class="identity-top">
       <div>
         <label>Audit Name *</label>
         <input id="auditName" type="text" placeholder="Required">
       </div>
+
       <div>
         <label>Client</label>
         <input id="clientName" type="text">
       </div>
+
       <div>
         <label>Audit Date</label>
-        <input id="auditDate" type="date">
+        <div id="auditDate"></div>
       </div>
-      <div>
+
+      <div class="status-container">
         <label>Status</label>
-        <div id="statusPill" class="status-pill"></div>
+        <div id="statusBadge" class="status-badge">IN PROGRESS</div>
       </div>
     </div>
   </div>
 
   <div class="card section-card">
     <div id="sectionHeader" class="section-header"></div>
-    <div id="sectionMeta" class="section-meta"></div>
     <div id="questionText" class="question"></div>
 
     <div class="buttons">
-      <button id="btnYes" class="yes">Yes</button>
-      <button id="btnNo" class="no">No</button>
-      <button id="btnNa" class="na">N/A</button>
+      <button onclick="answerYes()" class="yes">YES</button>
+      <button onclick="answerNo()" class="no">NO</button>
+      <button onclick="answerNA()" class="na">N/A</button>
     </div>
 
     <div class="navbuttons">
-      <button id="btnPrev">Previous</button>
-      <button id="btnNext">Next</button>
+      <button onclick="previous()" class="previous-btn">Previous</button>
     </div>
   </div>
 
 </div>
 
-<!-- ACTIONS VIEW -->
+<!-- ACTIONS -->
 <div id="actionsView" style="display:none;">
   <div class="card">
-    <h2>Open Actions</h2>
-    <div id="openActions"></div>
-
-    <h2>Closed Actions</h2>
-    <div id="closedActions"></div>
+    <h2>Actions</h2>
+    <div id="actionsList"></div>
   </div>
 </div>
 
-<!-- SUMMARY VIEW -->
+<!-- SUMMARY -->
 <div id="summaryView" style="display:none;">
   <div class="card">
     <h2>Audit Summary</h2>
-    <div id="summarySections"></div>
-    <div id="summaryTotals" class="summary-totals"></div>
+    <div id="summaryContent"></div>
   </div>
 </div>
 
