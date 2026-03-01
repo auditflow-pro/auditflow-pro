@@ -12,7 +12,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="logo">AuditFlow Pro</div>
-    <div class="status-indicator">Professional Edition</div>
+    <div class="edition">Structured Audit & Compliance Instrument</div>
   </div>
 </header>
 
@@ -21,17 +21,8 @@
   <section class="card">
     <h2>Create New Audit</h2>
 
-    <input type="text"
-           id="clientName"
-           placeholder="Client Name"
-           autocomplete="organization"
-           autocapitalize="words">
-
-    <input type="text"
-           id="auditTitle"
-           placeholder="Audit Title"
-           autocapitalize="words">
-
+    <input type="text" id="clientName" placeholder="Client Name" autocapitalize="words">
+    <input type="text" id="auditTitle" placeholder="Audit Title" autocapitalize="words">
     <input type="date" id="auditDate">
 
     <button onclick="createAudit()">Create Audit</button>
@@ -42,17 +33,14 @@
     <div id="auditList"></div>
   </section>
 
-  <section id="auditEngine" class="card hidden"></section>
+  <section id="auditEngine" class="audit-container hidden"></section>
 
 </main>
 
 <footer class="footer">
-  <div class="footer-inner">
-    © 2026 AuditFlow Pro. All rights reserved.
-    <br>
-    This software provides structured audit guidance only.
-    It does not replace professional regulatory advice.
-  </div>
+  © 2026 AuditFlow Pro. All rights reserved.
+  <br>
+  This system provides structured audit guidance only and does not replace regulatory or legal advice.
 </footer>
 
 <script src="app.js"></script>
