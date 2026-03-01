@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_v8_professional";
+const STORAGE_KEY = "auditflowpro_v9_slate";
 
 let state = loadState();
 
@@ -14,51 +14,11 @@ function saveState() {
 }
 
 function todayISO() {
-  const d = new Date();
-  return d.toISOString().split("T")[0];
-}
-
-/* SMART CAPS */
-
-function smartCapitalise(str) {
-  if (!str) return str;
-
-  const preserveCaps = ["CG","ISO","HSE","UK","USA","QA","EU"];
-  const preserveTitle = ["Ltd","PLC","LLC","Inc"];
-
-  return str.split(" ").map(function(word) {
-    if (!word) return word;
-
-    const upper = word.toUpperCase();
-
-    if (preserveCaps.includes(upper)) return upper;
-    if (preserveTitle.includes(word)) return word;
-    if (word === upper && word.length <= 5) return upper;
-
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-  }).join(" ");
-}
-
-function attachCapitalisation() {
-  const client = document.getElementById("clientName");
-  const title = document.getElementById("auditTitle");
-
-  client.addEventListener("input", function() {
-    const pos = client.selectionStart;
-    client.value = smartCapitalise(client.value);
-    client.setSelectionRange(pos,pos);
-  });
-
-  title.addEventListener("input", function() {
-    const pos = title.selectionStart;
-    title.value = smartCapitalise(title.value);
-    title.setSelectionRange(pos,pos);
-  });
+  return new Date().toISOString().split("T")[0];
 }
 
 document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("auditDate").value = todayISO();
-  attachCapitalisation();
   renderAuditList();
 });
 
@@ -66,27 +26,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function createAudit() {
 
-  const clientName = smartCapitalise(
-    document.getElementById("clientName").value.trim()
-  );
+  const client = document.getElementById("clientName").value.trim();
+  const title = document.getElementById("auditTitle").value.trim();
+  const date = document.getElementById("auditDate").value;
 
-  const auditTitle = smartCapitalise(
-    document.getElementById("auditTitle").value.trim()
-  );
-
-  const auditDate = document.getElementById("auditDate").value;
-
-  if (!clientName || !auditTitle || !auditDate) {
-    alert("All fields are required.");
+  if (!client || !title || !date) {
+    alert("All fields required.");
     return;
   }
 
   const audit = {
     id: "A-" + Date.now(),
-    clientName: clientName,
-    title: auditTitle,
-    date: auditDate,
-    rating: "Controlled Risk"
+    client: client,
+    title: title,
+    date: date,
+    status: "Draft",
+    riskScore: 0,
+    exposure: 0
   };
 
   state.audits.push(audit);
@@ -105,18 +61,22 @@ function createAudit() {
 /* LIST */
 
 function renderAuditList() {
-
   const container = document.getElementById("auditList");
   container.innerHTML = "";
 
-  state.audits.forEach(function(audit) {
+  state.audits.forEach(audit => {
 
     const div = document.createElement("div");
     div.className = "audit-item";
 
     div.innerHTML =
-      "<strong>" + audit.title + "</strong><br>" +
-      audit.clientName + " | " + audit.date;
+      "<div class='audit-row'>" +
+      "<strong>" + audit.title + "</strong>" +
+      "<span class='badge'>" + audit.status + "</span>" +
+      "</div>" +
+      "<div class='audit-sub'>" +
+      audit.client + " | " + audit.date +
+      "</div>";
 
     div.onclick = function() {
       openAudit(audit.id);
@@ -129,7 +89,9 @@ function renderAuditList() {
 /* OPEN AUDIT */
 
 function openAudit(id) {
+
   state.activeAuditId = id;
+
   const audit = state.audits.find(a => a.id === id);
   if (!audit) return;
 
@@ -138,21 +100,27 @@ function openAudit(id) {
 
   container.innerHTML =
     "<div class='audit-header'>" +
-      "<h2>" + audit.title + "</h2>" +
-      "<div class='audit-meta'>" +
-        audit.clientName + " | " + audit.date +
+      "<div class='audit-header-left'>" +
+        "<h2>" + audit.title + "</h2>" +
+        "<div class='audit-meta'>" +
+          audit.client + " | " + audit.date +
+        "</div>" +
       "</div>" +
-      "<div class='audit-status'>" +
-        "Status: " + audit.rating +
+      "<div class='audit-header-right'>" +
+        "<button class='secondary'>Snapshot</button>" +
+        "<button class='secondary'>Actions</button>" +
+        "<button class='primary'>Mark Complete</button>" +
       "</div>" +
     "</div>" +
 
-    "<div class='audit-actions'>" +
-      "<button class='secondary'>Action List</button>" +
-      "<button class='secondary'>Snapshot</button>" +
+    "<div class='executive'>" +
+      "<h3>Executive Risk Overview</h3>" +
+      "<p>Total Risk Score: " + audit.riskScore + "</p>" +
+      "<p>Exposure Level: " + audit.exposure + "%</p>" +
+      "<p>Status: " + audit.status + "</p>" +
     "</div>" +
 
     "<div class='audit-body'>" +
-      "<p>Audit engine ready. Full structured sections will load here.</p>" +
+      "<p>Structured audit sections load here.</p>" +
     "</div>";
 }
