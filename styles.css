@@ -1,6 +1,6 @@
-/* =========================================
-   AUDITFLOW PRO — LOCKED PROFESSIONAL UI
-========================================= */
+/* ===============================
+   AUDITFLOW PRO — STABLE LOCK
+================================ */
 
 * {
   box-sizing: border-box;
@@ -15,106 +15,98 @@ html, body {
   color: #1f2a36;
 }
 
-/* =========================================
+/* ===============================
    HEADER
-========================================= */
+================================ */
 
 .command-bar {
   background: #394957;
   color: #ffffff;
-  padding: 24px 20px 22px;
+  padding: 32px 20px 28px;
 }
 
 .command-inner {
   max-width: 960px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
   text-align: center;
 }
 
 .brand-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  margin-bottom: 6px;
 }
 
 .brand-sub {
-  font-size: 13px;
+  font-size: 14px;
   opacity: 0.85;
-  margin-top: 4px;
 }
 
 .brand-edition {
-  font-size: 11px;
-  opacity: 0.6;
-  margin-top: 2px;
-  letter-spacing: 0.5px;
+  font-size: 12px;
+  opacity: 0.65;
+  margin-bottom: 26px;
 }
 
 .command-row {
   display: flex;
-  width: 100%;
-  max-width: 600px;
-  gap: 14px;
+  justify-content: center;
+  gap: 16px;
 }
 
 .command-btn {
-  flex: 1;
-  padding: 11px 0;
-  font-size: 13px;
-  font-weight: 500;
+  width: 180px;
+  height: 44px;
+  font-size: 14px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.5);
   color: #ffffff;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .command-btn:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.1);
 }
 
-/* =========================================
+/* ===============================
    MAIN CONTAINER
-========================================= */
+================================ */
 
 .container {
   max-width: 960px;
-  margin: 44px auto 70px;
+  margin: 50px auto 80px;
   padding: 0 20px;
 }
 
-/* =========================================
+/* ===============================
    DASHBOARD
-========================================= */
+================================ */
 
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 22px;
-  margin-bottom: 46px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 50px;
 }
 
 .metric-block {
   background: #ffffff;
   border: 1px solid #c5cdd6;
-  padding: 28px 20px;
+  padding: 32px 20px;
   text-align: center;
 }
 
 .metric-label {
-  font-size: 11px;
-  letter-spacing: 0.9px;
+  font-size: 12px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: #6d7a87;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .metric-value {
-  font-size: 34px;
+  font-size: 36px;
   font-weight: 600;
 }
 
@@ -122,43 +114,41 @@ html, body {
   color: #2e7d32;
 }
 
-/* =========================================
+/* ===============================
    WORKSPACE
-========================================= */
+================================ */
 
 .workspace {
   background: #ffffff;
   border: 1px solid #bcc6cf;
-  margin-bottom: 46px;
+  margin-bottom: 50px;
 }
 
 .workspace-header {
   background: #eef2f6;
-  padding: 22px 24px;
-  font-size: 19px;
+  padding: 24px;
+  font-size: 20px;
   font-weight: 600;
   border-bottom: 1px solid #d2d9df;
 }
 
 .workspace-body {
-  padding: 40px 24px 48px;
+  padding: 48px 24px 52px;
 }
 
-/* THIS IS THE KEY FIX */
 .field-column {
-  width: 100%;
-  max-width: 560px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-/* =========================================
-   INPUTS — LOCKED CONTAINMENT
-========================================= */
+/* ===============================
+   INPUTS (SAFARI + CHROME LOCK)
+================================ */
 
 input {
-  display: block;
   width: 100%;
-  padding: 16px 18px;
+  height: 56px;
+  padding: 0 18px;
   margin-bottom: 22px;
   border: 1px solid #bfc8d2;
   background: #ffffff;
@@ -166,57 +156,56 @@ input {
   border-radius: 0;
   appearance: none;
   -webkit-appearance: none;
+  line-height: 56px;
 }
 
 input[type="date"] {
-  text-align: left;
+  height: 56px;
+  line-height: 56px;
 }
 
-/* =========================================
+/* ===============================
    PRIMARY BUTTON
-========================================= */
+================================ */
 
 .primary-btn {
-  display: block;
   width: 100%;
-  padding: 18px;
+  height: 56px;
   font-size: 15px;
   font-weight: 600;
-  color: #ffffff;
   background: #394957;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .primary-btn:hover {
-  background: #2f3e4c;
+  background: #2f3f4d;
 }
 
-/* =========================================
+/* ===============================
    REGISTRY
-========================================= */
+================================ */
 
 .registry {
   background: #ffffff;
   border: 1px solid #c5cdd6;
-  padding: 30px 24px;
+  padding: 34px 24px;
 }
 
 .registry-title {
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
-  margin-bottom: 20px;
 }
 
-/* =========================================
+/* ===============================
    FOOTER
-========================================= */
+================================ */
 
 .footer {
   text-align: center;
-  padding: 50px 20px;
+  padding: 60px 20px;
   font-size: 12px;
   color: #6c7884;
-  line-height: 1.6;
 }
