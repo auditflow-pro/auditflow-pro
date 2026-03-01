@@ -20,23 +20,24 @@ h1 {
   border: 1px solid #e3e6ea;
 }
 
-input, select {
+input {
   padding: 10px 12px;
-  margin: 6px 8px 6px 0;
+  margin: 8px 0;
   border-radius: 4px;
   border: 1px solid #cbd2d9;
   font-size: 14px;
-  min-width: 220px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 button {
-  padding: 8px 14px;
-  margin: 6px 6px 6px 0;
+  padding: 10px 16px;
+  margin-top: 12px;
   border-radius: 4px;
-  border: 1px solid #334e68;
+  border: none;
   background: #334e68;
   color: white;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -44,34 +45,20 @@ button:hover {
   background: #243b53;
 }
 
-.badge {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 4px;
-  margin-left: 10px;
-}
-
-.draft {
-  background: #e4e7eb;
-  color: #334e68;
+.audit-item {
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #eaeaea;
 }
 
 .section-header {
   font-weight: 600;
   margin-top: 28px;
-  font-size: 16px;
-}
-
-.section-summary {
-  font-size: 13px;
-  margin: 4px 0 14px 0;
-  color: #52606d;
 }
 
 .control-block {
   margin-bottom: 16px;
-  padding-bottom: 14px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #eef2f5;
 }
 
@@ -102,8 +89,3 @@ button:hover {
 .medium { background: #dd6b20; }
 .high { background: #c05621; }
 .critical { background: #9b2c2c; }
-
-.audit-item {
-  padding: 10px 0;
-  cursor: pointer;
-}
