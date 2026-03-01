@@ -1,11 +1,7 @@
 // =========================================
 // AuditFlow Pro v3 – Enterprise Risk Matrix Engine
-// Multi-Audit | Impact x Likelihood | Adjustable Thresholds
+// Fully aligned with index.html
 // =========================================
-
-// ------------------------------
-// STORAGE
-// ------------------------------
 
 const STORAGE_KEY = "auditflowpro_v3";
 
@@ -17,18 +13,10 @@ function saveAudits(audits) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(audits));
 }
 
-// ------------------------------
-// GLOBAL STATE
-// ------------------------------
-
 let state = {
   audits: loadAudits(),
   activeAuditId: null
 };
-
-// ------------------------------
-// CONTROL LIBRARY (WITH IMPACT)
-// ------------------------------
 
 const controlLibrary = [
   {
@@ -48,24 +36,16 @@ const controlLibrary = [
   }
 ];
 
-// ------------------------------
-// DEFAULT RISK CONFIGURATION
-// ------------------------------
-
 function defaultRiskConfig() {
   return {
     likelihoodFailure: 3,
-    severityThresholds: {
+    thresholds: {
       critical: 10,
       high: 7,
       medium: 4
     }
   };
 }
-
-// ------------------------------
-// CREATE AUDIT
-// ------------------------------
 
 function createAudit(title, client) {
   if (!title) return;
@@ -76,10 +56,9 @@ function createAudit(title, client) {
     id,
     title,
     client,
-    created: new Date().toISOString(),
-    completed: null,
     status: "Draft",
-    controls: generateControlSet(),
+    created: new Date().toISOString(),
+    controls: generateControls(),
     findings: [],
     riskScore: 0,
     overallRating: "Not Assessed",
@@ -87,18 +66,14 @@ function createAudit(title, client) {
   };
 
   state.audits.push(newAudit);
-  saveAudits(state.audits);
   state.activeAuditId = id;
+  saveAudits(state.audits);
 
   renderAuditList();
   renderActiveAudit();
 }
 
-// ------------------------------
-// GENERATE CONTROL SET
-// ------------------------------
-
-function generateControlSet() {
+function generateControls() {
   let result = [];
 
   controlLibrary.forEach(section => {
@@ -118,10 +93,6 @@ function generateControlSet() {
   return result;
 }
 
-// ------------------------------
-// ACTIVE AUDIT HELPERS
-// ------------------------------
-
 function setActiveAudit(id) {
   state.activeAuditId = id;
   renderActiveAudit();
@@ -131,12 +102,7 @@ function getActiveAudit() {
   return state.audits.find(a => a.id === state.activeAuditId);
 }
 
-// ------------------------------
-// RECORD RESPONSE
-// ------------------------------
-
 function recordResponse(controlId, response) {
-
   const audit = getActiveAudit();
   if (!audit) return;
 
@@ -148,6 +114,7 @@ function recordResponse(controlId, response) {
   } else {
     control.riskScore = 0;
     control.severity = null;
+    removeFinding(audit, control.id);
   }
 
   calculateOverallRisk(audit);
@@ -155,39 +122,24 @@ function recordResponse(controlId, response) {
   renderActiveAudit();
 }
 
-// ------------------------------
-// RISK MATRIX CALCULATION
-// ------------------------------
-
 function applyRiskMatrix(audit, control) {
-
   const likelihood = audit.riskConfig.likelihoodFailure;
   const score = control.impact * likelihood;
 
   control.riskScore = score;
-  control.severity = deriveSeverity(score, audit.riskConfig.severityThresholds);
+  control.severity = deriveSeverity(score, audit.riskConfig.thresholds);
 
   upsertFinding(audit, control);
 }
 
-// ------------------------------
-// DERIVE SEVERITY
-// ------------------------------
-
 function deriveSeverity(score, thresholds) {
-
   if (score >= thresholds.critical) return "Critical";
   if (score >= thresholds.high) return "High";
   if (score >= thresholds.medium) return "Medium";
   return "Low";
 }
 
-// ------------------------------
-// UPSERT FINDING
-// ------------------------------
-
 function upsertFinding(audit, control) {
-
   const existing = audit.findings.find(f => f.controlId === control.id);
 
   if (existing) {
@@ -199,50 +151,30 @@ function upsertFinding(audit, control) {
       controlId: control.id,
       section: control.section,
       statement: control.statement,
-      impact: control.impact,
-      riskScore: control.riskScore,
       severity: control.severity,
-      status: "Open",
-      owner: "",
-      dueDate: ""
+      riskScore: control.riskScore
     });
   }
 }
 
-// ------------------------------
-// OVERALL RISK CALCULATION
-// ------------------------------
+function removeFinding(audit, controlId) {
+  audit.findings = audit.findings.filter(f => f.controlId !== controlId);
+}
 
 function calculateOverallRisk(audit) {
-
   let total = 0;
-
-  audit.findings.forEach(f => {
-    total += f.riskScore;
-  });
+  audit.findings.forEach(f => total += f.riskScore);
 
   audit.riskScore = total;
 
-  if (total === 0) {
-    audit.overallRating = "Low";
-  } else if (total < 10) {
-    audit.overallRating = "Moderate";
-  } else if (total < 25) {
-    audit.overallRating = "Elevated";
-  } else {
-    audit.overallRating = "High";
-  }
+  if (total === 0) audit.overallRating = "Low";
+  else if (total < 10) audit.overallRating = "Moderate";
+  else if (total < 25) audit.overallRating = "Elevated";
+  else audit.overallRating = "High";
 }
 
-// ------------------------------
-// RENDER AUDIT LIST
-// ------------------------------
-
 function renderAuditList() {
-
   const container = document.getElementById("auditList");
-  if (!container) return;
-
   container.innerHTML = "";
 
   state.audits.forEach(audit => {
@@ -250,43 +182,33 @@ function renderAuditList() {
       <div onclick="setActiveAudit('${audit.id}')">
         <strong>${audit.title}</strong><br>
         Client: ${audit.client}<br>
-        Status: ${audit.status}<br>
         Overall Risk: ${audit.overallRating}<br>
-        Risk Score: ${audit.riskScore}
         <hr>
       </div>
     `;
   });
 }
 
-// ------------------------------
-// RENDER ACTIVE AUDIT
-// ------------------------------
-
 function renderActiveAudit() {
-
   const audit = getActiveAudit();
   if (!audit) return;
 
   const container = document.getElementById("auditEngine");
-  if (!container) return;
 
   container.innerHTML = `
     <h2>${audit.title}</h2>
     <p>Client: ${audit.client}</p>
-    <p>Status: ${audit.status}</p>
-    <p>Overall Risk Rating: ${audit.overallRating}</p>
+    <p>Overall Risk: ${audit.overallRating}</p>
     <p>Total Risk Score: ${audit.riskScore}</p>
     <hr>
   `;
 
   audit.controls.forEach(control => {
-
     container.innerHTML += `
       <div>
         <strong>${control.section}</strong><br>
         ${control.statement}<br>
-        Impact Level: ${control.impact}<br>
+        Impact: ${control.impact}<br>
         ${control.severity ? `Severity: ${control.severity} (Score ${control.riskScore})<br>` : ""}
         <button onclick="recordResponse('${control.id}','Yes')">Yes</button>
         <button onclick="recordResponse('${control.id}','No')">No</button>
@@ -297,10 +219,6 @@ function renderActiveAudit() {
   });
 }
 
-// ------------------------------
-// INITIALISE
-// ------------------------------
-
-window.onload = function () {
+window.onload = function() {
   renderAuditList();
 };
