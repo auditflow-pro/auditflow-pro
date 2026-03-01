@@ -8,24 +8,54 @@ body {
 .topbar {
   background: #394957;
   color: white;
-  padding: 16px 24px;
+  padding: 20px;
 }
 
 .logo {
+  font-size: 22px;
   font-weight: 600;
-  font-size: 20px;
 }
 
-.edition {
+.subtitle {
   font-size: 13px;
   opacity: 0.8;
 }
 
 .container {
-  max-width: 750px;
+  max-width: 900px;
   margin: 30px auto;
   padding: 0 20px;
 }
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.metric {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.metric-label {
+  font-size: 13px;
+  color: #6c7884;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.risk-low { color: #2e7d32; }
+.risk-medium { color: #f57c00; }
+.risk-high { color: #c62828; }
 
 .card {
   background: white;
@@ -33,17 +63,6 @@ body {
   border-radius: 10px;
   margin-bottom: 30px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-
-.audit-container {
-  background: white;
-  padding: 0;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.hidden {
-  display: none;
 }
 
 input {
@@ -80,13 +99,13 @@ button.secondary {
   cursor: pointer;
 }
 
-.audit-row {
+.ledger-row {
   display: flex;
   justify-content: space-between;
 }
 
-.audit-sub {
-  font-size: 14px;
+.ledger-sub {
+  font-size: 13px;
   color: #6c7884;
 }
 
@@ -95,6 +114,18 @@ button.secondary {
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 12px;
+}
+
+.exposure {
+  font-size: 12px;
+  color: #6c7884;
+}
+
+.audit-container {
+  background: white;
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 .audit-header {
@@ -106,17 +137,7 @@ button.secondary {
   align-items: center;
 }
 
-.audit-meta {
-  font-size: 13px;
-  opacity: 0.8;
-}
-
 .executive {
-  padding: 20px;
-  border-top: 1px solid #e5e9ee;
-}
-
-.audit-body {
   padding: 20px;
 }
 
