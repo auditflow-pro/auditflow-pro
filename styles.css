@@ -58,16 +58,6 @@ body{
   padding:0 20px;
 }
 
-.primary-btn{
-  background:var(--navy);
-  color:white;
-  border:none;
-  padding:10px 16px;
-  font-weight:600;
-  cursor:pointer;
-  margin-bottom:20px;
-}
-
 .card{
   background:var(--card);
   border:1px solid var(--border);
@@ -95,23 +85,27 @@ body{
   border:1px solid var(--border);
 }
 
-.status-container{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-}
-
 .status-badge{
   padding:8px 14px;
   font-weight:700;
   font-size:12px;
   letter-spacing:.5px;
   color:white;
-  background:var(--amber);
 }
 
-.status-badge.complete{
-  background:var(--success);
+.status-badge.draft{ background:var(--neutral); }
+.status-badge.progress{ background:var(--amber); }
+.status-badge.complete{ background:var(--success); }
+.status-badge.modified{ background:var(--navy-light); }
+
+.primary-btn{
+  background:var(--navy);
+  color:white;
+  border:none;
+  padding:12px 18px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:16px;
 }
 
 .section-card{
@@ -121,6 +115,11 @@ body{
 .section-header{
   font-size:18px;
   font-weight:700;
+}
+
+.section-meta{
+  font-size:14px;
+  color:var(--muted);
   margin-bottom:20px;
 }
 
@@ -142,6 +141,11 @@ button{
   cursor:pointer;
   border:none;
   font-size:15px;
+  transition:transform .05s ease;
+}
+
+button:active{
+  transform:scale(0.98);
 }
 
 .yes{background:var(--success);color:white;}
@@ -152,7 +156,6 @@ button{
   margin-top:20px;
   background:none;
   color:var(--navy);
-  font-weight:600;
 }
 
 .completion-panel{
@@ -163,4 +166,10 @@ button{
   font-weight:700;
   margin-bottom:20px;
   white-space:pre-line;
+}
+
+.error{
+  font-size:12px;
+  color:var(--danger);
+  margin-top:4px;
 }
