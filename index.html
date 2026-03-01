@@ -1,61 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header class="app-header">
+<header class="topnav">
   <div class="brand">AuditFlow Pro</div>
-  <div class="nav">
-    <div class="navitem active" data-view="audit">Audit</div>
-    <div class="navitem" data-view="actions">Actions</div>
-    <div class="navitem" data-view="summary">Summary</div>
-  </div>
+  <nav>
+    <span class="navitem active" data-view="audit">Audit</span>
+    <span class="navitem" data-view="actions">Actions</span>
+    <span class="navitem" data-view="summary">Summary</span>
+  </nav>
 </header>
 
-<main class="container">
-
-<div id="completionPanel" class="completion-panel" style="display:none;"></div>
+<!-- Persistent Enterprise Header -->
+<section class="enterprise-header">
+  <div><strong>Audit:</strong> <span id="headerAuditName">—</span></div>
+  <div><strong>Client:</strong> <span id="headerClientName">—</span></div>
+  <div><strong>Status:</strong> <span id="headerStatus">DRAFT</span></div>
+  <div><strong>Open Actions:</strong> <span id="headerOpenActions">0</span></div>
+</section>
 
 <!-- AUDIT VIEW -->
-<div id="auditView">
+<main id="auditView">
 
-  <div class="card identity-card">
-    <div class="identity-top">
-      <div>
-        <label>Audit Name *</label>
-        <input id="auditName" type="text" placeholder="Required">
-        <div id="nameError" class="error"></div>
-      </div>
+  <div class="card">
+    <label>AUDIT NAME *</label>
+    <input id="auditName" type="text">
+    <div id="nameError" class="error"></div>
 
-      <div>
-        <label>Client</label>
-        <input id="clientName" type="text">
-      </div>
+    <label>CLIENT</label>
+    <input id="clientName" type="text">
 
-      <div>
-        <label>Audit Date</label>
-        <div id="auditDate"></div>
-      </div>
+    <label>AUDIT DATE</label>
+    <div id="auditDate"></div>
 
-      <div class="status-container">
-        <label>Status</label>
-        <div id="statusBadge" class="status-badge draft">DRAFT</div>
-      </div>
-    </div>
+    <label>STATUS</label>
+    <div id="statusBadge" class="status-badge draft">DRAFT</div>
 
-    <button id="startAuditBtn" class="primary-btn">START AUDIT</button>
+    <button id="startAuditBtn" class="primary-btn">Start Audit</button>
   </div>
 
   <div id="engineBlock" style="display:none;">
-    <div class="card section-card">
+    <div class="section-card">
       <div id="sectionHeader" class="section-header"></div>
       <div id="sectionMeta" class="section-meta"></div>
-      <div id="questionText" class="question"></div>
+      <div id="questionText" class="question-text"></div>
 
       <div class="buttons">
         <button id="yesBtn" class="yes">YES</button>
@@ -63,33 +57,29 @@
         <button id="naBtn" class="na">N/A</button>
       </div>
 
-      <div class="navbuttons">
-        <button id="previousBtn" class="previous-btn">Previous</button>
-      </div>
+      <button id="previousBtn" class="secondary-btn">Previous</button>
     </div>
   </div>
 
-</div>
+</main>
 
-<!-- ACTIONS -->
-<div id="actionsView" style="display:none;">
+<!-- ACTIONS VIEW -->
+<main id="actionsView" style="display:none;">
   <div class="card">
-    <h2>Open Actions</h2>
+    <h2>Action Register</h2>
     <div id="actionsList"></div>
   </div>
-</div>
+</main>
 
-<!-- SUMMARY -->
-<div id="summaryView" style="display:none;">
+<!-- SUMMARY VIEW -->
+<main id="summaryView" style="display:none;">
   <div class="card">
     <h2>Audit Summary</h2>
     <div id="summaryContent"></div>
-    <button id="exportBtn" class="primary-btn">Export Report</button>
+    <button id="exportBtn" class="primary-btn">Export (Print)</button>
   </div>
-</div>
-
 </main>
 
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
