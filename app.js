@@ -1,13 +1,13 @@
 // =========================================
-// AuditFlow Pro v2 – Enterprise Severity Engine
-// Multi-Audit | Structured Controls | Weighted Risk Model
+// AuditFlow Pro v3 – Enterprise Risk Matrix Engine
+// Multi-Audit | Impact x Likelihood | Adjustable Thresholds
 // =========================================
 
 // ------------------------------
 // STORAGE
 // ------------------------------
 
-const STORAGE_KEY = "auditflowpro_v2";
+const STORAGE_KEY = "auditflowpro_v3";
 
 function loadAudits() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -27,26 +27,41 @@ let state = {
 };
 
 // ------------------------------
-// CONTROL LIBRARY
+// CONTROL LIBRARY (WITH IMPACT)
 // ------------------------------
 
 const controlLibrary = [
   {
     section: "Site & Environment",
     controls: [
-      { id: "SE-01", statement: "Access routes are clearly marked and unobstructed.", criticality: "Critical" },
-      { id: "SE-02", statement: "Emergency exits are accessible and appropriately signed.", criticality: "Critical" },
-      { id: "SE-03", statement: "Fire detection systems are functional and periodically tested.", criticality: "Critical" }
+      { id: "SE-01", statement: "Access routes are clearly marked and unobstructed.", impact: 4 },
+      { id: "SE-02", statement: "Emergency exits are accessible and appropriately signed.", impact: 4 },
+      { id: "SE-03", statement: "Fire detection systems are functional and periodically tested.", impact: 4 }
     ]
   },
   {
     section: "Equipment & Infrastructure",
     controls: [
-      { id: "EI-01", statement: "Critical equipment is maintained per schedule.", criticality: "Critical" },
-      { id: "EI-02", statement: "Inspection records are available and current.", criticality: "Standard" }
+      { id: "EI-01", statement: "Critical equipment is maintained per schedule.", impact: 3 },
+      { id: "EI-02", statement: "Inspection records are available and current.", impact: 2 }
     ]
   }
 ];
+
+// ------------------------------
+// DEFAULT RISK CONFIGURATION
+// ------------------------------
+
+function defaultRiskConfig() {
+  return {
+    likelihoodFailure: 3,
+    severityThresholds: {
+      critical: 10,
+      high: 7,
+      medium: 4
+    }
+  };
+}
 
 // ------------------------------
 // CREATE AUDIT
@@ -67,7 +82,8 @@ function createAudit(title, client) {
     controls: generateControlSet(),
     findings: [],
     riskScore: 0,
-    overallRating: "Not Assessed"
+    overallRating: "Not Assessed",
+    riskConfig: defaultRiskConfig()
   };
 
   state.audits.push(newAudit);
@@ -91,8 +107,9 @@ function generateControlSet() {
         section: section.section,
         id: control.id,
         statement: control.statement,
-        criticality: control.criticality,
+        impact: control.impact,
         response: null,
+        riskScore: 0,
         severity: null
       });
     });
@@ -119,6 +136,7 @@ function getActiveAudit() {
 // ------------------------------
 
 function recordResponse(controlId, response) {
+
   const audit = getActiveAudit();
   if (!audit) return;
 
@@ -126,77 +144,90 @@ function recordResponse(controlId, response) {
   control.response = response;
 
   if (response === "No") {
-    generateFinding(audit, control);
+    applyRiskMatrix(audit, control);
+  } else {
+    control.riskScore = 0;
+    control.severity = null;
   }
 
-  calculateRisk(audit);
+  calculateOverallRisk(audit);
   saveAudits(state.audits);
   renderActiveAudit();
 }
 
 // ------------------------------
-// ENTERPRISE SEVERITY ENGINE
+// RISK MATRIX CALCULATION
 // ------------------------------
 
-function deriveSeverity(control) {
+function applyRiskMatrix(audit, control) {
 
-  if (control.criticality === "Critical") {
-    return "High";
-  }
+  const likelihood = audit.riskConfig.likelihoodFailure;
+  const score = control.impact * likelihood;
 
-  if (control.criticality === "Standard") {
-    return "Medium";
-  }
+  control.riskScore = score;
+  control.severity = deriveSeverity(score, audit.riskConfig.severityThresholds);
 
+  upsertFinding(audit, control);
+}
+
+// ------------------------------
+// DERIVE SEVERITY
+// ------------------------------
+
+function deriveSeverity(score, thresholds) {
+
+  if (score >= thresholds.critical) return "Critical";
+  if (score >= thresholds.high) return "High";
+  if (score >= thresholds.medium) return "Medium";
   return "Low";
 }
 
 // ------------------------------
-// GENERATE FINDING
+// UPSERT FINDING
 // ------------------------------
 
-function generateFinding(audit, control) {
+function upsertFinding(audit, control) {
 
-  const severity = deriveSeverity(control);
+  const existing = audit.findings.find(f => f.controlId === control.id);
 
-  audit.findings.push({
-    id: "F-" + String(audit.findings.length + 1).padStart(3, "0"),
-    controlId: control.id,
-    section: control.section,
-    statement: control.statement,
-    severity: severity,
-    status: "Open",
-    owner: "",
-    dueDate: ""
-  });
+  if (existing) {
+    existing.severity = control.severity;
+    existing.riskScore = control.riskScore;
+  } else {
+    audit.findings.push({
+      id: "F-" + String(audit.findings.length + 1).padStart(3, "0"),
+      controlId: control.id,
+      section: control.section,
+      statement: control.statement,
+      impact: control.impact,
+      riskScore: control.riskScore,
+      severity: control.severity,
+      status: "Open",
+      owner: "",
+      dueDate: ""
+    });
+  }
 }
 
 // ------------------------------
-// WEIGHTED RISK SCORING
+// OVERALL RISK CALCULATION
 // ------------------------------
 
-function calculateRisk(audit) {
+function calculateOverallRisk(audit) {
 
-  let score = 0;
+  let total = 0;
 
   audit.findings.forEach(f => {
-
-    if (f.severity === "Critical") score += 5;
-    if (f.severity === "High") score += 3;
-    if (f.severity === "Medium") score += 2;
-    if (f.severity === "Low") score += 1;
-
+    total += f.riskScore;
   });
 
-  audit.riskScore = score;
+  audit.riskScore = total;
 
-  // Enterprise Threshold Model
-
-  if (score === 0) {
+  if (total === 0) {
     audit.overallRating = "Low";
-  } else if (score <= 4) {
+  } else if (total < 10) {
     audit.overallRating = "Moderate";
-  } else if (score <= 10) {
+  } else if (total < 25) {
     audit.overallRating = "Elevated";
   } else {
     audit.overallRating = "High";
@@ -208,6 +239,7 @@ function calculateRisk(audit) {
 // ------------------------------
 
 function renderAuditList() {
+
   const container = document.getElementById("auditList");
   if (!container) return;
 
@@ -219,7 +251,8 @@ function renderAuditList() {
         <strong>${audit.title}</strong><br>
         Client: ${audit.client}<br>
         Status: ${audit.status}<br>
-        Overall Risk: ${audit.overallRating}
+        Overall Risk: ${audit.overallRating}<br>
+        Risk Score: ${audit.riskScore}
         <hr>
       </div>
     `;
@@ -243,7 +276,7 @@ function renderActiveAudit() {
     <p>Client: ${audit.client}</p>
     <p>Status: ${audit.status}</p>
     <p>Overall Risk Rating: ${audit.overallRating}</p>
-    <p>Risk Score: ${audit.riskScore}</p>
+    <p>Total Risk Score: ${audit.riskScore}</p>
     <hr>
   `;
 
@@ -253,15 +286,15 @@ function renderActiveAudit() {
       <div>
         <strong>${control.section}</strong><br>
         ${control.statement}<br>
+        Impact Level: ${control.impact}<br>
+        ${control.severity ? `Severity: ${control.severity} (Score ${control.riskScore})<br>` : ""}
         <button onclick="recordResponse('${control.id}','Yes')">Yes</button>
         <button onclick="recordResponse('${control.id}','No')">No</button>
         <button onclick="recordResponse('${control.id}','N/A')">N/A</button>
         <hr>
       </div>
     `;
-
   });
-
 }
 
 // ------------------------------
