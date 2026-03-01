@@ -164,3 +164,60 @@ body {
   font-size:12px;
   margin-top:4px;
 }
+/* --- Strip Tightening --- */
+.enterprise-strip {
+  padding:6px 20px;
+  font-size:12px;
+  border-bottom:1px solid #1f2937;
+}
+
+.strip-item {
+  gap:4px;
+}
+
+.status-pill {
+  padding:3px 8px;
+  font-size:11px;
+  letter-spacing:0.5px;
+}
+
+.actions-pill {
+  padding:3px 8px;
+  font-size:11px;
+}
+
+/* --- Commission Density Tightening --- */
+.commission-card {
+  margin:24px 20px;
+  padding:20px;
+}
+
+.commission-grid {
+  gap:16px 32px;
+}
+
+.field input {
+  padding:8px;
+  height:36px;
+}
+
+.readonly-value {
+  font-size:15px;
+}
+
+/* --- Strengthen State Indicator --- */
+#statusBadge {
+  display:inline-block;
+  padding:6px 12px;
+  font-size:12px;
+  letter-spacing:0.5px;
+  background:#6b7280;
+  color:white;
+}
+
+/* --- Button Alignment --- */
+.primary-action {
+  margin-top:20px;
+  align-self:flex-start;
+  min-width:180px;
+}
