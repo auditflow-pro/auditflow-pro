@@ -1,165 +1,50 @@
-const STORAGE_KEY = "auditflowpro_v5_smartcaps";
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AuditFlow Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-let state = loadState();
+<h1>AuditFlow Pro</h1>
 
-function loadState() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-    audits: [],
-    activeAuditId: null
-  };
-}
+<div class="card">
+  <h2>Create New Audit</h2>
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+  <input
+    type="text"
+    id="clientName"
+    placeholder="Client Name"
+    required
+  >
 
-function todayISO() {
-  const d = new Date();
-  return d.toISOString().split("T")[0];
-}
+  <input
+    type="text"
+    id="auditTitle"
+    placeholder="Audit Title"
+    required
+  >
 
-/* =====================================
-   SMART CAPITALISATION ENGINE
-   ===================================== */
+  <input
+    type="date"
+    id="auditDate"
+    required
+  >
 
-function smartCapitalise(str) {
-  if (!str) return str;
+  <button onclick="createAudit()">Create Audit</button>
+</div>
 
-  const preserveCaps = ["CG", "ISO", "HSE", "UK", "USA", "QA", "EU"];
-  const preserveTitle = ["Ltd", "PLC", "LLC", "Inc"];
+<div class="card">
+  <h2>Existing Audits</h2>
+  <div id="auditList"></div>
+</div>
 
-  return str
-    .split(" ")
-    .map(word => {
-      if (!word) return word;
+<div class="card">
+  <div id="auditEngine"></div>
+</div>
 
-      const upper = word.toUpperCase();
-
-      // Preserve known acronyms fully capitalised
-      if (preserveCaps.includes(upper)) {
-        return upper;
-      }
-
-      // Preserve business suffix case exactly
-      if (preserveTitle.includes(word)) {
-        return word;
-      }
-
-      // If user typed full caps manually (e.g. CG)
-      if (word === upper && word.length <= 5) {
-        return upper;
-      }
-
-      // Standard title case
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    })
-    .join(" ");
-}
-
-function attachCapitalisation() {
-  const clientInput = document.getElementById("clientName");
-  const auditInput = document.getElementById("auditTitle");
-
-  clientInput.addEventListener("input", () => {
-    const cursor = clientInput.selectionStart;
-    clientInput.value = smartCapitalise(clientInput.value);
-    clientInput.setSelectionRange(cursor, cursor);
-  });
-
-  auditInput.addEventListener("input", () => {
-    const cursor = auditInput.selectionStart;
-    auditInput.value = smartCapitalise(auditInput.value);
-    auditInput.setSelectionRange(cursor, cursor);
-  });
-}
-
-/* =====================================
-   INITIALISE
-   ===================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("auditDate").value = todayISO();
-  attachCapitalisation();
-  renderAuditList();
-});
-
-/* =====================================
-   CREATE AUDIT
-   ===================================== */
-
-function createAudit() {
-  const clientName = smartCapitalise(
-    document.getElementById("clientName").value.trim()
-  );
-
-  const auditTitle = smartCapitalise(
-    document.getElementById("auditTitle").value.trim()
-  );
-
-  const auditDate = document.getElementById("auditDate").value;
-
-  if (!clientName || !auditTitle || !auditDate) {
-    alert("Client name, audit title, and date are required.");
-    return;
-  }
-
-  const auditId = "A-" + Date.now();
-
-  const audit = {
-    id: auditId,
-    clientName,
-    title: auditTitle,
-    date: auditDate,
-    riskScore: 0,
-    exposurePercent: 0,
-    rating: "Controlled Risk"
-  };
-
-  state.audits.push(audit);
-  state.activeAuditId = auditId;
-
-  document.getElementById("clientName").value = "";
-  document.getElementById("auditTitle").value = "";
-  document.getElementById("auditDate").value = todayISO();
-
-  saveState();
-  renderAuditList();
-  renderActiveAudit();
-}
-
-/* =====================================
-   RENDERING
-   ===================================== */
-
-function renderAuditList() {
-  const container = document.getElementById("auditList");
-  container.innerHTML = "";
-
-  state.audits.forEach(audit => {
-    container.innerHTML += `
-      <div class="audit-item" onclick="setActiveAudit('${audit.id}')">
-        <strong>${audit.title}</strong><br>
-        ${audit.clientName} | ${audit.date}
-      </div>
-    `;
-  });
-}
-
-function setActiveAudit(id) {
-  state.activeAuditId = id;
-  renderActiveAudit();
-}
-
-function renderActiveAudit() {
-  const audit = state.audits.find(a => a.id === state.activeAuditId);
-  if (!audit) return;
-
-  const container = document.getElementById("auditEngine");
-
-  container.innerHTML = `
-    <h2>${audit.title}</h2>
-    <p><strong>Client:</strong> ${audit.clientName}</p>
-    <p><strong>Date:</strong> ${audit.date}</p>
-    <p><strong>Rating:</strong> ${audit.rating}</p>
-  `;
-}
+<script src="app.js"></script>
+</body>
+</html>
