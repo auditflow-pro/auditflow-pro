@@ -1,5 +1,5 @@
 /* =========================================
-   AUDITFLOW PRO — STAGE 01 ENGINE v500
+   AUDITFLOW PRO — REGISTRATION ENGINE v600
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,15 +10,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const client = document.getElementById("clientName").value.trim();
     const location = document.getElementById("siteLocation").value.trim();
-    const ref = document.getElementById("assessmentRef").value.trim();
+    let ref = document.getElementById("assessmentRef").value.trim();
     const date = document.getElementById("assessmentDate").value;
 
     if (!client || !location || !ref || !date) {
-      alert("All scope fields must be defined before proceeding.");
       return;
     }
 
-    alert("Structured assessment phase will initialise.");
+    // Normalize reference code only (professional discipline)
+    ref = ref.toUpperCase();
+    document.getElementById("assessmentRef").value = ref;
+
+    // Placeholder transition — replace with assessment load
+    window.location.hash = "assessment";
 
   });
 
