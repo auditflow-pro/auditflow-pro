@@ -294,3 +294,78 @@ body {
   background: #0b1a33; /* deeper navy */
   min-width: 200px;
 }
+/* ===================== */
+/* PRINT-READY REPORT    */
+/* ===================== */
+
+.report-header h1 {
+  margin-bottom: 10px;
+}
+
+.report-meta div {
+  margin-bottom: 4px;
+}
+
+.report-section {
+  margin-top: 30px;
+  page-break-inside: avoid;
+}
+
+.domain-summary {
+  margin-bottom: 12px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.report-table th,
+.report-table td {
+  border: 1px solid #000;
+  padding: 6px;
+  text-align: left;
+  font-size: 12px;
+}
+
+@media print {
+
+  body {
+    background: white;
+    margin: 20mm;
+  }
+
+  .topnav,
+  .enterprise-strip,
+  .primary-action,
+  .secondary-action,
+  button {
+    display: none !important;
+  }
+
+  .commission-card {
+    display: none;
+  }
+
+  #engineBlock {
+    display: none;
+  }
+
+  #actionsView {
+    display: none;
+  }
+
+  #summaryView {
+    display: block !important;
+  }
+
+  @page {
+    size: auto;
+    margin: 20mm;
+  }
+
+  footer::after {
+    content: counter(page);
+  }
+}
