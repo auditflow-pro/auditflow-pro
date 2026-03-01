@@ -1,228 +1,170 @@
-(function(){
+// AuditFlow Pro – Workflow Authority Hardening V1
+// £59.99 Instrument Behaviour
 
-const STORAGE_KEY="auditflow_global_v8";
-const SECTION_ORDER=["site","equipment","operations","people"];
+const sections = [
+  {
+    name: "Site & Environment",
+    questions: [
+      "Work areas clean and free from hazards?",
+      "Access routes clearly marked?",
+      "Lighting adequate?",
+      "Waste management controlled?",
+      "Emergency exits unobstructed?",
+      "Housekeeping standards maintained?",
+      "Storage areas organised?",
+      "Signage visible and clear?",
+      "Environmental risks identified?",
+      "Controls implemented effectively?"
+    ]
+  },
+  {
+    name: "Equipment & Infrastructure",
+    questions: [
+      "Equipment maintained appropriately?",
+      "Inspection records available?",
+      "Electrical systems compliant?",
+      "Safety guards in place?",
+      "Calibration up to date?",
+      "Infrastructure structurally sound?",
+      "Ventilation systems functional?",
+      "Water systems safe?",
+      "Fire detection operational?",
+      "Backup systems available?"
+    ]
+  },
+  {
+    name: "Operational Controls",
+    questions: [
+      "Procedures aligned with practice?",
+      "Risk assessments current?",
+      "Supervision adequate?",
+      "Training records available?",
+      "Incident reporting functional?",
+      "Monitoring systems active?",
+      "Corrective actions tracked?",
+      "Permit systems enforced?",
+      "Change management controlled?",
+      "Compliance reviews conducted?"
+    ]
+  },
+  {
+    name: "People & Process",
+    questions: [
+      "Roles clearly defined?",
+      "Competency verified?",
+      "Communication effective?",
+      "Leadership oversight present?",
+      "Escalation procedures defined?",
+      "Performance reviewed regularly?",
+      "Accountability assigned?",
+      "Documentation controlled?",
+      "Continuous improvement evident?",
+      "Governance oversight effective?"
+    ]
+  }
+];
 
-const TEMPLATE={
-site:{title:"Site & Environment",questions:[
-"Housekeeping standards consistently maintained across operational areas?",
-"Access and egress routes clearly defined and unobstructed?",
-"Segregation between pedestrian and vehicle movement effectively controlled?",
-"Emergency arrangements clearly communicated and visible?",
-"Environmental risks assessed and controlled?",
-"Storage areas organised safely?",
-"Signage aligned with operational risk?",
-"Manual handling exposure minimised?",
-"External slip/trip risks controlled?",
-"Site security controls effective?"
-]},
-equipment:{title:"Equipment & Infrastructure",questions:[
-"Preventive maintenance current?",
-"Inspection records complete?",
-"Safety-critical devices tested?",
-"Temporary equipment controlled?",
-"Infrastructure integrity reviewed?",
-"Isolation controls applied?",
-"Electrical installations protected?",
-"Equipment guarding effective?",
-"Utility systems monitored?",
-"Defect reporting linked to action?"
-]},
-operations:{title:"Operational Controls",questions:[
-"Procedures aligned with practice?",
-"Risk assessments current?",
-"Control measures verified?",
-"Change management applied?",
-"Permit systems functioning?",
-"Monitoring active?",
-"Incident investigations robust?",
-"Corrective actions verified?",
-"Performance metrics used?",
-"Non-conformance handled consistently?"
-]},
-people:{title:"People & Process",questions:[
-"Roles clearly defined?",
-"Training current?",
-"Supervision appropriate?",
-"Communication effective?",
-"Incident reporting active?",
-"Leadership engagement visible?",
-"Contractor controls aligned?",
-"Staffing levels adequate?",
-"Improvement initiatives tracked?",
-"Governance oversight documented?"
-]}
+let state = {
+  currentSection: 0,
+  currentQuestion: 0,
+  answers: {},
+  auditName: "",
+  client: "",
+  date: new Date().toLocaleDateString(),
+  status: "IN PROGRESS"
 };
 
-function $(id){return document.getElementById(id);}
-function uid(){return Math.random().toString(16).slice(2);}
-
-function blankAudit(){
-let responses={};
-SECTION_ORDER.forEach(k=>responses[k]=Array(TEMPLATE[k].questions.length).fill(null));
-return{
-id:uid(),
-name:"",
-client:"",
-date:"",
-activeSection:"site",
-activeIndex:0,
-responses,
-actions:[]
-};
+function init() {
+  document.getElementById("auditDate").innerText = state.date;
+  render();
 }
 
-function load(){
-let raw=localStorage.getItem(STORAGE_KEY);
-if(!raw)return{audits:[],activeId:null,view:"audit"};
-return JSON.parse(raw);
+function render() {
+  renderStatus();
+  renderSectionHeader();
+  renderQuestion();
 }
 
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
-
-let state=load();
-
-if(!state.activeId){
-let a=blankAudit();
-state.audits=[a];
-state.activeId=a.id;
+function renderStatus() {
+  const badge = document.getElementById("statusBadge");
+  badge.innerText = state.status;
+  badge.className = "status-badge " + state.status.replace(" ", "-").toLowerCase();
 }
 
-function active(){return state.audits.find(a=>a.id===state.activeId);}
-
-function switchView(v){
-state.view=v;
-$("auditView").style.display=v==="audit"?"block":"none";
-$("actionsView").style.display=v==="actions"?"block":"none";
-$("summaryView").style.display=v==="summary"?"block":"none";
-document.querySelectorAll(".navitem").forEach(n=>n.classList.toggle("active",n.dataset.view===v));
-render();
+function renderSectionHeader() {
+  const section = sections[state.currentSection];
+  const answered = getSectionAnswered(state.currentSection);
+  document.getElementById("sectionHeader").innerText =
+    section.name + " • " + answered + "/" + section.questions.length + " answered";
 }
 
-document.querySelectorAll(".navitem").forEach(n=>n.onclick=()=>switchView(n.dataset.view));
+function renderQuestion() {
+  const section = sections[state.currentSection];
+  const question = section.questions[state.currentQuestion];
 
-function render(){
-let a=active();
-$("auditName").value=a.name;
-$("clientName").value=a.client;
-$("auditDate").value=a.date;
-
-let section=TEMPLATE[a.activeSection];
-$("sectionHeader").textContent=section.title;
-
-let answered=a.responses[a.activeSection].filter(x=>x!==null).length;
-let open=a.actions.filter(x=>x.status==="OPEN").length;
-
-$("sectionMeta").textContent=`${answered}/${section.questions.length} answered • ${open} open`;
-
-$("questionText").textContent=section.questions[a.activeIndex];
-
-renderActions();
-renderSummary();
-save();
+  document.getElementById("questionText").innerText = question;
 }
 
-function sectionCompleteTransition(nextSection){
-let banner=$("sectionCompleteBanner");
-banner.textContent=`${TEMPLATE[active().activeSection].title} complete`;
-banner.style.display="block";
-setTimeout(()=>{
-banner.style.display="none";
-active().activeSection=nextSection;
-active().activeIndex=0;
-render();
-},700);
+function answer(value) {
+  const key = state.currentSection + "-" + state.currentQuestion;
+  state.answers[key] = value;
+
+  autoAdvance();
 }
 
-function autoAdvance(){
-let a=active();
-let max=TEMPLATE[a.activeSection].questions.length-1;
-let secIndex=SECTION_ORDER.indexOf(a.activeSection);
+function autoAdvance() {
+  const section = sections[state.currentSection];
 
-if(a.activeIndex<max){
-a.activeIndex++;
-}else{
-if(secIndex<SECTION_ORDER.length-1){
-let nextSection=SECTION_ORDER[secIndex+1];
-sectionCompleteTransition(nextSection);
-return;
-}
-}
-render();
+  if (state.currentQuestion < section.questions.length - 1) {
+    state.currentQuestion++;
+    render();
+  } else {
+    showSectionComplete();
+  }
 }
 
-function record(val){
-let a=active();
-if(!a.name.trim())return;
+function showSectionComplete() {
+  const panel = document.getElementById("completionPanel");
+  const section = sections[state.currentSection];
 
-a.responses[a.activeSection][a.activeIndex]=val;
+  panel.innerText = "SECTION COMPLETE\n" + section.name.toUpperCase();
+  panel.style.display = "block";
 
-if(val==="NO"){
-a.actions.push({id:uid(),section:a.activeSection,index:a.activeIndex,status:"OPEN"});
+  setTimeout(() => {
+    panel.style.display = "none";
+    moveToNextSection();
+  }, 1200);
 }
 
-autoAdvance();
+function moveToNextSection() {
+  if (state.currentSection < sections.length - 1) {
+    state.currentSection++;
+    state.currentQuestion = 0;
+    render();
+  } else {
+    state.status = "COMPLETE";
+    render();
+  }
 }
 
-$("btnYes").onclick=()=>record("YES");
-$("btnNo").onclick=()=>record("NO");
-$("btnNa").onclick=()=>record("N/A");
-$("btnPrev").onclick=()=>{if(active().activeIndex>0){active().activeIndex--;render();}};
-$("btnNext").onclick=()=>{autoAdvance();};
-
-$("auditName").oninput=e=>{active().name=e.target.value;render();};
-$("clientName").oninput=e=>{active().client=e.target.value;};
-$("auditDate").onchange=e=>{active().date=e.target.value;};
-
-$("btnNewAudit").onclick=()=>{
-let a=blankAudit();
-state.audits.push(a);
-state.activeId=a.id;
-switchView("audit");
-};
-
-function renderActions(){
-let a=active();
-let openDiv=$("openActions");
-let closedDiv=$("closedActions");
-openDiv.innerHTML="";
-closedDiv.innerHTML="";
-
-a.actions.forEach(act=>{
-let div=document.createElement("div");
-div.className="action-item";
-div.textContent=TEMPLATE[act.section].questions[act.index];
-if(act.status==="OPEN"){
-let btn=document.createElement("button");
-btn.textContent="Close";
-btn.onclick=()=>{act.status="CLOSED";render();};
-div.appendChild(btn);
-openDiv.appendChild(div);
-}else{
-closedDiv.appendChild(div);
-}
-});
+function previous() {
+  if (state.currentQuestion > 0) {
+    state.currentQuestion--;
+    render();
+  }
 }
 
-function renderSummary(){
-let a=active();
-let container=$("summarySections");
-container.innerHTML="";
-
-SECTION_ORDER.forEach(k=>{
-let answered=a.responses[k].filter(x=>x!==null).length;
-let div=document.createElement("div");
-div.className="summary-row";
-div.textContent=`${TEMPLATE[k].title} — ${answered}/${TEMPLATE[k].questions.length}`;
-container.appendChild(div);
-});
-
-let open=a.actions.filter(x=>x.status==="OPEN").length;
-let closed=a.actions.filter(x=>x.status==="CLOSED").length;
-
-$("summaryTotals").textContent=`Open actions: ${open} • Closed actions: ${closed}`;
+function getSectionAnswered(sectionIndex) {
+  let count = 0;
+  sections[sectionIndex].questions.forEach((_, i) => {
+    if (state.answers[sectionIndex + "-" + i]) count++;
+  });
+  return count;
 }
 
-switchView(state.view||"audit");
+window.answerYes = () => answer("YES");
+window.answerNo = () => answer("NO");
+window.answerNA = () => answer("N/A");
+window.previous = previous;
 
-})();
+window.onload = init;
