@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_v7_clean";
+const STORAGE_KEY = "auditflowpro_v8_professional";
 
 let state = loadState();
 
@@ -18,7 +18,7 @@ function todayISO() {
   return d.toISOString().split("T")[0];
 }
 
-/* SMART CAPITALISATION */
+/* SMART CAPS */
 
 function smartCapitalise(str) {
   if (!str) return str;
@@ -92,13 +92,14 @@ function createAudit() {
   state.audits.push(audit);
   state.activeAuditId = audit.id;
 
+  saveState();
+
   document.getElementById("clientName").value = "";
   document.getElementById("auditTitle").value = "";
   document.getElementById("auditDate").value = todayISO();
 
-  saveState();
   renderAuditList();
-  renderActiveAudit();
+  openAudit(audit.id);
 }
 
 /* LIST */
@@ -118,29 +119,40 @@ function renderAuditList() {
       audit.clientName + " | " + audit.date;
 
     div.onclick = function() {
-      state.activeAuditId = audit.id;
-      renderActiveAudit();
+      openAudit(audit.id);
     };
 
     container.appendChild(div);
   });
 }
 
-/* ACTIVE */
+/* OPEN AUDIT */
 
-function renderActiveAudit() {
-
-  const audit = state.audits.find(function(a) {
-    return a.id === state.activeAuditId;
-  });
-
+function openAudit(id) {
+  state.activeAuditId = id;
+  const audit = state.audits.find(a => a.id === id);
   if (!audit) return;
 
   const container = document.getElementById("auditEngine");
+  container.classList.remove("hidden");
 
   container.innerHTML =
-    "<h2>" + audit.title + "</h2>" +
-    "<p><strong>Client:</strong> " + audit.clientName + "</p>" +
-    "<p><strong>Date:</strong> " + audit.date + "</p>" +
-    "<p><strong>Status:</strong> " + audit.rating + "</p>";
+    "<div class='audit-header'>" +
+      "<h2>" + audit.title + "</h2>" +
+      "<div class='audit-meta'>" +
+        audit.clientName + " | " + audit.date +
+      "</div>" +
+      "<div class='audit-status'>" +
+        "Status: " + audit.rating +
+      "</div>" +
+    "</div>" +
+
+    "<div class='audit-actions'>" +
+      "<button class='secondary'>Action List</button>" +
+      "<button class='secondary'>Snapshot</button>" +
+    "</div>" +
+
+    "<div class='audit-body'>" +
+      "<p>Audit engine ready. Full structured sections will load here.</p>" +
+    "</div>";
 }
