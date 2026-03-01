@@ -3,35 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <title>AuditFlow Pro</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f6f8;
+    }
+    h1, h2 {
+      margin-bottom: 10px;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+    button {
+      margin: 4px 4px 4px 0;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    hr {
+      margin: 15px 0;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>AuditFlow Pro</h1>
+<h1>AuditFlow Pro</h1>
 
-  <hr>
-
+<div class="card">
   <h2>Create New Audit</h2>
-
   <input id="newTitle" placeholder="Audit Title">
   <input id="newClient" placeholder="Client Name">
   <button onclick="createAudit(
-      document.getElementById('newTitle').value,
-      document.getElementById('newClient').value
-    )">
+    document.getElementById('newTitle').value,
+    document.getElementById('newClient').value
+  )">
     Create Audit
   </button>
+</div>
 
-  <hr>
-
+<div class="card">
   <h2>Existing Audits</h2>
   <div id="auditList"></div>
+</div>
 
-  <hr>
-
+<div class="card">
   <div id="auditEngine"></div>
+</div>
 
-  <script src="app.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
