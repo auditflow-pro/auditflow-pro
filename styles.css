@@ -1,5 +1,5 @@
 /* ========================================
-   AUDITFLOW PRO — INSTRUMENT CORE v200
+   AUDITFLOW PRO — ENTRY GATE v300
 ======================================== */
 
 * {
@@ -19,30 +19,29 @@ html, body {
 .command-bar {
   background: #16232e;
   color: white;
-  padding: 70px 24px 60px;
-  border-bottom: 4px solid #c8a94a;
+  padding: 50px 24px 40px;
+  border-bottom: 3px solid #c8a94a;
 }
 
 .command-inner {
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
 }
 
 .brand-title {
-  font-size: 34px;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: 0.5px;
 }
 
 .brand-sub {
-  font-size: 15px;
+  font-size: 14px;
   opacity: 0.85;
 }
 
 .brand-edition {
-  font-size: 12px;
-  letter-spacing: 1.8px;
+  font-size: 11px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   opacity: 0.6;
 }
@@ -50,100 +49,73 @@ html, body {
 /* CONTAINER */
 
 .container {
-  max-width: 1100px;
+  max-width: 900px;
   margin: 80px auto 120px;
   padding: 0 24px;
 }
 
-/* SYSTEM STRIP */
+/* ENTRY GATE */
 
-.system-strip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
-  margin-bottom: 80px;
-}
-
-.strip-block {
+.entry-gate {
   background: white;
   border: 1px solid #d9e1e8;
-  padding: 28px;
+  padding: 70px 60px;
 }
 
-.strip-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1.6px;
-  color: #7a8794;
-  margin-bottom: 6px;
-}
-
-.strip-value {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.strip-classification {
-  font-size: 12px;
-  margin-top: 4px;
-  letter-spacing: 1px;
-}
-
-.exposure .strip-value {
-  color: #2e7d32;
-}
-
-/* WORKSPACE */
-
-.workspace {
-  background: white;
-  border: 1px solid #d9e1e8;
-}
-
-.workspace-header {
-  padding: 28px 32px;
+.entry-header {
   font-size: 22px;
   font-weight: 600;
-  border-bottom: 1px solid #d9e1e8;
-  background: #f7f9fb;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.workspace-body {
-  padding: 60px 32px 80px;
+.lifecycle {
+  margin-bottom: 50px;
 }
 
-.field-column {
-  max-width: 640px;
-  margin: 0 auto;
+.stage {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28px;
 }
 
-label {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 6px;
+.stage-number {
+  font-size: 18px;
+  font-weight: 600;
+  width: 50px;
+  color: #16232e;
+}
+
+.stage-content {
+  flex: 1;
+}
+
+.stage-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.stage-desc {
+  font-size: 14px;
   color: #55616c;
 }
 
-input {
-  width: 100%;
-  height: 64px;
-  padding: 0 20px;
-  margin-bottom: 26px;
-  border: 1px solid #cfd8df;
-  font-size: 16px;
-  appearance: none;
-  -webkit-appearance: none;
+.outcome-line {
+  font-size: 14px;
+  color: #44525d;
+  margin-bottom: 50px;
+  line-height: 1.6;
 }
 
-input:focus {
-  outline: none;
-  border: 1px solid #16232e;
-}
+/* PRIMARY BUTTON */
 
 .primary-btn {
-  width: 100%;
-  height: 64px;
-  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  width: 260px;
+  height: 56px;
+  font-size: 15px;
   font-weight: 600;
   background: #16232e;
   color: white;
@@ -159,7 +131,7 @@ input:focus {
 
 .footer {
   text-align: center;
-  padding: 100px 24px;
-  font-size: 13px;
+  padding: 80px 24px;
+  font-size: 12px;
   color: #6b7682;
 }
