@@ -19,8 +19,6 @@
 
 <main class="container">
 
-<button id="btnNewAudit" class="primary-btn">+ New Audit</button>
-
 <div id="completionPanel" class="completion-panel" style="display:none;"></div>
 
 <!-- AUDIT VIEW -->
@@ -31,6 +29,7 @@
       <div>
         <label>Audit Name *</label>
         <input id="auditName" type="text" placeholder="Required">
+        <div id="nameError" class="error"></div>
       </div>
 
       <div>
@@ -45,23 +44,28 @@
 
       <div class="status-container">
         <label>Status</label>
-        <div id="statusBadge" class="status-badge">IN PROGRESS</div>
+        <div id="statusBadge" class="status-badge draft">DRAFT</div>
       </div>
     </div>
+
+    <button id="startAuditBtn" class="primary-btn">START AUDIT</button>
   </div>
 
-  <div class="card section-card">
-    <div id="sectionHeader" class="section-header"></div>
-    <div id="questionText" class="question"></div>
+  <div id="engineBlock" style="display:none;">
+    <div class="card section-card">
+      <div id="sectionHeader" class="section-header"></div>
+      <div id="sectionMeta" class="section-meta"></div>
+      <div id="questionText" class="question"></div>
 
-    <div class="buttons">
-      <button onclick="answerYes()" class="yes">YES</button>
-      <button onclick="answerNo()" class="no">NO</button>
-      <button onclick="answerNA()" class="na">N/A</button>
-    </div>
+      <div class="buttons">
+        <button id="yesBtn" class="yes">YES</button>
+        <button id="noBtn" class="no">NO</button>
+        <button id="naBtn" class="na">N/A</button>
+      </div>
 
-    <div class="navbuttons">
-      <button onclick="previous()" class="previous-btn">Previous</button>
+      <div class="navbuttons">
+        <button id="previousBtn" class="previous-btn">Previous</button>
+      </div>
     </div>
   </div>
 
@@ -70,7 +74,7 @@
 <!-- ACTIONS -->
 <div id="actionsView" style="display:none;">
   <div class="card">
-    <h2>Actions</h2>
+    <h2>Open Actions</h2>
     <div id="actionsList"></div>
   </div>
 </div>
@@ -80,6 +84,7 @@
   <div class="card">
     <h2>Audit Summary</h2>
     <div id="summaryContent"></div>
+    <button id="exportBtn" class="primary-btn">Export Report</button>
   </div>
 </div>
 
