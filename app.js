@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_enterprise_v4";
+const STORAGE_KEY = "auditflowpro_enterprise_v5";
 
 function loadAudits() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -53,7 +53,6 @@ function createAudit(title, client) {
   state.activeAuditId = id;
   saveAudits(state.audits);
 
-  // Professional reset behaviour
   document.getElementById("newTitle").value = "";
   document.getElementById("newClient").value = "";
 
@@ -105,12 +104,7 @@ function recordResponse(controlId, response) {
 
   const control = audit.controls.find(c => c.id === controlId);
   control.response = response;
-
-  if (response === "No") {
-    control.score = control.impact * audit.likelihood;
-  } else {
-    control.score = 0;
-  }
+  control.score = (response === "No") ? control.impact * audit.likelihood : 0;
 
   recalc(audit);
   saveAudits(state.audits);
@@ -146,7 +140,7 @@ function renderAuditList() {
 
   state.audits.forEach(audit => {
     container.innerHTML += `
-      <div onclick="setActiveAudit('${audit.id}')">
+      <div class="audit-item" onclick="setActiveAudit('${audit.id}')">
         <strong>${audit.title}</strong><br>
         ${audit.rating} (${audit.exposurePercent}%)
         <hr>
@@ -161,6 +155,11 @@ function renderActiveAudit() {
 
   const container = document.getElementById("auditEngine");
 
+  const barClass =
+    audit.exposurePercent <= 20 ? "low" :
+    audit.exposurePercent <= 60 ? "medium" :
+    audit.exposurePercent <= 80 ? "high" : "critical";
+
   container.innerHTML = `
     <h2>${audit.title}
       <span class="badge ${audit.status === "Draft" ? "draft" : "final"}">
@@ -170,24 +169,30 @@ function renderActiveAudit() {
 
     <p><strong>Client:</strong> ${audit.client}</p>
 
-    <h3>Executive Risk Overview</h3>
-    <p><strong>Total Risk Score:</strong> ${audit.riskScore} / ${audit.maxRisk}</p>
-    <p><strong>Risk Exposure:</strong> ${audit.exposurePercent}%</p>
-    <p><strong>Overall Rating:</strong> ${audit.rating}</p>
+    <div class="executive">
+      <h3>Executive Risk Overview</h3>
+      <p><strong>Total Risk Score:</strong> ${audit.riskScore} / ${audit.maxRisk}</p>
+      <p><strong>Exposure Level:</strong> ${audit.exposurePercent}%</p>
+      <p><strong>Overall Rating:</strong> ${audit.rating}</p>
+
+      <div class="risk-bar-container">
+        <div class="risk-bar ${barClass}" style="width:${audit.exposurePercent}%"></div>
+      </div>
+    </div>
 
     <button onclick="completeAudit()">Mark Audit Complete</button>
-    <hr>
+
+    <hr class="section-divider">
   `;
 
   audit.controls.forEach(control => {
     container.innerHTML += `
-      <div>
+      <div class="control-block">
         <strong>${control.section}</strong><br>
         ${control.statement}<br>
         <button onclick="recordResponse('${control.id}','Yes')">Yes</button>
         <button onclick="recordResponse('${control.id}','No')">No</button>
         <button onclick="recordResponse('${control.id}','N/A')">N/A</button>
-        <hr>
       </div>
     `;
   });
