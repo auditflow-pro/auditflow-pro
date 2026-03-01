@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
-<link rel="stylesheet" href="styles.css?v=400">
+<link rel="stylesheet" href="styles.css?v=500">
 </head>
 
 <body>
 
-<header class="top-bar">
-  <div class="top-inner">
+<header class="title-plate">
+  <div class="title-inner">
     <div class="brand-title">AuditFlow Pro</div>
     <div class="brand-sub">Professional Compliance Instrument</div>
   </div>
@@ -20,63 +20,41 @@
 
   <section class="instrument-frame">
 
-    <div class="frame-header">
-      Instrument Lifecycle
+    <div class="console-header">
+      Stage 01 — Scope Definition
     </div>
 
-    <div class="frame-body">
+    <div class="console-body">
 
-      <div class="lifecycle">
-
-        <div class="stage preparatory">
-          <div class="stage-index">01</div>
-          <div class="stage-content">
-            <div class="stage-title">Audit Registration</div>
-            <div class="stage-desc">
-              Formal definition of assessment scope and metadata.
-            </div>
-          </div>
-        </div>
-
-        <div class="stage preparatory">
-          <div class="stage-index">02</div>
-          <div class="stage-content">
-            <div class="stage-title">Structured Assessment</div>
-            <div class="stage-desc">
-              Weighted evaluation across defined compliance domains.
-            </div>
-          </div>
-        </div>
-
-        <div class="stage decisive">
-          <div class="stage-index">03</div>
-          <div class="stage-content">
-            <div class="stage-title">Exposure Determination</div>
-            <div class="stage-desc">
-              Deterministic calculation of quantified exposure profile.
-            </div>
-          </div>
-        </div>
-
-        <div class="stage formalisation">
-          <div class="stage-index">04</div>
-          <div class="stage-content">
-            <div class="stage-title">Executive Snapshot</div>
-            <div class="stage-desc">
-              Formal sealing of findings and structured action register.
-            </div>
-          </div>
-        </div>
-
+      <div class="field-group">
+        <label>Client / Organisation</label>
+        <input type="text" id="clientName" autocapitalize="words" autocomplete="off">
       </div>
 
-      <div class="instrument-outcome">
-        Produces a quantified exposure profile and structured compliance record.
+      <div class="field-group">
+        <label>Site / Location</label>
+        <input type="text" id="siteLocation" autocapitalize="words" autocomplete="off">
+      </div>
+
+      <div class="field-row">
+        <div class="field-group half">
+          <label>Assessment Reference</label>
+          <input type="text" id="assessmentRef" autocapitalize="characters" autocomplete="off">
+        </div>
+
+        <div class="field-group half">
+          <label>Date</label>
+          <input type="date" id="assessmentDate">
+        </div>
+      </div>
+
+      <div class="console-note">
+        Define assessment parameters before commencing structured evaluation.
       </div>
 
       <div class="action-zone">
-        <button class="primary-btn" id="initiateBtn">
-          Commence Assessment
+        <button class="primary-btn" id="commenceBtn">
+          Proceed to Assessment
         </button>
       </div>
 
@@ -90,7 +68,7 @@
   © 2026 AuditFlow Pro. Structured compliance guidance instrument. Not legal advice.
 </footer>
 
-<script src="app.js?v=400"></script>
+<script src="app.js?v=500"></script>
 
 </body>
 </html>
