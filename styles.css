@@ -57,23 +57,33 @@ button:hover {
   color: #334e68;
 }
 
-.final {
-  background: #334e68;
-  color: white;
-}
-
 .section-header {
   font-weight: 600;
-  margin-top: 20px;
+  margin-top: 28px;
+  font-size: 16px;
 }
 
 .section-summary {
   font-size: 13px;
-  margin: 4px 0 10px 0;
+  margin: 4px 0 14px 0;
+  color: #52606d;
 }
 
 .control-block {
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eef2f5;
+}
+
+.control-title {
+  font-weight: 500;
+}
+
+.control-desc {
+  font-size: 13px;
+  color: #6b7c93;
+  margin-top: 4px;
+  margin-bottom: 8px;
 }
 
 .risk-bar-container {
