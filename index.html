@@ -14,8 +14,24 @@
   <h2>Create New Audit</h2>
 
   <select id="clientSelect"></select>
-  <input id="newClientName" placeholder="Add New Client (optional)" autocapitalize="words">
-  <input id="newAuditTitle" placeholder="Audit Title" autocapitalize="words">
+
+  <input
+    type="text"
+    id="newClientName"
+    placeholder="Add New Client (optional)"
+    autocapitalize="words"
+    autocomplete="off"
+    spellcheck="true"
+  >
+
+  <input
+    type="text"
+    id="newAuditTitle"
+    placeholder="Audit Title"
+    autocapitalize="words"
+    autocomplete="off"
+    spellcheck="true"
+  >
 
   <button onclick="createAudit()">Create Audit</button>
 </div>
@@ -30,5 +46,6 @@
 </div>
 
 <script src="app.js"></script>
+
 </body>
 </html>
