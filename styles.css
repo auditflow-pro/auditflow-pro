@@ -1,6 +1,5 @@
 /* =========================================
-   AUDITFLOW PRO — INSTRUMENT FRAME v400
-   Measured • Contained • Device Safe
+   AUDITFLOW PRO — INTAKE CONSOLE v500
 ========================================= */
 
 * {
@@ -15,44 +14,38 @@ html, body {
   color: #111821;
 }
 
-/* ----------------------------------------
-   TOP BAR
------------------------------------------ */
+/* TITLE PLATE */
 
-.top-bar {
+.title-plate {
   background: #16232e;
   color: #ffffff;
-  padding: 32px 20px;
+  padding: 28px 20px;
   border-bottom: 2px solid #c8a94a;
 }
 
-.top-inner {
-  max-width: 1000px;
+.title-inner {
+  max-width: 900px;
   margin: 0 auto;
   text-align: center;
 }
 
 .brand-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
 }
 
 .brand-sub {
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.85;
 }
 
-/* ----------------------------------------
-   PAGE
------------------------------------------ */
+/* PAGE */
 
 .page {
   padding: 60px 20px 100px;
 }
 
-/* ----------------------------------------
-   INSTRUMENT FRAME
------------------------------------------ */
+/* INSTRUMENT FRAME */
 
 .instrument-frame {
   max-width: 900px;
@@ -61,89 +54,65 @@ html, body {
   border: 1px solid #cfd8df;
 }
 
-/* subtle containment — not card softness */
-.frame-header {
-  padding: 24px 28px;
-  font-size: 16px;
+.console-header {
+  padding: 22px 28px;
+  font-size: 15px;
   font-weight: 600;
   border-bottom: 1px solid #e3e9ee;
   letter-spacing: 0.4px;
 }
 
-.frame-body {
+.console-body {
   padding: 48px 40px 60px;
 }
 
-/* ----------------------------------------
-   LIFECYCLE STRUCTURE
------------------------------------------ */
+/* FIELDS */
 
-.lifecycle {
+.field-group {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
-.stage {
-  display: flex;
-  gap: 18px;
-}
-
-.stage-index {
-  width: 42px;
-  font-weight: 600;
-  font-size: 16px;
-  color: #16232e;
-}
-
-.stage-title {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.stage-desc {
-  font-size: 14px;
-  color: #55616c;
-  line-height: 1.5;
-}
-
-/* preparatory stages slightly lighter */
-.preparatory .stage-title {
-  opacity: 0.9;
-}
-
-/* decisive centre of gravity */
-.decisive {
-  padding: 16px 0;
-  border-top: 1px solid #e3e9ee;
-  border-bottom: 1px solid #e3e9ee;
-}
-
-.decisive .stage-title {
-  letter-spacing: 0.3px;
-}
-
-/* formal sealing */
-.formalisation .stage-title {
-  opacity: 0.95;
-}
-
-/* ----------------------------------------
-   OUTCOME
------------------------------------------ */
-
-.instrument-outcome {
-  font-size: 14px;
+.field-group label {
+  font-size: 13px;
+  margin-bottom: 6px;
   color: #44525d;
-  margin-bottom: 36px;
-  line-height: 1.6;
 }
 
-/* ----------------------------------------
-   ACTION ZONE
------------------------------------------ */
+.field-group input {
+  height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 1px solid #ccd6dd;
+  outline: none;
+}
+
+.field-group input:focus {
+  border-color: #16232e;
+}
+
+/* ROW */
+
+.field-row {
+  display: flex;
+  gap: 20px;
+}
+
+.half {
+  flex: 1;
+}
+
+/* NOTE */
+
+.console-note {
+  font-size: 13px;
+  color: #55616c;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+/* ACTION */
 
 .action-zone {
   text-align: center;
@@ -151,7 +120,7 @@ html, body {
 
 .primary-btn {
   width: 240px;
-  height: 52px;
+  height: 50px;
   font-size: 14px;
   font-weight: 600;
   background: #16232e;
@@ -164,9 +133,7 @@ html, body {
   background: #0f1a22;
 }
 
-/* ----------------------------------------
-   FOOTER
------------------------------------------ */
+/* FOOTER */
 
 .footer {
   text-align: center;
@@ -175,19 +142,16 @@ html, body {
   color: #6b7682;
 }
 
-/* ----------------------------------------
-   RESPONSIVE
------------------------------------------ */
+/* RESPONSIVE */
 
 @media (max-width: 600px) {
 
-  .frame-body {
+  .console-body {
     padding: 36px 22px 50px;
   }
 
-  .instrument-frame {
-    border-left: none;
-    border-right: none;
+  .field-row {
+    flex-direction: column;
   }
 
 }
