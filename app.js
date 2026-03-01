@@ -1,233 +1,247 @@
-// ===============================
-// AuditFlow Pro – Enterprise Engine + Report
-// ===============================
+// =========================================
+// AuditFlow Pro v2 – Enterprise Foundation
+// Multi-Audit | Structured Controls | Clean Architecture
+// =========================================
 
-const questionBank = {
-  "Site & Environment": [
-    "Access routes clearly marked and unobstructed?",
-    "Emergency exits accessible and appropriately signed?",
-    "Fire detection systems functional and periodically tested?",
-    "Environmental hazards identified and controlled?",
-    "Lighting levels adequate for operational tasks?"
-  ],
-  "Equipment & Infrastructure": [
-    "Critical equipment maintained per schedule?",
-    "Inspection records available and current?",
-    "Electrical systems protected against overload?",
-    "Machinery guarding intact and effective?",
-    "Emergency shutdown mechanisms functional?"
-  ]
-};
+// ------------------------------
+// STORAGE
+// ------------------------------
+
+const STORAGE_KEY = "auditflowpro_v2";
+
+function loadAudits() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function saveAudits(audits) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(audits));
+}
+
+// ------------------------------
+// GLOBAL STATE
+// ------------------------------
 
 let state = {
-  status: "DRAFT",
-  currentSectionIndex: 0,
-  currentQuestionIndex: 0,
-  answers: {},
-  actions: []
+  audits: loadAudits(),
+  activeAuditId: null
 };
 
-let actionCounter = 1;
+// ------------------------------
+// CONTROL LIBRARY (GLOBAL MODEL)
+// ------------------------------
 
-// ===============================
-// INIT
-// ===============================
+const controlLibrary = [
+  {
+    section: "Site & Environment",
+    controls: [
+      { id: "SE-01", statement: "Access routes are clearly marked and unobstructed.", criticality: "Critical" },
+      { id: "SE-02", statement: "Emergency exits are accessible and appropriately signed.", criticality: "Critical" },
+      { id: "SE-03", statement: "Fire detection systems are functional and periodically tested.", criticality: "Critical" }
+    ]
+  },
+  {
+    section: "Equipment & Infrastructure",
+    controls: [
+      { id: "EI-01", statement: "Critical equipment is maintained per schedule.", criticality: "Critical" },
+      { id: "EI-02", statement: "Inspection records are available and current.", criticality: "Standard" }
+    ]
+  }
+];
 
-function init() {
-  document.getElementById("auditDate").innerText =
-    new Date().toLocaleDateString("en-GB");
+// ------------------------------
+// CREATE NEW AUDIT
+// ------------------------------
 
-  wireNav();
-  wireEngine();
-  renderPersistentHeader();
+function createAudit(title, client) {
+  const id = "AUD-" + Date.now();
+
+  const newAudit = {
+    id,
+    title,
+    client,
+    created: new Date().toISOString(),
+    completed: null,
+    status: "Draft",
+    controls: generateControlSet(),
+    findings: [],
+    riskScore: 0,
+    overallRating: null
+  };
+
+  state.audits.push(newAudit);
+  saveAudits(state.audits);
+  state.activeAuditId = id;
+
+  renderAuditList();
+  renderActiveAudit();
 }
 
-window.onload = init;
+// ------------------------------
+// GENERATE CONTROL SET
+// ------------------------------
 
-// ===============================
-// NAVIGATION
-// ===============================
+function generateControlSet() {
+  let result = [];
 
-function wireNav() {
-  document.querySelectorAll(".navitem").forEach(item => {
-    item.addEventListener("click", () => {
-      document.querySelectorAll(".navitem").forEach(n => n.classList.remove("active"));
-      item.classList.add("active");
-
-      const view = item.dataset.view;
-
-      document.getElementById("auditView").style.display = view === "audit" ? "block" : "none";
-      document.getElementById("actionsView").style.display = view === "actions" ? "block" : "none";
-      document.getElementById("summaryView").style.display = view === "summary" ? "block" : "none";
-
-      if (view === "summary") renderSummary();
-      if (view === "actions") renderActions();
+  controlLibrary.forEach(section => {
+    section.controls.forEach(control => {
+      result.push({
+        section: section.section,
+        id: control.id,
+        statement: control.statement,
+        criticality: control.criticality,
+        response: null,
+        severity: null
+      });
     });
   });
+
+  return result;
 }
 
-// ===============================
-// ENGINE WIRING
-// ===============================
+// ------------------------------
+// SET ACTIVE AUDIT
+// ------------------------------
 
-function wireEngine() {
-  document.getElementById("startAuditBtn").onclick = startAudit;
-  document.getElementById("yesBtn").onclick = () => answer("YES");
-  document.getElementById("noBtn").onclick = () => answer("NO");
-  document.getElementById("naBtn").onclick = () => answer("NA");
-  document.getElementById("previousBtn").onclick = previous;
-  document.getElementById("exportBtn").onclick = () => window.print();
+function setActiveAudit(id) {
+  state.activeAuditId = id;
+  renderActiveAudit();
 }
 
-// ===============================
-// START AUDIT
-// ===============================
+// ------------------------------
+// GET ACTIVE AUDIT
+// ------------------------------
 
-function startAudit() {
-  const name = document.getElementById("auditName").value.trim();
-  const error = document.getElementById("nameError");
+function getActiveAudit() {
+  return state.audits.find(a => a.id === state.activeAuditId);
+}
 
-  if (!name) {
-    error.innerText = "Audit name required to create formal record.";
-    return;
+// ------------------------------
+// RECORD RESPONSE
+// ------------------------------
+
+function recordResponse(controlId, response) {
+  const audit = getActiveAudit();
+  if (!audit) return;
+
+  const control = audit.controls.find(c => c.id === controlId);
+  control.response = response;
+
+  if (response === "No") {
+    generateFinding(audit, control);
   }
 
-  error.innerText = "";
-
-  state.status = "IN PROGRESS";
-  document.getElementById("engineBlock").style.display = "block";
-  document.getElementById("startAuditBtn").style.display = "none";
-
-  renderPersistentHeader();
-  renderQuestion();
+  calculateRisk(audit);
+  saveAudits(state.audits);
+  renderActiveAudit();
 }
 
-// ===============================
-// QUESTIONS
-// ===============================
+// ------------------------------
+// GENERATE FINDING
+// ------------------------------
 
-function renderQuestion() {
-  const sections = Object.keys(questionBank);
-  const sectionName = sections[state.currentSectionIndex];
-  const question = questionBank[sectionName][state.currentQuestionIndex];
+function generateFinding(audit, control) {
+  const severity = deriveSeverity(control);
 
-  document.getElementById("sectionHeader").innerText = sectionName;
-  document.getElementById("questionText").innerText = question;
+  audit.findings.push({
+    id: "F-" + String(audit.findings.length + 1).padStart(3, "0"),
+    controlId: control.id,
+    section: control.section,
+    statement: control.statement,
+    severity,
+    status: "Open",
+    owner: "",
+    dueDate: ""
+  });
 }
 
-function answer(value) {
-  const key = state.currentSectionIndex + "-" + state.currentQuestionIndex;
-  state.answers[key] = value;
+// ------------------------------
+// SEVERITY ENGINE
+// ------------------------------
 
-  if (value === "NO") {
-    createAction();
-  }
-
-  next();
+function deriveSeverity(control) {
+  if (control.criticality === "Critical") return "High";
+  return "Medium";
 }
 
-function createAction() {
-  const sections = Object.keys(questionBank);
-  const sectionName = sections[state.currentSectionIndex];
-  const question = questionBank[sectionName][state.currentQuestionIndex];
+// ------------------------------
+// RISK SCORING
+// ------------------------------
 
-  state.actions.push({
-    id: "A-" + String(actionCounter++).padStart(3, "0"),
-    section: sectionName,
-    questionText: question,
-    recommendedAction: "",
-    status: "Open"
+function calculateRisk(audit) {
+  let score = 0;
+
+  audit.findings.forEach(f => {
+    if (f.severity === "High") score += 3;
+    if (f.severity === "Medium") score += 2;
   });
 
-  renderPersistentHeader();
+  audit.riskScore = score;
+
+  if (score === 0) audit.overallRating = "Low";
+  else if (score < 5) audit.overallRating = "Moderate";
+  else audit.overallRating = "Elevated";
 }
 
-function next() {
-  const sections = Object.keys(questionBank);
-  const sectionName = sections[state.currentSectionIndex];
+// ------------------------------
+// RENDER AUDIT LIST
+// ------------------------------
 
-  if (state.currentQuestionIndex < questionBank[sectionName].length - 1) {
-    state.currentQuestionIndex++;
-  } else if (state.currentSectionIndex < sections.length - 1) {
-    state.currentSectionIndex++;
-    state.currentQuestionIndex = 0;
-  } else {
-    state.status = "COMPLETE";
-  }
+function renderAuditList() {
+  const container = document.getElementById("auditList");
+  if (!container) return;
 
-  renderPersistentHeader();
-  renderQuestion();
-}
-
-function previous() {
-  if (state.currentQuestionIndex > 0) {
-    state.currentQuestionIndex--;
-    renderQuestion();
-  }
-}
-
-// ===============================
-// HEADER
-// ===============================
-
-function renderPersistentHeader() {
-  document.getElementById("headerAuditName").innerText =
-    document.getElementById("auditName").value || "—";
-
-  document.getElementById("headerClientName").innerText =
-    document.getElementById("clientName").value || "—";
-
-  document.getElementById("headerStatus").innerText = state.status;
-  document.getElementById("headerOpenActions").innerText =
-    state.actions.filter(a => a.status === "Open").length;
-}
-
-// ===============================
-// ACTIONS VIEW
-// ===============================
-
-function renderActions() {
-  const container = document.getElementById("actionsList");
   container.innerHTML = "";
 
-  state.actions.forEach(a => {
+  state.audits.forEach(audit => {
     container.innerHTML += `
-      <div>
-        <strong>${a.section}</strong><br>
-        ${a.questionText}<br>
-        Status: ${a.status}
+      <div onclick="setActiveAudit('${audit.id}')">
+        <strong>${audit.title}</strong><br>
+        Client: ${audit.client}<br>
+        Status: ${audit.status}
         <hr>
       </div>
     `;
   });
 }
 
-// ===============================
-// SUMMARY REPORT
-// ===============================
+// ------------------------------
+// RENDER ACTIVE AUDIT
+// ------------------------------
 
-function renderSummary() {
-  const container = document.getElementById("summaryContent");
-  container.innerHTML = "";
+function renderActiveAudit() {
+  const audit = getActiveAudit();
+  if (!audit) return;
 
-  const auditName = document.getElementById("auditName").value || "—";
-  const client = document.getElementById("clientName").value || "—";
-  const date = document.getElementById("auditDate").innerText;
-  const findings = state.actions.filter(a => a.status === "Open");
+  const container = document.getElementById("auditEngine");
+  if (!container) return;
 
-  container.innerHTML += `
-    <h1>Operational Assessment Report</h1>
-    <p><strong>Audit:</strong> ${auditName}</p>
-    <p><strong>Client:</strong> ${client}</p>
-    <p><strong>Date:</strong> ${date}</p>
-    <p><strong>Status:</strong> ${state.status}</p>
+  container.innerHTML = `
+    <h2>${audit.title}</h2>
+    <p>Client: ${audit.client}</p>
+    <p>Status: ${audit.status}</p>
+    <p>Overall Risk: ${audit.overallRating || "Not Assessed"}</p>
     <hr>
-    <h2>Findings</h2>
   `;
 
-  findings.forEach(f => {
+  audit.controls.forEach(control => {
     container.innerHTML += `
-      <p><strong>${f.section}</strong>: ${f.questionText}</p>
+      <div>
+        <strong>${control.section}</strong><br>
+        ${control.statement}<br>
+        <button onclick="recordResponse('${control.id}','Yes')">Yes</button>
+        <button onclick="recordResponse('${control.id}','No')">No</button>
+        <button onclick="recordResponse('${control.id}','N/A')">N/A</button>
+        <hr>
+      </div>
     `;
   });
 }
+
+// ------------------------------
+// INITIALISE
+// ------------------------------
+
+window.onload = function () {
+  renderAuditList();
+};
