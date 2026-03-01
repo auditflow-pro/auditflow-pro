@@ -21,28 +21,43 @@ const SECTIONS = [
   "People & Process"
 ];
 
+/* ===============================
+   CONTROL LIBRARY (40 Controls)
+   =============================== */
+
 function buildControlLibrary() {
   const controls = [];
+
   SECTIONS.forEach(section => {
     for (let i = 1; i <= 10; i++) {
+
+      // Deterministic impact spread 1–4
+      const impact = ((i - 1) % 4) + 1;
+
       controls.push({
         id: section.substring(0,2) + "-" + i,
         section,
         statement: `${section} Control ${i}`,
-        impact: (i % 4) + 1,
+        impact,
         response: null,
         score: 0
       });
     }
   });
+
   return controls;
 }
+
+/* ===============================
+   CLIENT REGISTRY
+   =============================== */
 
 function populateClientSelect() {
   const select = document.getElementById("clientSelect");
   select.innerHTML = `<option value="">Select Existing Client</option>`;
-  state.clients.forEach(c => {
-    select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+
+  state.clients.forEach(client => {
+    select.innerHTML += `<option value="${client.id}">${client.name}</option>`;
   });
 }
 
@@ -66,16 +81,18 @@ function createAudit() {
   const previousAudit = getLastAuditForClient(clientId);
 
   const auditId = "A-" + Date.now();
+  const controls = buildControlLibrary();
+  const likelihood = 3;
 
   const audit = {
     id: auditId,
     clientId,
     title: auditTitle,
     status: "Draft",
-    controls: buildControlLibrary(),
-    likelihood: 3,
+    controls,
+    likelihood,
     riskScore: 0,
-    maxRisk: calculateMaxRisk(),
+    maxRisk: calculateMaxRisk(controls, likelihood),
     exposurePercent: 0,
     rating: "Controlled Risk",
     previousExposure: previousAudit ? previousAudit.exposurePercent : null
@@ -93,14 +110,21 @@ function createAudit() {
   renderActiveAudit();
 }
 
-function calculateMaxRisk() {
-  return 40 * 4 * 3 / 4; 
+/* ===============================
+   RISK ENGINE
+   =============================== */
+
+function calculateMaxRisk(controls, likelihood) {
+  return controls.reduce((total, control) => {
+    return total + (control.impact * likelihood);
+  }, 0);
 }
 
 function getLastAuditForClient(clientId) {
   const audits = state.audits
     .filter(a => a.clientId === clientId)
-    .sort((a,b) => b.id.localeCompare(a.id));
+    .sort((a, b) => b.id.localeCompare(a.id));
+
   return audits[0] || null;
 }
 
@@ -115,10 +139,15 @@ function getActiveAudit() {
 
 function recordResponse(controlId, response) {
   const audit = getActiveAudit();
+  if (!audit) return;
+
   const control = audit.controls.find(c => c.id === controlId);
+  if (!control) return;
 
   control.response = response;
-  control.score = response === "No" ? control.impact * audit.likelihood : 0;
+  control.score = response === "No"
+    ? control.impact * audit.likelihood
+    : 0;
 
   recalcAudit(audit);
   saveState();
@@ -126,31 +155,43 @@ function recordResponse(controlId, response) {
 }
 
 function recalcAudit(audit) {
-  audit.riskScore = audit.controls.reduce((t,c) => t + c.score, 0);
-  audit.exposurePercent = Math.round((audit.riskScore / audit.maxRisk) * 100);
+  audit.riskScore = audit.controls.reduce((total, c) => {
+    return total + c.score;
+  }, 0);
+
+  audit.exposurePercent = Math.round(
+    (audit.riskScore / audit.maxRisk) * 100
+  );
+
   audit.rating = deriveRating(audit.exposurePercent);
 }
 
-function deriveRating(p) {
-  if (p <= 20) return "Controlled Risk";
-  if (p <= 40) return "Emerging Risk";
-  if (p <= 60) return "Material Risk";
-  if (p <= 80) return "Significant Exposure";
+function deriveRating(percent) {
+  if (percent <= 20) return "Controlled Risk";
+  if (percent <= 40) return "Emerging Risk";
+  if (percent <= 60) return "Material Risk";
+  if (percent <= 80) return "Significant Exposure";
   return "Critical Exposure";
 }
+
+/* ===============================
+   RENDERING
+   =============================== */
 
 function renderAuditList() {
   const container = document.getElementById("auditList");
   container.innerHTML = "";
 
-  state.audits.forEach(a => {
-    const delta = a.previousExposure !== null
-      ? ` | Previous: ${a.previousExposure}%`
+  state.audits.forEach(audit => {
+
+    const delta = audit.previousExposure !== null
+      ? ` | Previous: ${audit.previousExposure}%`
       : "";
 
     container.innerHTML += `
-      <div class="audit-item" onclick="setActiveAudit('${a.id}')">
-        <strong>${a.title}</strong> (${a.rating} ${a.exposurePercent}%)${delta}
+      <div class="audit-item" onclick="setActiveAudit('${audit.id}')">
+        <strong>${audit.title}</strong>
+        (${audit.rating} ${audit.exposurePercent}%)${delta}
       </div>
     `;
   });
@@ -165,7 +206,8 @@ function renderActiveAudit() {
   const barClass =
     audit.exposurePercent <= 20 ? "low" :
     audit.exposurePercent <= 60 ? "medium" :
-    audit.exposurePercent <= 80 ? "high" : "critical";
+    audit.exposurePercent <= 80 ? "high" :
+    "critical";
 
   const previousLine = audit.previousExposure !== null
     ? `<p><strong>Previous Exposure:</strong> ${audit.previousExposure}%</p>`
@@ -189,12 +231,18 @@ function renderActiveAudit() {
   `;
 
   SECTIONS.forEach(section => {
+
     const sectionControls = audit.controls.filter(c => c.section === section);
-    const sectionScore = sectionControls.reduce((t,c) => t + c.score, 0);
+
+    const sectionScore = sectionControls.reduce((total, c) => {
+      return total + c.score;
+    }, 0);
 
     container.innerHTML += `
       <div class="section-header">${section}</div>
-      <div class="section-summary">Section Score: ${sectionScore}</div>
+      <div class="section-summary">
+        Section Score: ${sectionScore}
+      </div>
     `;
 
     sectionControls.forEach(control => {
@@ -209,6 +257,10 @@ function renderActiveAudit() {
     });
   });
 }
+
+/* ===============================
+   INITIALISE
+   =============================== */
 
 populateClientSelect();
 renderAuditList();
