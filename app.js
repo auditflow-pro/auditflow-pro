@@ -1,6 +1,6 @@
 (function(){
 
-const STORAGE_KEY = "auditflow_global_v4";
+const STORAGE_KEY = "auditflow_global_v5";
 
 const STATUS = {
   IN_PROGRESS:"IN_PROGRESS",
@@ -12,37 +12,61 @@ const TEMPLATE = {
   site:{
     title:"Site & Environment",
     questions:[
-      "Work areas clean and free from hazards?",
-      "Access and egress routes clear?",
-      "Environmental conditions acceptable?",
-      "Emergency arrangements adequate?"
+      "Housekeeping standards consistently maintained across operational areas?",
+      "Access and egress routes clearly defined and unobstructed?",
+      "Segregation between pedestrian and vehicle movement effectively controlled?",
+      "Emergency arrangements clearly communicated and visible?",
+      "Environmental risks (noise, temperature, ventilation) assessed and controlled?",
+      "Storage areas organised to prevent instability or congestion?",
+      "Signage clear, consistent, and aligned with operational risk?",
+      "Workspaces designed to minimise manual handling exposure?",
+      "External areas maintained to prevent slips, trips, or access risk?",
+      "Site security controls effective against unauthorised access?"
     ]
   },
   equipment:{
     title:"Equipment & Infrastructure",
     questions:[
-      "Equipment maintained and inspected?",
-      "Infrastructure structurally sound?",
-      "Safety devices operational?",
-      "Utilities functioning safely?"
+      "Preventive maintenance programme implemented and current?",
+      "Inspection records complete and readily accessible?",
+      "Safety-critical devices tested and verified operational?",
+      "Temporary equipment subject to equivalent control standards?",
+      "Infrastructure integrity routinely reviewed and documented?",
+      "Isolation and lockout controls clearly defined and applied?",
+      "Electrical installations visually compliant and protected?",
+      "Equipment guarding effective and free from bypassing?",
+      "Utility systems monitored for abnormal performance?",
+      "Defect reporting process clearly linked to maintenance action?"
     ]
   },
   operations:{
     title:"Operational Controls",
     questions:[
-      "Documented procedures available?",
-      "Controls implemented effectively?",
-      "Monitoring mechanisms in place?",
-      "Non-conformance handled correctly?"
+      "Documented procedures current and aligned with practice?",
+      "Risk assessments reflect actual operating conditions?",
+      "Control measures verified for effectiveness?",
+      "Change management process applied to operational updates?",
+      "Permit or authorisation systems functioning correctly?",
+      "Monitoring and review processes actively maintained?",
+      "Incident investigation identifies root cause, not symptoms?",
+      "Corrective actions tracked to verified completion?",
+      "Performance metrics used to inform operational decisions?",
+      "Non-conformance handling process consistently applied?"
     ]
   },
   people:{
     title:"People & Process",
     questions:[
-      "Staff trained and competent?",
-      "Responsibilities clearly assigned?",
-      "Incident reporting functional?",
-      "Continuous improvement evident?"
+      "Roles and responsibilities clearly defined and understood?",
+      "Training records current and competence verified?",
+      "Supervision proportionate to operational risk?",
+      "Communication channels effective across teams?",
+      "Incident reporting culture demonstrably active?",
+      "Leadership engagement visible within operational areas?",
+      "Contractor controls equivalent to internal standards?",
+      "Workload and staffing levels appropriate to task risk?",
+      "Continuous improvement initiatives formally tracked?",
+      "Governance oversight documented and periodically reviewed?"
     ]
   }
 };
@@ -137,58 +161,6 @@ function renderAudit(){
   save();
 }
 
-function renderActions(){
-  const audit=activeAudit();
-  const body=$("actionsBody");
-  body.innerHTML="";
-
-  if(!audit || audit.actions.length===0){
-    body.innerHTML="<tr><td colspan='3'>No actions</td></tr>";
-    return;
-  }
-
-  audit.actions.forEach(a=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML=
-      `<td>${TEMPLATE[a.sectionKey].questions[a.questionIndex]}</td>`+
-      `<td>${TEMPLATE[a.sectionKey].title}</td>`+
-      `<td>${a.status}</td>`;
-    body.appendChild(tr);
-  });
-}
-
-function renderSummary(){
-  const audit=activeAudit();
-  if(!audit) return;
-
-  const pill=$("statusPill");
-  pill.textContent=statusLabel(audit.status);
-  pill.className="status-pill "+statusClass(audit.status);
-
-  $("summaryMeta").textContent=`${openCount(audit)} open actions`;
-
-  const btn=$("btnToggleComplete");
-
-  if(audit.status===STATUS.IN_PROGRESS)
-    btn.textContent="Move to Ready for Review";
-  else if(audit.status===STATUS.READY_REVIEW)
-    btn.textContent="Mark Complete";
-  else
-    btn.textContent="Reopen Audit";
-}
-
-function render(){
-  renderNav();
-
-  $("viewAudit").style.display=state.view==="audit"?"block":"none";
-  $("viewActions").style.display=state.view==="actions"?"block":"none";
-  $("viewSummary").style.display=state.view==="summary"?"block":"none";
-
-  if(state.view==="audit") renderAudit();
-  if(state.view==="actions") renderActions();
-  if(state.view==="summary") renderSummary();
-}
-
 function record(value){
   const audit=activeAudit();
   if(!audit||!audit.name.trim()) return;
@@ -220,24 +192,6 @@ function next(delta){
   render();
 }
 
-function toggleCompletion(){
-  const audit=activeAudit();
-  if(!audit) return;
-
-  const open=openCount(audit);
-
-  if(audit.status===STATUS.IN_PROGRESS){
-    audit.status=STATUS.READY_REVIEW;
-  }else if(audit.status===STATUS.READY_REVIEW){
-    if(open>0){ alert("Close all open actions first."); return; }
-    audit.status=STATUS.COMPLETE;
-  }else{
-    audit.status=STATUS.IN_PROGRESS;
-  }
-
-  render();
-}
-
 function createAudit(){
   const a=blankAudit();
   state.audits.push(a);
@@ -255,7 +209,6 @@ $("btnNo").onclick=()=>record("NO");
 $("btnNa").onclick=()=>record("N/A");
 $("btnPrev").onclick=()=>next(-1);
 $("btnNext").onclick=()=>next(1);
-$("btnToggleComplete").onclick=toggleCompletion;
 $("btnNewAudit").onclick=createAudit;
 
 $("auditName").oninput=e=>{
