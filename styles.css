@@ -1,6 +1,6 @@
-/* ================================
+/* =========================
    GLOBAL SYSTEM
-================================ */
+========================= */
 
 * {
   box-sizing: border-box;
@@ -15,34 +15,47 @@ html, body {
   color: #1f2a36;
 }
 
-/* ================================
-   HEADER – EXECUTIVE STRIP
-================================ */
+/* =========================
+   HEADER – EXECUTIVE BAR
+========================= */
 
 .command-bar {
   background: #394957;
-  color: #ffffff;
-  padding: 16px 18px 14px;
+  color: white;
+  padding: 14px 18px;
 }
 
-.command-left {
+.command-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.brand-block {
   line-height: 1.2;
-  margin-bottom: 10px;
 }
 
-.command-left h1 {
-  margin: 0;
+.brand-title {
   font-size: 18px;
   font-weight: 600;
+  margin: 0;
 }
 
-.command-left p {
-  margin: 2px 0 0 0;
+.brand-sub {
   font-size: 12px;
   opacity: 0.85;
+  margin-top: 2px;
 }
 
-.command-right {
+.brand-edition {
+  font-size: 11px;
+  opacity: 0.65;
+  margin-top: 2px;
+}
+
+.command-row {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -50,42 +63,41 @@ html, body {
 
 .command-btn {
   background: transparent;
-  color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: white;
   padding: 6px 12px;
   font-size: 12px;
   cursor: pointer;
-  white-space: nowrap;
   transition: background 0.2s ease;
 }
 
 .command-btn:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
 }
 
-/* ================================
-   MASTER CONTAINER
-================================ */
+/* =========================
+   CONTAINER
+========================= */
 
 .container {
   max-width: 880px;
-  margin: 28px auto 50px;
+  margin: 30px auto 50px;
   padding: 0 18px;
 }
 
-/* ================================
-   DASHBOARD METRICS
-================================ */
+/* =========================
+   DASHBOARD
+========================= */
 
 .dashboard {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 18px;
-  margin-bottom: 34px;
+  margin-bottom: 36px;
 }
 
 .metric-block {
-  background: #ffffff;
+  background: white;
   border: 1px solid #c3cbd3;
   padding: 20px 16px;
   text-align: center;
@@ -93,8 +105,8 @@ html, body {
 
 .metric-label {
   font-size: 11px;
-  text-transform: uppercase;
   letter-spacing: 0.6px;
+  text-transform: uppercase;
   color: #6c7884;
   margin-bottom: 6px;
 }
@@ -108,14 +120,14 @@ html, body {
   color: #2e7d32;
 }
 
-/* ================================
-   WORKSPACE CARD
-================================ */
+/* =========================
+   WORKSPACE
+========================= */
 
 .workspace {
-  background: #ffffff;
+  background: white;
   border: 1px solid #b9c2cb;
-  margin-bottom: 34px;
+  margin-bottom: 36px;
 }
 
 .workspace-header {
@@ -134,42 +146,43 @@ html, body {
 
 .field-column {
   width: 100%;
-  max-width: 500px;
+  max-width: 480px;
 }
 
-/* ================================
+/* =========================
    INPUT SYSTEM
-================================ */
+========================= */
 
 input {
   width: 100%;
-  padding: 14px 14px;
+  padding: 14px;
   margin-bottom: 18px;
   border: 1px solid #bfc8d2;
-  background: #ffffff;
+  background: white;
   font-size: 15px;
-  transition: border 0.15s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 
-input:focus {
-  outline: none;
-  border-color: #394957;
+/* Force date input consistency */
+input[type="date"] {
+  text-align: left;
 }
 
-/* ================================
-   PRIMARY ACTION BUTTON
-================================ */
+/* =========================
+   PRIMARY BUTTON
+========================= */
 
 .primary-btn {
   width: 100%;
   padding: 15px;
   font-size: 15px;
   font-weight: 600;
-  color: #ffffff;
+  color: white;
   background: #394957;
   border: none;
   cursor: pointer;
-  margin-top: 8px;
   transition: background 0.2s ease;
 }
 
@@ -177,57 +190,45 @@ input:focus {
   background: #2f3e4c;
 }
 
-/* ================================
+/* =========================
    REGISTRY
-================================ */
+========================= */
 
 .registry {
-  background: #ffffff;
+  background: white;
   border: 1px solid #c3cbd3;
-  padding: 24px 20px 26px;
+  padding: 24px 20px;
 }
 
 .registry-title {
   font-size: 17px;
   font-weight: 600;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
-.registry-header {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: #6c7884;
-  border-bottom: 1px solid #c3cbd3;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-}
-
-/* ================================
+/* =========================
    FOOTER
-================================ */
+========================= */
 
 .footer {
   text-align: center;
-  padding: 36px 20px;
+  padding: 34px 20px;
   font-size: 12px;
   color: #6b7785;
 }
 
-/* ================================
+/* =========================
    MOBILE REFINEMENT
-================================ */
+========================= */
 
 @media (max-width: 768px) {
 
-  .container {
-    padding: 0 16px;
-  }
-
   .workspace-body {
     padding: 28px 16px 36px;
+  }
+
+  .field-column {
+    max-width: 100%;
   }
 
   .metric-value {
