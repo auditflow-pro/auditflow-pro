@@ -4,45 +4,32 @@
 <meta charset="UTF-8">
 <title>AuditFlow Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
 
 <h1>AuditFlow Pro</h1>
 
 <div class="card">
-<h2>Create New Audit</h2>
+  <h2>Create New Audit</h2>
 
-<input id="newTitle"
-       placeholder="Audit Title"
-       autocapitalize="words"
-       autocomplete="off">
+  <select id="clientSelect"></select>
+  <input id="newClientName" placeholder="Add New Client (optional)" autocapitalize="words">
 
-<input id="newClient"
-       placeholder="Client Name"
-       autocapitalize="words"
-       autocomplete="off">
+  <input id="newAuditTitle" placeholder="Audit Title" autocapitalize="words">
 
-<button onclick="createAudit(
-  document.getElementById('newTitle').value,
-  document.getElementById('newClient').value
-)">
-Create Audit
-</button>
+  <button onclick="createAudit()">Create Audit</button>
 </div>
 
 <div class="card">
-<h2>Existing Audits</h2>
-<div id="auditList"></div>
+  <h2>Existing Audits</h2>
+  <div id="auditList"></div>
 </div>
 
 <div class="card">
-<div id="auditEngine"></div>
+  <div id="auditEngine"></div>
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
