@@ -1,6 +1,6 @@
-/* =========================================
-   AUDITFLOW PRO — AUTHORITY BUILD v105
-========================================= */
+/* ========================================
+   AUDITFLOW PRO — INSTRUMENT CORE v200
+======================================== */
 
 * {
   box-sizing: border-box;
@@ -9,20 +9,17 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f4f6f8;
+  background: #eef2f5;
   color: #111821;
 }
 
-/* =========================================
-   HEADER — COMMAND AUTHORITY
-========================================= */
+/* HEADER */
 
 .command-bar {
-  background: #1f2d38;
-  color: #ffffff;
-  padding: 60px 24px 50px;
+  background: #16232e;
+  color: white;
+  padding: 70px 24px 60px;
   border-bottom: 4px solid #c8a94a;
 }
 
@@ -33,10 +30,9 @@ html, body {
 }
 
 .brand-title {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  margin-bottom: 10px;
 }
 
 .brand-sub {
@@ -46,106 +42,74 @@ html, body {
 
 .brand-edition {
   font-size: 12px;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
   opacity: 0.6;
-  margin-bottom: 40px;
 }
 
-/* COMMAND BUTTONS */
-
-.command-row {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.command-btn {
-  width: 200px;
-  height: 48px;
-  font-size: 14px;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.6);
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.command-btn:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-.primary-command {
-  border: 1px solid #c8a94a;
-  color: #c8a94a;
-}
-
-/* =========================================
-   MAIN CONTAINER
-========================================= */
+/* CONTAINER */
 
 .container {
   max-width: 1100px;
-  margin: 80px auto 110px;
+  margin: 80px auto 120px;
   padding: 0 24px;
 }
 
-/* =========================================
-   DASHBOARD — STRUCTURED BLOCKS
-========================================= */
+/* SYSTEM STRIP */
 
-.dashboard {
+.system-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-  margin-bottom: 90px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 80px;
 }
 
-.metric-block {
-  background: #ffffff;
-  border: 1px solid #e1e6eb;
-  padding: 50px 30px;
-  text-align: center;
+.strip-block {
+  background: white;
+  border: 1px solid #d9e1e8;
+  padding: 28px;
 }
 
-.metric-label {
+.strip-label {
   font-size: 12px;
-  letter-spacing: 1.6px;
   text-transform: uppercase;
+  letter-spacing: 1.6px;
   color: #7a8794;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
 }
 
-.metric-value {
-  font-size: 44px;
+.strip-value {
+  font-size: 20px;
   font-weight: 600;
-  color: #111821;
 }
 
-.exposure .metric-value {
+.strip-classification {
+  font-size: 12px;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.exposure .strip-value {
   color: #2e7d32;
 }
 
-/* =========================================
-   WORKSPACE — OPERATION PANEL
-========================================= */
+/* WORKSPACE */
 
 .workspace {
-  background: #ffffff;
-  border: 1px solid #e1e6eb;
-  margin-bottom: 90px;
+  background: white;
+  border: 1px solid #d9e1e8;
 }
 
 .workspace-header {
-  background: #f8fafc;
   padding: 28px 32px;
   font-size: 22px;
   font-weight: 600;
-  border-bottom: 1px solid #e1e6eb;
+  border-bottom: 1px solid #d9e1e8;
+  background: #f7f9fb;
 }
 
 .workspace-body {
-  padding: 70px 32px 75px;
+  padding: 60px 32px 80px;
 }
 
 .field-column {
@@ -153,73 +117,45 @@ html, body {
   margin: 0 auto;
 }
 
-/* =========================================
-   INPUT LOCK (CROSS-BROWSER SAFE)
-========================================= */
+label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #55616c;
+}
 
 input {
   width: 100%;
   height: 64px;
-  padding: 0 22px;
-  margin-bottom: 28px;
-  border: 1px solid #d5dbe1;
-  background: #ffffff;
+  padding: 0 20px;
+  margin-bottom: 26px;
+  border: 1px solid #cfd8df;
   font-size: 16px;
-  border-radius: 0;
   appearance: none;
   -webkit-appearance: none;
-  line-height: 64px;
-  transition: border 0.2s ease;
 }
 
 input:focus {
   outline: none;
-  border: 1px solid #1f2d38;
+  border: 1px solid #16232e;
 }
-
-input[type="date"] {
-  height: 64px;
-  line-height: 64px;
-}
-
-/* =========================================
-   PRIMARY ACTION
-========================================= */
 
 .primary-btn {
   width: 100%;
   height: 64px;
   font-size: 16px;
   font-weight: 600;
-  background: #1f2d38;
-  color: #ffffff;
+  background: #16232e;
+  color: white;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
 .primary-btn:hover {
-  background: #16222b;
+  background: #0f1a22;
 }
 
-/* =========================================
-   REGISTRY
-========================================= */
-
-.registry {
-  background: #ffffff;
-  border: 1px solid #e1e6eb;
-  padding: 50px 32px;
-}
-
-.registry-title {
-  font-size: 24px;
-  font-weight: 600;
-}
-
-/* =========================================
-   FOOTER
-========================================= */
+/* FOOTER */
 
 .footer {
   text-align: center;
