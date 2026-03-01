@@ -1,6 +1,6 @@
 // =========================================
-// AuditFlow Pro v2 – Enterprise Foundation
-// Multi-Audit | Structured Controls | Clean Architecture
+// AuditFlow Pro v2 – Enterprise Severity Engine
+// Multi-Audit | Structured Controls | Weighted Risk Model
 // =========================================
 
 // ------------------------------
@@ -27,7 +27,7 @@ let state = {
 };
 
 // ------------------------------
-// CONTROL LIBRARY (GLOBAL MODEL)
+// CONTROL LIBRARY
 // ------------------------------
 
 const controlLibrary = [
@@ -49,10 +49,12 @@ const controlLibrary = [
 ];
 
 // ------------------------------
-// CREATE NEW AUDIT
+// CREATE AUDIT
 // ------------------------------
 
 function createAudit(title, client) {
+  if (!title) return;
+
   const id = "AUD-" + Date.now();
 
   const newAudit = {
@@ -65,7 +67,7 @@ function createAudit(title, client) {
     controls: generateControlSet(),
     findings: [],
     riskScore: 0,
-    overallRating: null
+    overallRating: "Not Assessed"
   };
 
   state.audits.push(newAudit);
@@ -100,17 +102,13 @@ function generateControlSet() {
 }
 
 // ------------------------------
-// SET ACTIVE AUDIT
+// ACTIVE AUDIT HELPERS
 // ------------------------------
 
 function setActiveAudit(id) {
   state.activeAuditId = id;
   renderActiveAudit();
 }
-
-// ------------------------------
-// GET ACTIVE AUDIT
-// ------------------------------
 
 function getActiveAudit() {
   return state.audits.find(a => a.id === state.activeAuditId);
@@ -137,10 +135,28 @@ function recordResponse(controlId, response) {
 }
 
 // ------------------------------
+// ENTERPRISE SEVERITY ENGINE
+// ------------------------------
+
+function deriveSeverity(control) {
+
+  if (control.criticality === "Critical") {
+    return "High";
+  }
+
+  if (control.criticality === "Standard") {
+    return "Medium";
+  }
+
+  return "Low";
+}
+
+// ------------------------------
 // GENERATE FINDING
 // ------------------------------
 
 function generateFinding(audit, control) {
+
   const severity = deriveSeverity(control);
 
   audit.findings.push({
@@ -148,7 +164,7 @@ function generateFinding(audit, control) {
     controlId: control.id,
     section: control.section,
     statement: control.statement,
-    severity,
+    severity: severity,
     status: "Open",
     owner: "",
     dueDate: ""
@@ -156,31 +172,35 @@ function generateFinding(audit, control) {
 }
 
 // ------------------------------
-// SEVERITY ENGINE
-// ------------------------------
-
-function deriveSeverity(control) {
-  if (control.criticality === "Critical") return "High";
-  return "Medium";
-}
-
-// ------------------------------
-// RISK SCORING
+// WEIGHTED RISK SCORING
 // ------------------------------
 
 function calculateRisk(audit) {
+
   let score = 0;
 
   audit.findings.forEach(f => {
+
+    if (f.severity === "Critical") score += 5;
     if (f.severity === "High") score += 3;
     if (f.severity === "Medium") score += 2;
+    if (f.severity === "Low") score += 1;
+
   });
 
   audit.riskScore = score;
 
-  if (score === 0) audit.overallRating = "Low";
-  else if (score < 5) audit.overallRating = "Moderate";
-  else audit.overallRating = "Elevated";
+  // Enterprise Threshold Model
+
+  if (score === 0) {
+    audit.overallRating = "Low";
+  } else if (score <= 4) {
+    audit.overallRating = "Moderate";
+  } else if (score <= 10) {
+    audit.overallRating = "Elevated";
+  } else {
+    audit.overallRating = "High";
+  }
 }
 
 // ------------------------------
@@ -198,7 +218,8 @@ function renderAuditList() {
       <div onclick="setActiveAudit('${audit.id}')">
         <strong>${audit.title}</strong><br>
         Client: ${audit.client}<br>
-        Status: ${audit.status}
+        Status: ${audit.status}<br>
+        Overall Risk: ${audit.overallRating}
         <hr>
       </div>
     `;
@@ -210,6 +231,7 @@ function renderAuditList() {
 // ------------------------------
 
 function renderActiveAudit() {
+
   const audit = getActiveAudit();
   if (!audit) return;
 
@@ -220,11 +242,13 @@ function renderActiveAudit() {
     <h2>${audit.title}</h2>
     <p>Client: ${audit.client}</p>
     <p>Status: ${audit.status}</p>
-    <p>Overall Risk: ${audit.overallRating || "Not Assessed"}</p>
+    <p>Overall Risk Rating: ${audit.overallRating}</p>
+    <p>Risk Score: ${audit.riskScore}</p>
     <hr>
   `;
 
   audit.controls.forEach(control => {
+
     container.innerHTML += `
       <div>
         <strong>${control.section}</strong><br>
@@ -235,7 +259,9 @@ function renderActiveAudit() {
         <hr>
       </div>
     `;
+
   });
+
 }
 
 // ------------------------------
