@@ -1,6 +1,7 @@
-/* ========================================
-   AUDITFLOW PRO — ENTRY GATE v300
-======================================== */
+/* =========================================
+   AUDITFLOW PRO — INSTRUMENT FRAME v400
+   Measured • Contained • Device Safe
+========================================= */
 
 * {
   box-sizing: border-box;
@@ -14,84 +15,90 @@ html, body {
   color: #111821;
 }
 
-/* HEADER */
+/* ----------------------------------------
+   TOP BAR
+----------------------------------------- */
 
-.command-bar {
+.top-bar {
   background: #16232e;
-  color: white;
-  padding: 50px 24px 40px;
-  border-bottom: 3px solid #c8a94a;
+  color: #ffffff;
+  padding: 32px 20px;
+  border-bottom: 2px solid #c8a94a;
 }
 
-.command-inner {
+.top-inner {
   max-width: 1000px;
   margin: 0 auto;
   text-align: center;
 }
 
 .brand-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
 }
 
 .brand-sub {
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.85;
 }
 
-.brand-edition {
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  opacity: 0.6;
+/* ----------------------------------------
+   PAGE
+----------------------------------------- */
+
+.page {
+  padding: 60px 20px 100px;
 }
 
-/* CONTAINER */
+/* ----------------------------------------
+   INSTRUMENT FRAME
+----------------------------------------- */
 
-.container {
+.instrument-frame {
   max-width: 900px;
-  margin: 80px auto 120px;
-  padding: 0 24px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #cfd8df;
 }
 
-/* ENTRY GATE */
-
-.entry-gate {
-  background: white;
-  border: 1px solid #d9e1e8;
-  padding: 70px 60px;
-}
-
-.entry-header {
-  font-size: 22px;
+/* subtle containment — not card softness */
+.frame-header {
+  padding: 24px 28px;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 40px;
-  text-align: center;
+  border-bottom: 1px solid #e3e9ee;
+  letter-spacing: 0.4px;
 }
+
+.frame-body {
+  padding: 48px 40px 60px;
+}
+
+/* ----------------------------------------
+   LIFECYCLE STRUCTURE
+----------------------------------------- */
 
 .lifecycle {
-  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 40px;
 }
 
 .stage {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 28px;
+  gap: 18px;
 }
 
-.stage-number {
-  font-size: 18px;
+.stage-index {
+  width: 42px;
   font-weight: 600;
-  width: 50px;
+  font-size: 16px;
   color: #16232e;
 }
 
-.stage-content {
-  flex: 1;
-}
-
 .stage-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   margin-bottom: 4px;
 }
@@ -99,26 +106,56 @@ html, body {
 .stage-desc {
   font-size: 14px;
   color: #55616c;
+  line-height: 1.5;
 }
 
-.outcome-line {
+/* preparatory stages slightly lighter */
+.preparatory .stage-title {
+  opacity: 0.9;
+}
+
+/* decisive centre of gravity */
+.decisive {
+  padding: 16px 0;
+  border-top: 1px solid #e3e9ee;
+  border-bottom: 1px solid #e3e9ee;
+}
+
+.decisive .stage-title {
+  letter-spacing: 0.3px;
+}
+
+/* formal sealing */
+.formalisation .stage-title {
+  opacity: 0.95;
+}
+
+/* ----------------------------------------
+   OUTCOME
+----------------------------------------- */
+
+.instrument-outcome {
   font-size: 14px;
   color: #44525d;
-  margin-bottom: 50px;
+  margin-bottom: 36px;
   line-height: 1.6;
 }
 
-/* PRIMARY BUTTON */
+/* ----------------------------------------
+   ACTION ZONE
+----------------------------------------- */
+
+.action-zone {
+  text-align: center;
+}
 
 .primary-btn {
-  display: block;
-  margin: 0 auto;
-  width: 260px;
-  height: 56px;
-  font-size: 15px;
+  width: 240px;
+  height: 52px;
+  font-size: 14px;
   font-weight: 600;
   background: #16232e;
-  color: white;
+  color: #ffffff;
   border: none;
   cursor: pointer;
 }
@@ -127,11 +164,30 @@ html, body {
   background: #0f1a22;
 }
 
-/* FOOTER */
+/* ----------------------------------------
+   FOOTER
+----------------------------------------- */
 
 .footer {
   text-align: center;
-  padding: 80px 24px;
+  padding: 60px 20px;
   font-size: 12px;
   color: #6b7682;
+}
+
+/* ----------------------------------------
+   RESPONSIVE
+----------------------------------------- */
+
+@media (max-width: 600px) {
+
+  .frame-body {
+    padding: 36px 22px 50px;
+  }
+
+  .instrument-frame {
+    border-left: none;
+    border-right: none;
+  }
+
 }
