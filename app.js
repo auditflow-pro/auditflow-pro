@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_v9_slate";
+const STORAGE_KEY = "auditflowpro_v10_dashboard";
 
 let state = loadState();
 
@@ -19,10 +19,13 @@ function todayISO() {
 
 document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("auditDate").value = todayISO();
-  renderAuditList();
+  renderAll();
 });
 
-/* CREATE */
+function renderAll() {
+  renderDashboard();
+  renderAuditList();
+}
 
 function createAudit() {
 
@@ -41,7 +44,6 @@ function createAudit() {
     title: title,
     date: date,
     status: "Draft",
-    riskScore: 0,
     exposure: 0
   };
 
@@ -54,13 +56,43 @@ function createAudit() {
   document.getElementById("auditTitle").value = "";
   document.getElementById("auditDate").value = todayISO();
 
-  renderAuditList();
+  renderAll();
   openAudit(audit.id);
 }
 
-/* LIST */
+/* DASHBOARD */
+
+function renderDashboard() {
+
+  const total = state.audits.length;
+  const draft = state.audits.filter(a => a.status === "Draft").length;
+  const final = state.audits.filter(a => a.status === "Final").length;
+
+  let avgExposure = 0;
+
+  if (total > 0) {
+    const sum = state.audits.reduce((acc,a) => acc + a.exposure, 0);
+    avgExposure = Math.round(sum / total);
+  }
+
+  document.getElementById("metricTotal").innerText = total;
+  document.getElementById("metricDraft").innerText = draft;
+  document.getElementById("metricFinal").innerText = final;
+
+  const exposureEl = document.getElementById("metricExposure");
+  exposureEl.innerText = avgExposure + "%";
+
+  exposureEl.className = "metric-value";
+
+  if (avgExposure >= 70) exposureEl.classList.add("risk-high");
+  else if (avgExposure >= 30) exposureEl.classList.add("risk-medium");
+  else exposureEl.classList.add("risk-low");
+}
+
+/* LEDGER */
 
 function renderAuditList() {
+
   const container = document.getElementById("auditList");
   container.innerHTML = "";
 
@@ -70,12 +102,15 @@ function renderAuditList() {
     div.className = "audit-item";
 
     div.innerHTML =
-      "<div class='audit-row'>" +
-      "<strong>" + audit.title + "</strong>" +
-      "<span class='badge'>" + audit.status + "</span>" +
-      "</div>" +
-      "<div class='audit-sub'>" +
-      audit.client + " | " + audit.date +
+      "<div class='ledger-row'>" +
+        "<div>" +
+          "<strong>" + audit.title + "</strong><br>" +
+          "<span class='ledger-sub'>" + audit.client + " | " + audit.date + "</span>" +
+        "</div>" +
+        "<div>" +
+          "<span class='badge'>" + audit.status + "</span><br>" +
+          "<span class='exposure'>" + audit.exposure + "%</span>" +
+        "</div>" +
       "</div>";
 
     div.onclick = function() {
@@ -90,8 +125,6 @@ function renderAuditList() {
 
 function openAudit(id) {
 
-  state.activeAuditId = id;
-
   const audit = state.audits.find(a => a.id === id);
   if (!audit) return;
 
@@ -100,13 +133,11 @@ function openAudit(id) {
 
   container.innerHTML =
     "<div class='audit-header'>" +
-      "<div class='audit-header-left'>" +
+      "<div>" +
         "<h2>" + audit.title + "</h2>" +
-        "<div class='audit-meta'>" +
-          audit.client + " | " + audit.date +
-        "</div>" +
+        "<div class='ledger-sub'>" + audit.client + " | " + audit.date + "</div>" +
       "</div>" +
-      "<div class='audit-header-right'>" +
+      "<div>" +
         "<button class='secondary'>Snapshot</button>" +
         "<button class='secondary'>Actions</button>" +
         "<button class='primary'>Mark Complete</button>" +
@@ -115,12 +146,7 @@ function openAudit(id) {
 
     "<div class='executive'>" +
       "<h3>Executive Risk Overview</h3>" +
-      "<p>Total Risk Score: " + audit.riskScore + "</p>" +
-      "<p>Exposure Level: " + audit.exposure + "%</p>" +
+      "<p>Exposure: " + audit.exposure + "%</p>" +
       "<p>Status: " + audit.status + "</p>" +
-    "</div>" +
-
-    "<div class='audit-body'>" +
-      "<p>Structured audit sections load here.</p>" +
     "</div>";
 }
