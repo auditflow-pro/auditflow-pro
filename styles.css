@@ -1,5 +1,6 @@
 /* =========================================
-   AUDITFLOW PRO — INTAKE CONSOLE v500
+   AUDITFLOW PRO — INSTRUMENT HOUSING v600
+   Compliance & Procedural Tone
 ========================================= */
 
 * {
@@ -19,18 +20,17 @@ html, body {
 .title-plate {
   background: #16232e;
   color: #ffffff;
-  padding: 28px 20px;
+  padding: 22px 20px;
   border-bottom: 2px solid #c8a94a;
 }
 
 .title-inner {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
-  text-align: center;
 }
 
 .brand-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
 }
 
@@ -39,31 +39,29 @@ html, body {
   opacity: 0.85;
 }
 
-/* PAGE */
+/* INSTRUMENT SURFACE */
 
-.page {
-  padding: 60px 20px 100px;
-}
-
-/* INSTRUMENT FRAME */
-
-.instrument-frame {
-  max-width: 900px;
+.instrument-surface {
+  max-width: 1100px;
   margin: 0 auto;
-  background: #ffffff;
-  border: 1px solid #cfd8df;
+  padding: 50px 20px 100px;
 }
 
-.console-header {
-  padding: 22px 28px;
+/* SURFACE HEADER */
+
+.surface-header {
   font-size: 15px;
   font-weight: 600;
-  border-bottom: 1px solid #e3e9ee;
-  letter-spacing: 0.4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #cfd8df;
+  margin-bottom: 40px;
+  letter-spacing: 0.3px;
 }
 
-.console-body {
-  padding: 48px 40px 60px;
+/* BODY */
+
+.surface-body {
+  max-width: 720px;
 }
 
 /* FIELDS */
@@ -71,13 +69,14 @@ html, body {
 .field-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .field-group label {
-  font-size: 13px;
+  font-size: 12px;
   margin-bottom: 6px;
   color: #44525d;
+  letter-spacing: 0.3px;
 }
 
 .field-group input {
@@ -85,14 +84,13 @@ html, body {
   padding: 0 12px;
   font-size: 14px;
   border: 1px solid #ccd6dd;
+  background: #ffffff;
   outline: none;
 }
 
 .field-group input:focus {
   border-color: #16232e;
 }
-
-/* ROW */
 
 .field-row {
   display: flex;
@@ -105,23 +103,24 @@ html, body {
 
 /* NOTE */
 
-.console-note {
-  font-size: 13px;
+.procedural-note {
+  font-size: 12px;
   color: #55616c;
-  margin-top: 10px;
-  margin-bottom: 30px;
+  margin-top: 4px;
+  margin-bottom: 36px;
 }
 
 /* ACTION */
 
 .action-zone {
-  text-align: center;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .primary-btn {
-  width: 240px;
-  height: 50px;
-  font-size: 14px;
+  width: 200px;
+  height: 44px;
+  font-size: 13px;
   font-weight: 600;
   background: #16232e;
   color: #ffffff;
@@ -138,7 +137,7 @@ html, body {
 .footer {
   text-align: center;
   padding: 60px 20px;
-  font-size: 12px;
+  font-size: 11px;
   color: #6b7682;
 }
 
@@ -146,12 +145,20 @@ html, body {
 
 @media (max-width: 600px) {
 
-  .console-body {
-    padding: 36px 22px 50px;
+  .instrument-surface {
+    padding: 36px 20px 80px;
+  }
+
+  .surface-body {
+    max-width: 100%;
   }
 
   .field-row {
     flex-direction: column;
+  }
+
+  .action-zone {
+    justify-content: center;
   }
 
 }
