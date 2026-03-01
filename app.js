@@ -1,3 +1,6 @@
+// AuditFlow Pro – Enterprise Action Engine V1
+// Offline-first, single-user, structured risk documentation
+
 const sections = [
   { name:"Site & Environment", total:10 },
   { name:"Equipment & Infrastructure", total:10 },
@@ -10,8 +13,12 @@ let state = {
   currentSection:0,
   currentQuestion:0,
   answers:{},
+  actions:[],
   modified:false
 };
+
+let actionCounter = 1;
+let pendingActionContext = null;
 
 function init(){
   document.getElementById("auditDate").innerText =
@@ -27,10 +34,13 @@ function wireNav(){
     item.addEventListener("click",()=>{
       document.querySelectorAll(".navitem").forEach(n=>n.classList.remove("active"));
       item.classList.add("active");
+
       const view=item.dataset.view;
+
       document.getElementById("auditView").style.display=view==="audit"?"block":"none";
       document.getElementById("actionsView").style.display=view==="actions"?"block":"none";
       document.getElementById("summaryView").style.display=view==="summary"?"block":"none";
+
       if(view==="actions") renderActions();
       if(view==="summary") renderSummary();
     });
@@ -71,9 +81,76 @@ function startAudit(){
 }
 
 function answer(val){
+  if(state.status!=="IN PROGRESS") return;
+
   const key=state.currentSection+"-"+state.currentQuestion;
   state.answers[key]=val;
+
+  if(val==="NO"){
+    openActionPanel();
+  } else {
+    autoAdvance();
+  }
+}
+
+function openActionPanel(){
+  const container=document.querySelector(".section-card");
+
+  pendingActionContext={
+    section:sections[state.currentSection].name,
+    questionIndex:state.currentQuestion,
+    questionText:"Question "+(state.currentQuestion+1)
+  };
+
+  container.innerHTML = `
+    <div class="section-header">Action Required</div>
+    <div class="section-meta">${pendingActionContext.section} – ${pendingActionContext.questionText}</div>
+
+    <label>Severity *</label>
+    <select id="severitySelect">
+      <option value="">Select severity</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>High</option>
+      <option>Critical</option>
+    </select>
+
+    <label>Rationale (optional)</label>
+    <textarea id="rationaleInput"></textarea>
+
+    <label>Recommended Action (optional)</label>
+    <textarea id="recommendInput"></textarea>
+
+    <button id="confirmActionBtn" class="primary-btn">Confirm Action</button>
+  `;
+
+  document.getElementById("confirmActionBtn").onclick=confirmAction;
+}
+
+function confirmAction(){
+  const severity=document.getElementById("severitySelect").value;
+  if(!severity) return;
+
+  const rationale=document.getElementById("rationaleInput").value;
+  const recommend=document.getElementById("recommendInput").value;
+
+  const action={
+    id:"A-"+String(actionCounter++).padStart(3,"0"),
+    section:pendingActionContext.section,
+    questionIndex:pendingActionContext.questionIndex,
+    questionText:pendingActionContext.questionText,
+    severity,
+    status:"Open",
+    created:new Date().toISOString(),
+    closed:null,
+    rationale,
+    recommendedAction:recommend
+  };
+
+  state.actions.push(action);
+
   autoAdvance();
+  render();
 }
 
 function autoAdvance(){
@@ -155,33 +232,64 @@ function getAnswered(sectionIndex){
 }
 
 function getOpenCount(){
-  let count=0;
-  Object.values(state.answers).forEach(v=>{
-    if(v==="NO") count++;
-  });
-  return count;
+  return state.actions.filter(a=>a.status==="Open").length;
 }
 
 function renderActions(){
   const container=document.getElementById("actionsList");
   container.innerHTML="";
-  Object.keys(state.answers).forEach(key=>{
-    if(state.answers[key]==="NO"){
-      const div=document.createElement("div");
-      div.innerText="Section "+(parseInt(key.split("-")[0])+1)+
-        " – Question "+(parseInt(key.split("-")[1])+1);
-      container.appendChild(div);
-    }
+
+  const openActions=state.actions.filter(a=>a.status==="Open");
+
+  const summary=document.createElement("div");
+  const counts={
+    Critical:0,High:0,Medium:0,Low:0
+  };
+  openActions.forEach(a=>counts[a.severity]++);
+
+  summary.innerText=
+    "Open: "+openActions.length+
+    " | Critical: "+counts.Critical+
+    " | High: "+counts.High+
+    " | Medium: "+counts.Medium+
+    " | Low: "+counts.Low;
+
+  container.appendChild(summary);
+
+  openActions.forEach(action=>{
+    const div=document.createElement("div");
+    div.style.borderBottom="1px solid #e3e6ee";
+    div.style.padding="12px 0";
+
+    div.innerHTML=
+      `<strong>${action.id}</strong><br>
+       ${action.section} – ${action.questionText}<br>
+       Severity: ${action.severity}<br>
+       Status: ${action.status}`;
+
+    const closeBtn=document.createElement("button");
+    closeBtn.innerText="Close";
+    closeBtn.onclick=()=>{
+      action.status="Closed";
+      action.closed=new Date().toISOString();
+      if(state.status==="COMPLETE") setModified();
+      renderActions();
+    };
+
+    div.appendChild(closeBtn);
+    container.appendChild(div);
   });
 }
 
 function renderSummary(){
   const container=document.getElementById("summaryContent");
   container.innerHTML="";
+
   sections.forEach((section,index)=>{
     const div=document.createElement("div");
-    div.innerText=section.name+
-      " — "+getAnswered(index)+"/"+section.total+" answered";
+    div.innerText=
+      section.name+" — "+
+      getAnswered(index)+"/"+section.total+" answered";
     container.appendChild(div);
   });
 }
