@@ -1,87 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AuditFlow Pro</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuditFlow Pro</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
 <header class="command-bar">
-  <div class="command-left">
-    <div class="brand">AuditFlow Pro</div>
-    <div class="descriptor">Structured Audit & Compliance Instrument</div>
-    <div class="edition">Professional Edition · Global Model</div>
-  </div>
+  <div class="command-inner">
 
-  <div class="command-right">
-    <button class="command-btn">
-      <span class="icon">≡</span> Summary
-    </button>
-    <button class="command-btn">
-      <span class="icon">⚑</span> Actions
-    </button>
-    <button class="command-btn primary-command">
-      <span class="icon">⎙</span> Snapshot
-    </button>
+    <div class="brand-block">
+      <div class="brand-title">AuditFlow Pro</div>
+      <div class="brand-sub">Structured Audit & Compliance Instrument</div>
+      <div class="brand-edition">Professional Edition · Global Model</div>
+    </div>
+
+    <div class="command-row">
+      <button class="command-btn">Summary</button>
+      <button class="command-btn">Actions</button>
+      <button class="command-btn">Snapshot</button>
+    </div>
+
   </div>
 </header>
 
 <main class="container">
 
-  <!-- DASHBOARD -->
   <section class="dashboard">
+
     <div class="metric-block">
       <div class="metric-label">Total Audits</div>
-      <div class="metric-value" id="metricTotal">0</div>
+      <div class="metric-value">0</div>
     </div>
+
     <div class="metric-block">
       <div class="metric-label">Draft</div>
-      <div class="metric-value" id="metricDraft">0</div>
+      <div class="metric-value">0</div>
     </div>
+
     <div class="metric-block">
       <div class="metric-label">Final</div>
-      <div class="metric-value" id="metricFinal">0</div>
+      <div class="metric-value">0</div>
     </div>
+
     <div class="metric-block exposure">
       <div class="metric-label">Avg Exposure</div>
-      <div class="metric-value" id="metricExposure">0%</div>
+      <div class="metric-value">0%</div>
     </div>
+
   </section>
 
-  <!-- WORKSPACE -->
   <section class="workspace">
-    <div class="workspace-header">
-      Initiate Audit
-    </div>
+    <div class="workspace-header">Initiate Audit</div>
 
     <div class="workspace-body">
       <div class="field-column">
-        <input type="text" id="clientName" placeholder="Client Name">
-        <input type="text" id="auditTitle" placeholder="Audit Title">
-        <input type="date" id="auditDate">
 
-        <button class="primary-btn" onclick="createAudit()">Start Audit</button>
+        <input type="text" placeholder="Client Name">
+        <input type="text" placeholder="Audit Title">
+        <input type="date">
+
+        <button class="primary-btn">Start Audit</button>
+
       </div>
     </div>
   </section>
 
-  <!-- REGISTRY -->
   <section class="registry">
     <div class="registry-title">Audit Registry</div>
-
-    <div class="registry-header">
-      <div>Audit</div>
-      <div>Status</div>
-      <div>Exposure</div>
-    </div>
-
-    <div id="auditList"></div>
   </section>
-
-  <section id="auditEngine" class="audit-container hidden"></section>
 
 </main>
 
@@ -90,6 +80,5 @@
   This system provides structured audit guidance only and does not replace regulatory or legal advice.
 </footer>
 
-<script src="app.js"></script>
 </body>
 </html>
