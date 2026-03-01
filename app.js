@@ -1,90 +1,107 @@
-const STORAGE_KEY = "auditflowpro_enterprise_v5";
+const STORAGE_KEY = "auditflowpro_v1_foundation";
 
-function loadAudits() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+let state = loadState();
+
+function loadState() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    clients: [],
+    audits: [],
+    activeAuditId: null
+  };
 }
 
-function saveAudits(audits) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(audits));
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-let state = {
-  audits: loadAudits(),
-  activeAuditId: null
-};
-
-const controlLibrary = [
-  {
-    section: "Site & Environment",
-    controls: [
-      { id: "SE-01", statement: "Access routes are clearly marked and unobstructed.", impact: 4 },
-      { id: "SE-02", statement: "Emergency exits are accessible and appropriately signed.", impact: 4 },
-      { id: "SE-03", statement: "Fire detection systems are functional and periodically tested.", impact: 4 }
-    ]
-  },
-  {
-    section: "Equipment & Infrastructure",
-    controls: [
-      { id: "EI-01", statement: "Critical equipment is maintained per schedule.", impact: 3 },
-      { id: "EI-02", statement: "Inspection records are available and current.", impact: 2 }
-    ]
-  }
+const SECTIONS = [
+  "Site & Environment",
+  "Equipment & Infrastructure",
+  "Operational Controls",
+  "People & Process"
 ];
 
-function createAudit(title, client) {
-  if (!title) return;
+function buildControlLibrary() {
+  const controls = [];
+  SECTIONS.forEach(section => {
+    for (let i = 1; i <= 10; i++) {
+      controls.push({
+        id: section.substring(0,2) + "-" + i,
+        section,
+        statement: `${section} Control ${i}`,
+        impact: (i % 4) + 1,
+        response: null,
+        score: 0
+      });
+    }
+  });
+  return controls;
+}
 
-  const id = "AUD-" + Date.now();
+function populateClientSelect() {
+  const select = document.getElementById("clientSelect");
+  select.innerHTML = `<option value="">Select Existing Client</option>`;
+  state.clients.forEach(c => {
+    select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+  });
+}
 
-  const newAudit = {
-    id,
-    title,
-    client,
+function createAudit() {
+  const select = document.getElementById("clientSelect");
+  const newClientName = document.getElementById("newClientName").value.trim();
+  const auditTitle = document.getElementById("newAuditTitle").value.trim();
+
+  if (!auditTitle) return;
+
+  let clientId;
+
+  if (newClientName) {
+    clientId = "C-" + Date.now();
+    state.clients.push({ id: clientId, name: newClientName });
+  } else {
+    clientId = select.value;
+    if (!clientId) return;
+  }
+
+  const previousAudit = getLastAuditForClient(clientId);
+
+  const auditId = "A-" + Date.now();
+
+  const audit = {
+    id: auditId,
+    clientId,
+    title: auditTitle,
     status: "Draft",
-    controls: generateControls(),
+    controls: buildControlLibrary(),
     likelihood: 3,
     riskScore: 0,
     maxRisk: calculateMaxRisk(),
     exposurePercent: 0,
-    rating: "Controlled Risk"
+    rating: "Controlled Risk",
+    previousExposure: previousAudit ? previousAudit.exposurePercent : null
   };
 
-  state.audits.push(newAudit);
-  state.activeAuditId = id;
-  saveAudits(state.audits);
+  state.audits.push(audit);
+  state.activeAuditId = auditId;
 
-  document.getElementById("newTitle").value = "";
-  document.getElementById("newClient").value = "";
+  document.getElementById("newClientName").value = "";
+  document.getElementById("newAuditTitle").value = "";
 
+  saveState();
+  populateClientSelect();
   renderAuditList();
   renderActiveAudit();
 }
 
-function generateControls() {
-  let list = [];
-  controlLibrary.forEach(section => {
-    section.controls.forEach(c => {
-      list.push({
-        section: section.section,
-        id: c.id,
-        statement: c.statement,
-        impact: c.impact,
-        response: null,
-        score: 0
-      });
-    });
-  });
-  return list;
+function calculateMaxRisk() {
+  return 40 * 4 * 3 / 4; 
 }
 
-function calculateMaxRisk() {
-  let total = 0;
-  controlLibrary.forEach(section => {
-    section.controls.forEach(c => {
-      total += c.impact * 3;
-    });
-  });
-  return total;
+function getLastAuditForClient(clientId) {
+  const audits = state.audits
+    .filter(a => a.clientId === clientId)
+    .sort((a,b) => b.id.localeCompare(a.id));
+  return audits[0] || null;
 }
 
 function setActiveAudit(id) {
@@ -98,24 +115,19 @@ function getActiveAudit() {
 
 function recordResponse(controlId, response) {
   const audit = getActiveAudit();
-  if (!audit) return;
-
-  if (audit.status === "Complete") audit.status = "Draft";
-
   const control = audit.controls.find(c => c.id === controlId);
-  control.response = response;
-  control.score = (response === "No") ? control.impact * audit.likelihood : 0;
 
-  recalc(audit);
-  saveAudits(state.audits);
+  control.response = response;
+  control.score = response === "No" ? control.impact * audit.likelihood : 0;
+
+  recalcAudit(audit);
+  saveState();
   renderActiveAudit();
 }
 
-function recalc(audit) {
-  let total = 0;
-  audit.controls.forEach(c => total += c.score);
-  audit.riskScore = total;
-  audit.exposurePercent = Math.round((total / audit.maxRisk) * 100);
+function recalcAudit(audit) {
+  audit.riskScore = audit.controls.reduce((t,c) => t + c.score, 0);
+  audit.exposurePercent = Math.round((audit.riskScore / audit.maxRisk) * 100);
   audit.rating = deriveRating(audit.exposurePercent);
 }
 
@@ -127,23 +139,18 @@ function deriveRating(p) {
   return "Critical Exposure";
 }
 
-function completeAudit() {
-  const audit = getActiveAudit();
-  audit.status = "Complete";
-  saveAudits(state.audits);
-  renderActiveAudit();
-}
-
 function renderAuditList() {
   const container = document.getElementById("auditList");
   container.innerHTML = "";
 
-  state.audits.forEach(audit => {
+  state.audits.forEach(a => {
+    const delta = a.previousExposure !== null
+      ? ` | Previous: ${a.previousExposure}%`
+      : "";
+
     container.innerHTML += `
-      <div class="audit-item" onclick="setActiveAudit('${audit.id}')">
-        <strong>${audit.title}</strong><br>
-        ${audit.rating} (${audit.exposurePercent}%)
-        <hr>
+      <div class="audit-item" onclick="setActiveAudit('${a.id}')">
+        <strong>${a.title}</strong> (${a.rating} ${a.exposurePercent}%)${delta}
       </div>
     `;
   });
@@ -160,44 +167,48 @@ function renderActiveAudit() {
     audit.exposurePercent <= 60 ? "medium" :
     audit.exposurePercent <= 80 ? "high" : "critical";
 
+  const previousLine = audit.previousExposure !== null
+    ? `<p><strong>Previous Exposure:</strong> ${audit.previousExposure}%</p>`
+    : "";
+
   container.innerHTML = `
     <h2>${audit.title}
-      <span class="badge ${audit.status === "Draft" ? "draft" : "final"}">
-        ${audit.status === "Draft" ? "Provisional" : "Final"}
-      </span>
+      <span class="badge draft">${audit.status}</span>
     </h2>
 
-    <p><strong>Client:</strong> ${audit.client}</p>
-
-    <div class="executive">
-      <h3>Executive Risk Overview</h3>
-      <p><strong>Total Risk Score:</strong> ${audit.riskScore} / ${audit.maxRisk}</p>
-      <p><strong>Exposure Level:</strong> ${audit.exposurePercent}%</p>
-      <p><strong>Overall Rating:</strong> ${audit.rating}</p>
+    <div>
+      <p><strong>Total Score:</strong> ${audit.riskScore} / ${audit.maxRisk}</p>
+      <p><strong>Exposure:</strong> ${audit.exposurePercent}%</p>
+      <p><strong>Rating:</strong> ${audit.rating}</p>
+      ${previousLine}
 
       <div class="risk-bar-container">
         <div class="risk-bar ${barClass}" style="width:${audit.exposurePercent}%"></div>
       </div>
     </div>
-
-    <button onclick="completeAudit()">Mark Audit Complete</button>
-
-    <hr class="section-divider">
   `;
 
-  audit.controls.forEach(control => {
+  SECTIONS.forEach(section => {
+    const sectionControls = audit.controls.filter(c => c.section === section);
+    const sectionScore = sectionControls.reduce((t,c) => t + c.score, 0);
+
     container.innerHTML += `
-      <div class="control-block">
-        <strong>${control.section}</strong><br>
-        ${control.statement}<br>
-        <button onclick="recordResponse('${control.id}','Yes')">Yes</button>
-        <button onclick="recordResponse('${control.id}','No')">No</button>
-        <button onclick="recordResponse('${control.id}','N/A')">N/A</button>
-      </div>
+      <div class="section-header">${section}</div>
+      <div class="section-summary">Section Score: ${sectionScore}</div>
     `;
+
+    sectionControls.forEach(control => {
+      container.innerHTML += `
+        <div class="control-block">
+          ${control.statement} (Impact ${control.impact})
+          <button onclick="recordResponse('${control.id}','Yes')">Yes</button>
+          <button onclick="recordResponse('${control.id}','No')">No</button>
+          <button onclick="recordResponse('${control.id}','N/A')">N/A</button>
+        </div>
+      `;
+    });
   });
 }
 
-window.onload = function() {
-  renderAuditList();
-};
+populateClientSelect();
+renderAuditList();
