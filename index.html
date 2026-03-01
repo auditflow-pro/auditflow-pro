@@ -27,29 +27,6 @@ button {
   cursor: pointer;
 }
 
-details summary {
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.risk-bar-container {
-  height: 14px;
-  background: #e0e0e0;
-  border-radius: 7px;
-  overflow: hidden;
-  margin: 8px 0;
-}
-
-.risk-bar {
-  height: 100%;
-}
-
-.low { background: #2e7d32; }
-.medium { background: #f9a825; }
-.high { background: #ef6c00; }
-.critical { background: #c62828; }
-
 .badge {
   padding: 4px 8px;
   font-size: 12px;
@@ -61,21 +38,12 @@ details summary {
 .draft { background: #999; color: white; }
 .final { background: #2e7d32; color: white; }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-}
-
-th, td {
-  border: 1px solid #ccc;
-  padding: 6px;
-  font-size: 13px;
-  text-align: left;
-}
-
 hr { margin: 15px 0; }
 
+input {
+  padding: 6px;
+  margin: 4px 4px 4px 0;
+}
 </style>
 </head>
 <body>
@@ -84,8 +52,17 @@ hr { margin: 15px 0; }
 
 <div class="card">
 <h2>Create New Audit</h2>
-<input id="newTitle" placeholder="Audit Title" autocapitalize="words" autocomplete="off">
-<input id="newClient" placeholder="Client Name" autocapitalize="words" autocomplete="off">
+
+<input id="newTitle"
+       placeholder="Audit Title"
+       autocapitalize="words"
+       autocomplete="off">
+
+<input id="newClient"
+       placeholder="Client Name"
+       autocapitalize="words"
+       autocomplete="off">
+
 <button onclick="createAudit(
   document.getElementById('newTitle').value,
   document.getElementById('newClient').value
@@ -104,5 +81,6 @@ Create Audit
 </div>
 
 <script src="app.js"></script>
+
 </body>
 </html>
