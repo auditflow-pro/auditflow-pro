@@ -1,6 +1,6 @@
 (function(){
 
-const STORAGE_KEY = "auditflow_global_v5";
+const STORAGE_KEY = "auditflow_global_v6";
 
 const STATUS = {
   IN_PROGRESS:"IN_PROGRESS",
@@ -123,13 +123,7 @@ function statusClass(s){
   return "progress";
 }
 
-function renderNav(){
-  document.querySelectorAll(".navitem").forEach(n=>{
-    n.classList.toggle("active",n.dataset.view===state.view);
-  });
-}
-
-function renderAudit(){
+function render(){
   const audit=activeAudit();
   if(!audit) return;
 
@@ -142,17 +136,21 @@ function renderAudit(){
   pill.className="status-pill "+statusClass(audit.status);
 
   const disabled=!audit.name.trim();
+
   ["btnYes","btnNo","btnNa","btnPrev","btnNext"].forEach(id=>{
     $(id).disabled=disabled;
   });
 
   if(disabled){
     $("contextStrip").textContent="Audit name required to begin.";
+    $("questionText").textContent="";
     return;
   }
 
   const section=TEMPLATE[audit.activeSection];
-  $("questionText").textContent=section.questions[audit.activeIndex];
+  const question=section.questions[audit.activeIndex];
+
+  $("questionText").textContent=question;
 
   $("contextStrip").textContent=
     `${section.title} • ${audit.activeIndex+1}/${section.questions.length} • `+
@@ -196,13 +194,8 @@ function createAudit(){
   const a=blankAudit();
   state.audits.push(a);
   state.activeAuditId=a.id;
-  state.view="audit";
   render();
 }
-
-document.querySelectorAll(".navitem").forEach(n=>{
-  n.onclick=()=>{state.view=n.dataset.view;render();};
-});
 
 $("btnYes").onclick=()=>record("YES");
 $("btnNo").onclick=()=>record("NO");
