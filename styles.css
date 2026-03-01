@@ -1,371 +1,161 @@
+/* ===============================
+   AuditFlow Pro – Professional UI
+   =============================== */
+
 body {
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:#f4f6f9;
-  color:#111827;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f3f5f7;
+  margin: 0;
+  padding: 30px;
+  color: #1f2933;
 }
 
-/* Top Nav */
-.topnav {
-  background:#0f1f3d;
-  color:white;
-  display:flex;
-  justify-content:space-between;
-  padding:12px 20px;
-  font-weight:600;
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
 }
 
-.navitem {
-  margin-left:20px;
-  cursor:pointer;
-  opacity:.7;
+/* ===== Cards ===== */
+
+.card {
+  background: #ffffff;
+  padding: 24px;
+  margin-bottom: 28px;
+  border-radius: 6px;
+  border: 1px solid #e3e6ea;
 }
 
-.navitem.active {
-  opacity:1;
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  font-weight: 600;
 }
 
-/* Enterprise Strip */
-.enterprise-strip {
-  position:sticky;
-  top:0;
-  background:#111827;
-  color:white;
-  display:flex;
-  justify-content:space-between;
-  padding:8px 20px;
-  font-size:13px;
-  letter-spacing:.5px;
-}
+/* ===== Inputs ===== */
 
-.strip-item {
-  display:flex;
-  gap:6px;
-  align-items:center;
-}
-
-.strip-label {
-  opacity:.6;
-  font-weight:500;
-}
-
-.strip-value {
-  font-weight:600;
-}
-
-/* Status Pills */
-.status-pill {
-  padding:4px 10px;
-  font-weight:600;
-  background:#6b7280;
-  color:white;
-}
-
-.actions-pill {
-  padding:4px 10px;
-  background:#1f2937;
-  color:white;
-  font-weight:600;
-}
-
-/* Commissioning Block */
-.commission-card {
-  background:white;
-  margin:30px 20px;
-  padding:25px;
-  border:1px solid #e5e7eb;
-}
-
-.commission-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px 40px;
-}
-
-.field label {
-  font-size:12px;
-  letter-spacing:1px;
-  font-weight:600;
-  color:#6b7280;
-}
-
-.field input {
-  width:100%;
-  padding:10px;
-  border:1px solid #d1d5db;
-  margin-top:6px;
-}
-
-.readonly-value {
-  margin-top:6px;
-  font-weight:600;
-}
-
-/* Buttons */
-.primary-action {
-  margin-top:25px;
-  background:#0f1f3d;
-  color:white;
-  border:none;
-  padding:12px 20px;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.secondary-action {
-  margin-top:20px;
-  background:none;
-  border:none;
-  color:#0f1f3d;
-  font-weight:600;
-  cursor:pointer;
-}
-
-/* Section */
-.section-card {
-  background:white;
-  margin:30px 20px;
-  padding:25px;
-  border:1px solid #e5e7eb;
-}
-
-.section-header {
-  font-weight:700;
-  font-size:18px;
-}
-
-.section-meta {
-  font-size:13px;
-  margin-bottom:20px;
-  color:#6b7280;
-}
-
-.question-text {
-  font-size:18px;
-  font-weight:600;
-  margin-bottom:25px;
-}
-
-.buttons button {
-  width:100%;
-  padding:12px;
-  margin-bottom:12px;
-  font-weight:600;
-  border:none;
-  cursor:pointer;
-}
-
-.btn-yes { background:#065f46; color:white; }
-.btn-no { background:#7f1d1d; color:white; }
-.btn-na { background:#374151; color:white; }
-
-.error {
-  color:#b91c1c;
-  font-size:12px;
-  margin-top:4px;
-}
-/* --- Strip Tightening --- */
-.enterprise-strip {
-  padding:6px 20px;
-  font-size:12px;
-  border-bottom:1px solid #1f2937;
-}
-
-.strip-item {
-  gap:4px;
-}
-
-.status-pill {
-  padding:3px 8px;
-  font-size:11px;
-  letter-spacing:0.5px;
-}
-
-.actions-pill {
-  padding:3px 8px;
-  font-size:11px;
-}
-
-/* --- Commission Density Tightening --- */
-.commission-card {
-  margin:24px 20px;
-  padding:20px;
-}
-
-.commission-grid {
-  gap:16px 32px;
-}
-
-.field input {
-  padding:8px;
-  height:36px;
-}
-
-.readonly-value {
-  font-size:15px;
-}
-
-/* --- Strengthen State Indicator --- */
-#statusBadge {
-  display:inline-block;
-  padding:6px 12px;
-  font-size:12px;
-  letter-spacing:0.5px;
-  background:#6b7280;
-  color:white;
-}
-
-/* --- Button Alignment --- */
-.primary-action {
-  margin-top:20px;
-  align-self:flex-start;
-  min-width:180px;
-}
-/* ========================= */
-/* FINAL AUTHORITY REFINEMENT */
-/* ========================= */
-
-/* 1️⃣ Control Strip Compression */
-.enterprise-strip {
-  padding: 5px 20px;
-  font-size: 11.5px;
-  letter-spacing: 0.6px;
-  border-bottom: 1px solid #1c2433;
-}
-
-.strip-item {
-  gap: 3px;
-}
-
-.status-pill {
-  padding: 3px 9px;
-  font-size: 11px;
-  background: #4b5563; /* slightly stronger than grey */
-  letter-spacing: 0.8px;
-}
-
-.actions-pill {
-  padding: 3px 9px;
-  font-size: 11px;
-  background: #111827;
-}
-
-/* 2️⃣ Commission Block Anchoring */
-body {
-  background: #eef1f5; /* slightly cooler, more institutional */
-}
-
-.commission-card {
-  margin: 22px 20px 18px 20px;
-  padding: 18px 22px;
-  border: 1px solid #d6dbe3;
-}
-
-/* 3️⃣ Grid Tightening */
-.commission-grid {
-  gap: 14px 28px;
-}
-
-.field label {
-  font-size: 11px;
-  letter-spacing: 1.2px;
-  color: #6b7280;
-}
-
-.field input {
-  height: 34px;
-  padding: 6px 8px;
-}
-
-/* 4️⃣ Strengthen STATE Indicator */
-#statusBadge {
-  padding: 5px 12px;
-  font-size: 11px;
-  letter-spacing: 1px;
-  background: #525866;
-}
-
-/* 5️⃣ Elevate Primary Action */
-.primary-action {
-  margin-top: 18px;
-  height: 44px;
-  letter-spacing: 0.8px;
+input {
+  padding: 10px 12px;
+  margin: 6px 8px 6px 0;
+  border-radius: 4px;
+  border: 1px solid #cbd2d9;
   font-size: 14px;
-  background: #0b1a33; /* deeper navy */
-  min-width: 200px;
-}
-/* ===================== */
-/* PRINT-READY REPORT    */
-/* ===================== */
-
-.report-header h1 {
-  margin-bottom: 10px;
+  min-width: 220px;
 }
 
-.report-meta div {
-  margin-bottom: 4px;
+input:focus {
+  outline: none;
+  border-color: #334e68;
 }
 
-.report-section {
-  margin-top: 30px;
-  page-break-inside: avoid;
+/* ===== Buttons ===== */
+
+button {
+  padding: 8px 14px;
+  margin: 6px 6px 6px 0;
+  border-radius: 4px;
+  border: 1px solid #334e68;
+  background: #334e68;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease;
 }
 
-.domain-summary {
-  margin-bottom: 12px;
+button:hover {
+  background: #243b53;
 }
 
-.report-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
+/* ===== Badges ===== */
 
-.report-table th,
-.report-table td {
-  border: 1px solid #000;
-  padding: 6px;
-  text-align: left;
+.badge {
+  padding: 4px 10px;
   font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-left: 10px;
 }
 
-@media print {
+.draft {
+  background: #e4e7eb;
+  color: #334e68;
+}
 
-  body {
-    background: white;
-    margin: 20mm;
-  }
+.final {
+  background: #334e68;
+  color: white;
+}
 
-  .topnav,
-  .enterprise-strip,
-  .primary-action,
-  .secondary-action,
-  button {
-    display: none !important;
-  }
+/* ===== Executive Section ===== */
 
-  .commission-card {
-    display: none;
-  }
+.executive {
+  background: #f9fafb;
+  padding: 18px;
+  border-left: 4px solid #334e68;
+  margin: 18px 0;
+}
 
-  #engineBlock {
-    display: none;
-  }
+.executive h3 {
+  margin-top: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
 
-  #actionsView {
-    display: none;
-  }
+.executive p {
+  margin: 6px 0;
+  font-size: 14px;
+}
 
-  #summaryView {
-    display: block !important;
-  }
+/* ===== Risk Bar ===== */
 
-  @page {
-    size: auto;
-    margin: 20mm;
-  }
+.risk-bar-container {
+  height: 14px;
+  background: #e1e4e8;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-top: 8px;
+}
 
-  footer::after {
-    content: counter(page);
-  }
+.risk-bar {
+  height: 100%;
+}
+
+.low { background: #2f855a; }
+.medium { background: #dd6b20; }
+.high { background: #c05621; }
+.critical { background: #9b2c2c; }
+
+/* ===== Audit List ===== */
+
+.audit-item {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.audit-item strong {
+  font-weight: 600;
+}
+
+.audit-item hr {
+  margin-top: 10px;
+  border: none;
+  border-top: 1px solid #e3e6ea;
+}
+
+/* ===== Controls ===== */
+
+.control-block {
+  margin-bottom: 16px;
+}
+
+.control-block strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+hr.section-divider {
+  border: none;
+  border-top: 1px solid #e3e6ea;
+  margin: 20px 0;
 }
