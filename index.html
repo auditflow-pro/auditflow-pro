@@ -1,110 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AuditFlow Pro</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>AuditFlow Pro</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header class="topnav">
-  <div class="brand">AuditFlow Pro</div>
-  <nav>
-    <span class="navitem active" data-view="audit">Audit</span>
-    <span class="navitem" data-view="actions">Actions</span>
-    <span class="navitem" data-view="summary">Summary</span>
-  </nav>
-</header>
+  <h1>AuditFlow Pro</h1>
 
-<!-- Enterprise Control Strip -->
-<section class="enterprise-strip">
-  <div class="strip-item">
-    <span class="strip-label">AUDIT</span>
-    <span id="headerAuditName" class="strip-value">—</span>
-  </div>
-  <div class="strip-item">
-    <span class="strip-label">CLIENT</span>
-    <span id="headerClientName" class="strip-value">—</span>
-  </div>
-  <div class="strip-item">
-    <span class="strip-label">STATUS</span>
-    <span id="headerStatus" class="status-pill">DRAFT</span>
-  </div>
-  <div class="strip-item">
-    <span class="strip-label">OPEN ACTIONS</span>
-    <span id="headerOpenActions" class="actions-pill">0</span>
-  </div>
-</section>
+  <hr>
 
-<main id="auditView">
+  <h2>Create New Audit</h2>
 
-  <!-- Commissioning Block -->
-  <div class="commission-card">
-    <div class="commission-grid">
+  <input id="newTitle" placeholder="Audit Title">
+  <input id="newClient" placeholder="Client Name">
+  <button onclick="createAudit(
+      document.getElementById('newTitle').value,
+      document.getElementById('newClient').value
+    )">
+    Create Audit
+  </button>
 
-      <div class="field">
-        <label>AUDIT NAME *</label>
-        <input id="auditName" type="text" autocapitalize="words">
-        <div id="nameError" class="error"></div>
-      </div>
+  <hr>
 
-      <div class="field">
-        <label>CLIENT</label>
-        <input id="clientName" type="text" autocapitalize="words">
-      </div>
+  <h2>Existing Audits</h2>
+  <div id="auditList"></div>
 
-      <div class="field">
-        <label>AUDIT DATE</label>
-        <div id="auditDate" class="readonly-value"></div>
-      </div>
+  <hr>
 
-      <div class="field">
-        <label>STATE</label>
-        <div id="statusBadge" class="status-pill draft">DRAFT</div>
-      </div>
+  <div id="auditEngine"></div>
 
-    </div>
+  <script src="app.js"></script>
 
-    <button id="startAuditBtn" class="primary-action">
-      Initiate Audit
-    </button>
-  </div>
-
-  <!-- Engine -->
-  <div id="engineBlock" style="display:none;">
-    <div class="section-card">
-      <div id="sectionHeader" class="section-header"></div>
-      <div id="sectionMeta" class="section-meta"></div>
-      <div id="questionText" class="question-text"></div>
-
-      <div class="buttons">
-        <button id="yesBtn" class="btn-yes">YES</button>
-        <button id="noBtn" class="btn-no">NO</button>
-        <button id="naBtn" class="btn-na">N/A</button>
-      </div>
-
-      <button id="previousBtn" class="secondary-action">Previous</button>
-    </div>
-  </div>
-
-</main>
-
-<main id="actionsView" style="display:none;">
-  <div class="section-card">
-    <h2>Action Register</h2>
-    <div id="actionsList"></div>
-  </div>
-</main>
-
-<main id="summaryView" style="display:none;">
-  <div class="section-card">
-    <h2>Audit Summary</h2>
-    <div id="summaryContent"></div>
-    <button id="exportBtn" class="primary-action">Export (Print)</button>
-  </div>
-</main>
-
-<script src="app.js?v=6"></script>
 </body>
 </html>
