@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_v6_safe";
+const STORAGE_KEY = "auditflowpro_v7_clean";
 
 let state = loadState();
 
@@ -23,8 +23,8 @@ function todayISO() {
 function smartCapitalise(str) {
   if (!str) return str;
 
-  const preserveCaps = ["CG", "ISO", "HSE", "UK", "USA", "QA", "EU"];
-  const preserveTitle = ["Ltd", "PLC", "LLC", "Inc"];
+  const preserveCaps = ["CG","ISO","HSE","UK","USA","QA","EU"];
+  const preserveTitle = ["Ltd","PLC","LLC","Inc"];
 
   return str.split(" ").map(function(word) {
     if (!word) return word;
@@ -40,19 +40,19 @@ function smartCapitalise(str) {
 }
 
 function attachCapitalisation() {
-  const clientInput = document.getElementById("clientName");
-  const auditInput = document.getElementById("auditTitle");
+  const client = document.getElementById("clientName");
+  const title = document.getElementById("auditTitle");
 
-  clientInput.addEventListener("input", function() {
-    const pos = clientInput.selectionStart;
-    clientInput.value = smartCapitalise(clientInput.value);
-    clientInput.setSelectionRange(pos, pos);
+  client.addEventListener("input", function() {
+    const pos = client.selectionStart;
+    client.value = smartCapitalise(client.value);
+    client.setSelectionRange(pos,pos);
   });
 
-  auditInput.addEventListener("input", function() {
-    const pos = auditInput.selectionStart;
-    auditInput.value = smartCapitalise(auditInput.value);
-    auditInput.setSelectionRange(pos, pos);
+  title.addEventListener("input", function() {
+    const pos = title.selectionStart;
+    title.value = smartCapitalise(title.value);
+    title.setSelectionRange(pos,pos);
   });
 }
 
@@ -62,9 +62,10 @@ document.addEventListener("DOMContentLoaded", function() {
   renderAuditList();
 });
 
-/* CREATE AUDIT */
+/* CREATE */
 
 function createAudit() {
+
   const clientName = smartCapitalise(
     document.getElementById("clientName").value.trim()
   );
@@ -76,14 +77,12 @@ function createAudit() {
   const auditDate = document.getElementById("auditDate").value;
 
   if (!clientName || !auditTitle || !auditDate) {
-    alert("Client name, audit title, and date are required.");
+    alert("All fields are required.");
     return;
   }
 
-  const auditId = "A-" + Date.now();
-
   const audit = {
-    id: auditId,
+    id: "A-" + Date.now(),
     clientName: clientName,
     title: auditTitle,
     date: auditDate,
@@ -91,7 +90,7 @@ function createAudit() {
   };
 
   state.audits.push(audit);
-  state.activeAuditId = auditId;
+  state.activeAuditId = audit.id;
 
   document.getElementById("clientName").value = "";
   document.getElementById("auditTitle").value = "";
@@ -102,9 +101,10 @@ function createAudit() {
   renderActiveAudit();
 }
 
-/* RENDER LIST */
+/* LIST */
 
 function renderAuditList() {
+
   const container = document.getElementById("auditList");
   container.innerHTML = "";
 
@@ -112,28 +112,24 @@ function renderAuditList() {
 
     const div = document.createElement("div");
     div.className = "audit-item";
-    div.onclick = function() {
-      setActiveAudit(audit.id);
-    };
 
     div.innerHTML =
       "<strong>" + audit.title + "</strong><br>" +
       audit.clientName + " | " + audit.date;
 
+    div.onclick = function() {
+      state.activeAuditId = audit.id;
+      renderActiveAudit();
+    };
+
     container.appendChild(div);
   });
 }
 
-/* SET ACTIVE */
-
-function setActiveAudit(id) {
-  state.activeAuditId = id;
-  renderActiveAudit();
-}
-
-/* RENDER ACTIVE */
+/* ACTIVE */
 
 function renderActiveAudit() {
+
   const audit = state.audits.find(function(a) {
     return a.id === state.activeAuditId;
   });
@@ -146,5 +142,5 @@ function renderActiveAudit() {
     "<h2>" + audit.title + "</h2>" +
     "<p><strong>Client:</strong> " + audit.clientName + "</p>" +
     "<p><strong>Date:</strong> " + audit.date + "</p>" +
-    "<p><strong>Rating:</strong> " + audit.rating + "</p>";
+    "<p><strong>Status:</strong> " + audit.rating + "</p>";
 }
