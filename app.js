@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_enterprise_v2";
+const STORAGE_KEY = "auditflowpro_enterprise_v4";
 
 function loadAudits() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -52,6 +52,10 @@ function createAudit(title, client) {
   state.audits.push(newAudit);
   state.activeAuditId = id;
   saveAudits(state.audits);
+
+  // Professional reset behaviour
+  document.getElementById("newTitle").value = "";
+  document.getElementById("newClient").value = "";
 
   renderAuditList();
   renderActiveAudit();
@@ -139,6 +143,7 @@ function completeAudit() {
 function renderAuditList() {
   const container = document.getElementById("auditList");
   container.innerHTML = "";
+
   state.audits.forEach(audit => {
     container.innerHTML += `
       <div onclick="setActiveAudit('${audit.id}')">
@@ -156,52 +161,19 @@ function renderActiveAudit() {
 
   const container = document.getElementById("auditEngine");
 
-  const barClass =
-    audit.exposurePercent <= 20 ? "low" :
-    audit.exposurePercent <= 60 ? "medium" :
-    audit.exposurePercent <= 80 ? "high" : "critical";
-
   container.innerHTML = `
     <h2>${audit.title}
       <span class="badge ${audit.status === "Draft" ? "draft" : "final"}">
         ${audit.status === "Draft" ? "Provisional" : "Final"}
       </span>
     </h2>
+
     <p><strong>Client:</strong> ${audit.client}</p>
-
-    <details open>
-      <summary>Risk Model & Methodology</summary>
-      <p><strong>Formula:</strong> Risk Score = Impact × Likelihood</p>
-      <p><strong>Likelihood (Failure):</strong> 3</p>
-
-      <h4>Impact Scale</h4>
-      <table>
-        <tr><th>Impact</th><th>Definition</th></tr>
-        <tr><td>4</td><td>Life Safety / Legal Exposure / Operational Continuity Threat</td></tr>
-        <tr><td>3</td><td>Regulatory / Major Operational Disruption</td></tr>
-        <tr><td>2</td><td>Process Weakness / Performance Risk</td></tr>
-        <tr><td>1</td><td>Minor Control Improvement</td></tr>
-      </table>
-
-      <h4>Exposure Bands</h4>
-      <table>
-        <tr><th>% Exposure</th><th>Rating</th></tr>
-        <tr><td>0–20%</td><td>Controlled Risk</td></tr>
-        <tr><td>21–40%</td><td>Emerging Risk</td></tr>
-        <tr><td>41–60%</td><td>Material Risk</td></tr>
-        <tr><td>61–80%</td><td>Significant Exposure</td></tr>
-        <tr><td>81–100%</td><td>Critical Exposure</td></tr>
-      </table>
-    </details>
 
     <h3>Executive Risk Overview</h3>
     <p><strong>Total Risk Score:</strong> ${audit.riskScore} / ${audit.maxRisk}</p>
     <p><strong>Risk Exposure:</strong> ${audit.exposurePercent}%</p>
     <p><strong>Overall Rating:</strong> ${audit.rating}</p>
-
-    <div class="risk-bar-container">
-      <div class="risk-bar ${barClass}" style="width:${audit.exposurePercent}%"></div>
-    </div>
 
     <button onclick="completeAudit()">Mark Audit Complete</button>
     <hr>
