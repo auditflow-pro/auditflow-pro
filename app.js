@@ -1,12 +1,14 @@
 (function(){
 
-const STORAGE_KEY = "auditflow_global_v6";
+const STORAGE_KEY = "auditflow_global_v7";
 
 const STATUS = {
   IN_PROGRESS:"IN_PROGRESS",
   READY_REVIEW:"READY_REVIEW",
   COMPLETE:"COMPLETE"
 };
+
+const SECTION_ORDER = ["site","equipment","operations","people"];
 
 const TEMPLATE = {
   site:{
@@ -76,7 +78,7 @@ function uid(){ return Math.random().toString(16).slice(2)+"-"+Date.now().toStri
 
 function blankAudit(){
   const responses={};
-  Object.keys(TEMPLATE).forEach(k=>{
+  SECTION_ORDER.forEach(k=>{
     responses[k]=Array(TEMPLATE[k].questions.length).fill(null);
   });
   return{
@@ -123,7 +125,13 @@ function statusClass(s){
   return "progress";
 }
 
-function render(){
+function renderNav(){
+  document.querySelectorAll(".navitem").forEach(n=>{
+    n.classList.toggle("active",n.dataset.view===state.view);
+  });
+}
+
+function renderAudit(){
   const audit=activeAudit();
   if(!audit) return;
 
@@ -155,8 +163,77 @@ function render(){
   $("contextStrip").textContent=
     `${section.title} • ${audit.activeIndex+1}/${section.questions.length} • `+
     `${openCount(audit)} open • ${statusLabel(audit.status)}`;
+}
+
+function renderActions(){
+  const audit=activeAudit();
+  if(!audit) return;
+
+  const container=$("actionsList");
+  if(!container) return;
+
+  container.innerHTML="";
+
+  audit.actions.forEach(action=>{
+    const section=TEMPLATE[action.sectionKey];
+    const question=section.questions[action.questionIndex];
+
+    const div=document.createElement("div");
+    div.className="action-item";
+    div.innerHTML=`
+      <strong>${section.title}</strong>
+      <div>${question}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function renderSummary(){
+  const audit=activeAudit();
+  if(!audit) return;
+
+  const container=$("summaryList");
+  if(!container) return;
+
+  container.innerHTML="";
+
+  SECTION_ORDER.forEach(key=>{
+    const section=TEMPLATE[key];
+    const answered=audit.responses[key].filter(r=>r!==null).length;
+
+    const div=document.createElement("div");
+    div.className="summary-row";
+    div.innerHTML=`
+      <strong>${section.title}</strong>
+      <span>${answered}/${section.questions.length}</span>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function render(){
+  renderNav();
+
+  if(state.view==="audit") renderAudit();
+  if(state.view==="actions") renderActions();
+  if(state.view==="summary") renderSummary();
 
   save();
+}
+
+function autoAdvance(){
+  const audit=activeAudit();
+  const sectionIndex=SECTION_ORDER.indexOf(audit.activeSection);
+  const max=TEMPLATE[audit.activeSection].questions.length-1;
+
+  if(audit.activeIndex < max){
+    audit.activeIndex++;
+  }else{
+    if(sectionIndex < SECTION_ORDER.length-1){
+      audit.activeSection=SECTION_ORDER[sectionIndex+1];
+      audit.activeIndex=0;
+    }
+  }
 }
 
 function record(value){
@@ -174,10 +251,7 @@ function record(value){
     });
   }
 
-  if(audit.status===STATUS.COMPLETE && openCount(audit)>0){
-    audit.status=STATUS.READY_REVIEW;
-  }
-
+  autoAdvance();
   render();
 }
 
@@ -194,8 +268,13 @@ function createAudit(){
   const a=blankAudit();
   state.audits.push(a);
   state.activeAuditId=a.id;
+  state.view="audit";
   render();
 }
+
+document.querySelectorAll(".navitem").forEach(n=>{
+  n.onclick=()=>{state.view=n.dataset.view;render();};
+});
 
 $("btnYes").onclick=()=>record("YES");
 $("btnNo").onclick=()=>record("NO");
