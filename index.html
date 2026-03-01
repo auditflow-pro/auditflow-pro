@@ -8,34 +8,48 @@
 </head>
 <body>
 
-<h1>AuditFlow Pro</h1>
+<header class="app-header">
+  <div class="brand">AuditFlow Pro</div>
+  <div class="nav">
+    <div class="navitem active" data-view="audit">Audit</div>
+    <div class="navitem" data-view="actions">Actions</div>
+    <div class="navitem" data-view="summary">Summary</div>
+  </div>
+</header>
 
-<div class="nav">
-  <div class="navitem active" data-view="audit">Audit</div>
-  <div class="navitem" data-view="actions">Actions</div>
-  <div class="navitem" data-view="summary">Summary</div>
-</div>
+<main class="container">
 
-<button id="btnNewAudit">+ New Audit</button>
+<button id="btnNewAudit" class="primary-btn">+ New Audit</button>
 
 <div id="sectionCompleteBanner" class="section-banner" style="display:none;"></div>
 
+<!-- AUDIT VIEW -->
 <div id="auditView">
-  <div class="card">
-    <label>Audit Name *</label>
-    <input id="auditName" type="text" placeholder="Required">
 
-    <label>Client</label>
-    <input id="clientName" type="text">
+  <div class="card identity-card">
+    <div class="identity-grid">
+      <div>
+        <label>Audit Name *</label>
+        <input id="auditName" type="text" placeholder="Required">
+      </div>
+      <div>
+        <label>Client</label>
+        <input id="clientName" type="text">
+      </div>
+      <div>
+        <label>Audit Date</label>
+        <input id="auditDate" type="date">
+      </div>
+      <div>
+        <label>Status</label>
+        <div id="statusPill" class="status-pill"></div>
+      </div>
+    </div>
+  </div>
 
-    <label>Audit Date</label>
-    <input id="auditDate" type="date">
-
-    <div id="statusPill" class="status-pill"></div>
-
+  <div class="card section-card">
     <div id="sectionHeader" class="section-header"></div>
     <div id="sectionMeta" class="section-meta"></div>
-
     <div id="questionText" class="question"></div>
 
     <div class="buttons">
@@ -49,8 +63,10 @@
       <button id="btnNext">Next</button>
     </div>
   </div>
+
 </div>
 
+<!-- ACTIONS VIEW -->
 <div id="actionsView" style="display:none;">
   <div class="card">
     <h2>Open Actions</h2>
@@ -61,6 +77,7 @@
   </div>
 </div>
 
+<!-- SUMMARY VIEW -->
 <div id="summaryView" style="display:none;">
   <div class="card">
     <h2>Audit Summary</h2>
@@ -68,6 +85,8 @@
     <div id="summaryTotals" class="summary-totals"></div>
   </div>
 </div>
+
+</main>
 
 <script src="app.js"></script>
 </body>
