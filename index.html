@@ -1,50 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>AuditFlow Pro</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>AuditFlow Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h1>AuditFlow Pro</h1>
+  <div class="container">
 
-<div class="card">
-  <h2>Create New Audit</h2>
+    <h1 class="brand">AuditFlow Pro</h1>
 
-  <input
-    type="text"
-    id="clientName"
-    placeholder="Client Name"
-    required
-  >
+    <div class="card">
+      <h2>Create New Audit</h2>
 
-  <input
-    type="text"
-    id="auditTitle"
-    placeholder="Audit Title"
-    required
-  >
+      <input
+        type="text"
+        id="clientName"
+        placeholder="Client Name"
+        autocomplete="organization"
+        autocapitalize="words"
+      >
 
-  <input
-    type="date"
-    id="auditDate"
-    required
-  >
+      <input
+        type="text"
+        id="auditTitle"
+        placeholder="Audit Title"
+        autocomplete="off"
+        autocapitalize="words"
+      >
 
-  <button onclick="createAudit()">Create Audit</button>
-</div>
+      <input
+        type="date"
+        id="auditDate"
+      >
 
-<div class="card">
-  <h2>Existing Audits</h2>
-  <div id="auditList"></div>
-</div>
+      <button onclick="createAudit()">Create Audit</button>
+    </div>
 
-<div class="card">
-  <div id="auditEngine"></div>
-</div>
+    <div class="card">
+      <h2>Existing Audits</h2>
+      <div id="auditList"></div>
+    </div>
 
-<script src="app.js"></script>
+    <div id="auditEngine" class="card"></div>
+
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
