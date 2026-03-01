@@ -5,140 +5,138 @@ body {
   color: #1f2a36;
 }
 
-.topbar {
+/* COMMAND STRIP */
+
+.command-bar {
   background: #394957;
   color: white;
-  padding: 20px;
+  padding: 18px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.logo {
-  font-size: 22px;
+.brand {
+  font-size: 20px;
   font-weight: 600;
 }
 
-.subtitle {
-  font-size: 13px;
+.descriptor {
+  font-size: 12px;
   opacity: 0.8;
 }
 
+.command-right {
+  display: flex;
+  gap: 12px;
+}
+
+.command-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.command-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.icon {
+  margin-right: 6px;
+}
+
+/* LAYOUT */
+
 .container {
-  max-width: 900px;
+  max-width: 950px;
   margin: 30px auto;
   padding: 0 20px;
 }
 
+/* DASHBOARD */
+
 .dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  gap: 18px;
   margin-bottom: 30px;
 }
 
-.metric {
+.metric-block {
   background: white;
-  padding: 18px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  padding: 20px;
+  border: 1px solid #dde3ea;
 }
 
 .metric-label {
-  font-size: 13px;
+  font-size: 12px;
   color: #6c7884;
 }
 
 .metric-value {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 600;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .risk-low { color: #2e7d32; }
 .risk-medium { color: #f57c00; }
 .risk-high { color: #c62828; }
 
-.card {
+/* PANELS */
+
+.panel {
   background: white;
   padding: 24px;
-  border-radius: 10px;
   margin-bottom: 30px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  border: 1px solid #dde3ea;
 }
 
 input {
   width: 100%;
   padding: 14px;
   margin-bottom: 14px;
-  border-radius: 8px;
   border: 1px solid #cdd6df;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-button {
-  padding: 12px 18px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-button.primary {
+.primary-btn {
   background: #394957;
   color: white;
+  padding: 12px 22px;
+  border: none;
+  cursor: pointer;
 }
 
-button.secondary {
-  background: #6b7d8d;
-  color: white;
-  margin-right: 8px;
+.primary-btn:hover {
+  opacity: 0.9;
+}
+
+/* REGISTRY */
+
+.registry-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  font-size: 12px;
+  color: #6c7884;
+  border-bottom: 1px solid #dde3ea;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .audit-item {
-  padding: 16px 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 12px 0;
   border-bottom: 1px solid #e5e9ee;
   cursor: pointer;
 }
 
-.ledger-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.ledger-sub {
-  font-size: 13px;
-  color: #6c7884;
-}
-
-.badge {
-  background: #e3e8ee;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-}
-
-.exposure {
-  font-size: 12px;
-  color: #6c7884;
-}
-
-.audit-container {
-  background: white;
-  padding: 0;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.audit-header {
-  background: #394957;
-  color: white;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.executive {
-  padding: 20px;
+.audit-item:hover {
+  background: #f7f9fb;
 }
 
 .footer {
