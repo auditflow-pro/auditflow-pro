@@ -36,3 +36,75 @@
   border-radius: 4px;
   font-weight: 600;
 }
+/* ========================= */
+/* Enterprise Control Bar    */
+/* ========================= */
+
+.enterprise-header {
+  position: sticky;
+  top: 0;
+  background: #0f1f3d;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: 14px;
+  z-index: 1000;
+  gap: 12px;
+}
+
+.enterprise-header div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.enterprise-header strong {
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+#headerStatus {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  background: #6b7280; /* draft default */
+}
+
+#headerOpenActions {
+  background: #1f2937;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* Improve main spacing below header */
+main {
+  padding-top: 16px;
+}
+
+/* Improve card spacing */
+.card {
+  margin: 20px 16px;
+  padding: 20px;
+}
+
+/* Improve input spacing */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0 16px 0;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+/* Improve primary button */
+.primary-btn {
+  background: #0f1f3d;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+}
