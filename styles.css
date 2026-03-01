@@ -141,21 +141,22 @@ html, body {
 }
 
 .workspace-body {
-  padding: 44px 24px 50px;
-  display: flex;
-  justify-content: center;
+  padding: 40px 24px 48px;
 }
 
+/* THIS IS THE KEY FIX */
 .field-column {
   width: 100%;
   max-width: 560px;
+  margin: 0 auto;
 }
 
 /* =========================================
-   INPUTS (Safari Normalised)
+   INPUTS — LOCKED CONTAINMENT
 ========================================= */
 
 input {
+  display: block;
   width: 100%;
   padding: 16px 18px;
   margin-bottom: 22px;
@@ -176,6 +177,7 @@ input[type="date"] {
 ========================================= */
 
 .primary-btn {
+  display: block;
   width: 100%;
   padding: 18px;
   font-size: 15px;
