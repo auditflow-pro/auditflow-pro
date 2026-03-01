@@ -221,3 +221,76 @@ body {
   align-self:flex-start;
   min-width:180px;
 }
+/* ========================= */
+/* FINAL AUTHORITY REFINEMENT */
+/* ========================= */
+
+/* 1️⃣ Control Strip Compression */
+.enterprise-strip {
+  padding: 5px 20px;
+  font-size: 11.5px;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid #1c2433;
+}
+
+.strip-item {
+  gap: 3px;
+}
+
+.status-pill {
+  padding: 3px 9px;
+  font-size: 11px;
+  background: #4b5563; /* slightly stronger than grey */
+  letter-spacing: 0.8px;
+}
+
+.actions-pill {
+  padding: 3px 9px;
+  font-size: 11px;
+  background: #111827;
+}
+
+/* 2️⃣ Commission Block Anchoring */
+body {
+  background: #eef1f5; /* slightly cooler, more institutional */
+}
+
+.commission-card {
+  margin: 22px 20px 18px 20px;
+  padding: 18px 22px;
+  border: 1px solid #d6dbe3;
+}
+
+/* 3️⃣ Grid Tightening */
+.commission-grid {
+  gap: 14px 28px;
+}
+
+.field label {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  color: #6b7280;
+}
+
+.field input {
+  height: 34px;
+  padding: 6px 8px;
+}
+
+/* 4️⃣ Strengthen STATE Indicator */
+#statusBadge {
+  padding: 5px 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  background: #525866;
+}
+
+/* 5️⃣ Elevate Primary Action */
+.primary-action {
+  margin-top: 18px;
+  height: 44px;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  background: #0b1a33; /* deeper navy */
+  min-width: 200px;
+}
