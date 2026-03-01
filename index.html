@@ -17,7 +17,7 @@
   </nav>
 </header>
 
-<!-- Persistent Enterprise Header -->
+<!-- Fixed Enterprise Control Bar -->
 <section class="enterprise-header">
   <div><strong>Audit:</strong> <span id="headerAuditName">—</span></div>
   <div><strong>Client:</strong> <span id="headerClientName">—</span></div>
@@ -25,16 +25,19 @@
   <div><strong>Open Actions:</strong> <span id="headerOpenActions">0</span></div>
 </section>
 
+<!-- ============================= -->
 <!-- AUDIT VIEW -->
+<!-- ============================= -->
+
 <main id="auditView">
 
   <div class="card">
     <label>AUDIT NAME *</label>
-    <input id="auditName" type="text">
+    <input id="auditName" type="text" autocapitalize="words">
     <div id="nameError" class="error"></div>
 
     <label>CLIENT</label>
-    <input id="clientName" type="text">
+    <input id="clientName" type="text" autocapitalize="words">
 
     <label>AUDIT DATE</label>
     <div id="auditDate"></div>
@@ -63,7 +66,10 @@
 
 </main>
 
+<!-- ============================= -->
 <!-- ACTIONS VIEW -->
+<!-- ============================= -->
+
 <main id="actionsView" style="display:none;">
   <div class="card">
     <h2>Action Register</h2>
@@ -71,7 +77,10 @@
   </div>
 </main>
 
+<!-- ============================= -->
 <!-- SUMMARY VIEW -->
+<!-- ============================= -->
+
 <main id="summaryView" style="display:none;">
   <div class="card">
     <h2>Audit Summary</h2>
@@ -80,6 +89,8 @@
   </div>
 </main>
 
-<script src="app.js?v=4"></script>
+<!-- Cache busting version increment -->
+<script src="app.js?v=5"></script>
+
 </body>
 </html>
