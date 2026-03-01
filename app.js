@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_enterprise";
+const STORAGE_KEY = "auditflowpro_enterprise_v2";
 
 function loadAudits() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -31,10 +31,6 @@ const controlLibrary = [
   }
 ];
 
-function defaultConfig() {
-  return { likelihood: 3 };
-}
-
 function createAudit(title, client) {
   if (!title) return;
 
@@ -45,14 +41,12 @@ function createAudit(title, client) {
     title,
     client,
     status: "Draft",
-    created: new Date().toISOString(),
     controls: generateControls(),
-    findings: [],
+    likelihood: 3,
     riskScore: 0,
     maxRisk: calculateMaxRisk(),
     exposurePercent: 0,
-    overallRating: "Controlled Risk",
-    config: defaultConfig()
+    rating: "Controlled Risk"
   };
 
   state.audits.push(newAudit);
@@ -64,27 +58,27 @@ function createAudit(title, client) {
 }
 
 function generateControls() {
-  let result = [];
+  let list = [];
   controlLibrary.forEach(section => {
-    section.controls.forEach(control => {
-      result.push({
+    section.controls.forEach(c => {
+      list.push({
         section: section.section,
-        id: control.id,
-        statement: control.statement,
-        impact: control.impact,
+        id: c.id,
+        statement: c.statement,
+        impact: c.impact,
         response: null,
-        riskScore: 0
+        score: 0
       });
     });
   });
-  return result;
+  return list;
 }
 
 function calculateMaxRisk() {
   let total = 0;
   controlLibrary.forEach(section => {
-    section.controls.forEach(control => {
-      total += control.impact * 3;
+    section.controls.forEach(c => {
+      total += c.impact * 3;
     });
   });
   return total;
@@ -103,45 +97,40 @@ function recordResponse(controlId, response) {
   const audit = getActiveAudit();
   if (!audit) return;
 
-  if (audit.status === "Complete") {
-    audit.status = "Draft";
-  }
+  if (audit.status === "Complete") audit.status = "Draft";
 
   const control = audit.controls.find(c => c.id === controlId);
   control.response = response;
 
   if (response === "No") {
-    control.riskScore = control.impact * audit.config.likelihood;
+    control.score = control.impact * audit.likelihood;
   } else {
-    control.riskScore = 0;
+    control.score = 0;
   }
 
-  recalculateAudit(audit);
+  recalc(audit);
   saveAudits(state.audits);
   renderActiveAudit();
 }
 
-function recalculateAudit(audit) {
+function recalc(audit) {
   let total = 0;
-  audit.controls.forEach(c => total += c.riskScore);
-
+  audit.controls.forEach(c => total += c.score);
   audit.riskScore = total;
   audit.exposurePercent = Math.round((total / audit.maxRisk) * 100);
-
-  audit.overallRating = deriveRating(audit.exposurePercent);
+  audit.rating = deriveRating(audit.exposurePercent);
 }
 
-function deriveRating(percent) {
-  if (percent <= 20) return "Controlled Risk";
-  if (percent <= 40) return "Emerging Risk";
-  if (percent <= 60) return "Material Risk";
-  if (percent <= 80) return "Significant Exposure";
+function deriveRating(p) {
+  if (p <= 20) return "Controlled Risk";
+  if (p <= 40) return "Emerging Risk";
+  if (p <= 60) return "Material Risk";
+  if (p <= 80) return "Significant Exposure";
   return "Critical Exposure";
 }
 
 function completeAudit() {
   const audit = getActiveAudit();
-  if (!audit) return;
   audit.status = "Complete";
   saveAudits(state.audits);
   renderActiveAudit();
@@ -150,13 +139,11 @@ function completeAudit() {
 function renderAuditList() {
   const container = document.getElementById("auditList");
   container.innerHTML = "";
-
   state.audits.forEach(audit => {
     container.innerHTML += `
       <div onclick="setActiveAudit('${audit.id}')">
         <strong>${audit.title}</strong><br>
-        Client: ${audit.client}<br>
-        ${audit.overallRating} (${audit.exposurePercent}%)
+        ${audit.rating} (${audit.exposurePercent}%)
         <hr>
       </div>
     `;
@@ -169,11 +156,10 @@ function renderActiveAudit() {
 
   const container = document.getElementById("auditEngine");
 
-  const riskClass =
+  const barClass =
     audit.exposurePercent <= 20 ? "low" :
     audit.exposurePercent <= 60 ? "medium" :
-    audit.exposurePercent <= 80 ? "high" :
-    "critical";
+    audit.exposurePercent <= 80 ? "high" : "critical";
 
   container.innerHTML = `
     <h2>${audit.title}
@@ -183,13 +169,38 @@ function renderActiveAudit() {
     </h2>
     <p><strong>Client:</strong> ${audit.client}</p>
 
+    <details open>
+      <summary>Risk Model & Methodology</summary>
+      <p><strong>Formula:</strong> Risk Score = Impact × Likelihood</p>
+      <p><strong>Likelihood (Failure):</strong> 3</p>
+
+      <h4>Impact Scale</h4>
+      <table>
+        <tr><th>Impact</th><th>Definition</th></tr>
+        <tr><td>4</td><td>Life Safety / Legal Exposure / Operational Continuity Threat</td></tr>
+        <tr><td>3</td><td>Regulatory / Major Operational Disruption</td></tr>
+        <tr><td>2</td><td>Process Weakness / Performance Risk</td></tr>
+        <tr><td>1</td><td>Minor Control Improvement</td></tr>
+      </table>
+
+      <h4>Exposure Bands</h4>
+      <table>
+        <tr><th>% Exposure</th><th>Rating</th></tr>
+        <tr><td>0–20%</td><td>Controlled Risk</td></tr>
+        <tr><td>21–40%</td><td>Emerging Risk</td></tr>
+        <tr><td>41–60%</td><td>Material Risk</td></tr>
+        <tr><td>61–80%</td><td>Significant Exposure</td></tr>
+        <tr><td>81–100%</td><td>Critical Exposure</td></tr>
+      </table>
+    </details>
+
     <h3>Executive Risk Overview</h3>
     <p><strong>Total Risk Score:</strong> ${audit.riskScore} / ${audit.maxRisk}</p>
     <p><strong>Risk Exposure:</strong> ${audit.exposurePercent}%</p>
-    <p><strong>Overall Rating:</strong> ${audit.overallRating}</p>
+    <p><strong>Overall Rating:</strong> ${audit.rating}</p>
 
     <div class="risk-bar-container">
-      <div class="risk-bar ${riskClass}" style="width:${audit.exposurePercent}%"></div>
+      <div class="risk-bar ${barClass}" style="width:${audit.exposurePercent}%"></div>
     </div>
 
     <button onclick="completeAudit()">Mark Audit Complete</button>
@@ -210,6 +221,6 @@ function renderActiveAudit() {
   });
 }
 
-window.onload = function () {
+window.onload = function() {
   renderAuditList();
 };
