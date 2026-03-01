@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=200">
+<link rel="stylesheet" href="styles.css?v=300">
 </head>
 
 <body>
@@ -13,75 +13,78 @@
 <header class="command-bar">
   <div class="command-inner">
     <div class="brand-title">AuditFlow Pro</div>
-    <div class="brand-sub">Structured Audit & Compliance Instrument</div>
-    <div class="brand-edition">Professional Edition · Global Model</div>
+    <div class="brand-sub">Professional Compliance Instrument</div>
+    <div class="brand-edition">Global Neutral Model</div>
   </div>
 </header>
 
 <main class="container">
 
-  <!-- INSTRUMENT STATUS STRIP -->
-  <section class="system-strip">
-    <div class="strip-block">
-      <div class="strip-label">Audit ID</div>
-      <div class="strip-value" id="metaId">—</div>
-    </div>
+  <section class="entry-gate">
 
-    <div class="strip-block">
-      <div class="strip-label">Status</div>
-      <div class="strip-value" id="metaStatus">Ready</div>
-    </div>
+    <div class="entry-header">Lifecycle Overview</div>
 
-    <div class="strip-block">
-      <div class="strip-label">Version</div>
-      <div class="strip-value" id="metaVersion">1.0</div>
-    </div>
+    <div class="lifecycle">
 
-    <div class="strip-block exposure">
-      <div class="strip-label">Exposure</div>
-      <div class="strip-value" id="metaExposure">0%</div>
-      <div class="strip-classification" id="metaClass">Low</div>
-    </div>
-  </section>
+      <div class="stage">
+        <div class="stage-number">01</div>
+        <div class="stage-content">
+          <div class="stage-title">Audit Registration</div>
+          <div class="stage-desc">
+            Formal registration of assessment scope and metadata.
+          </div>
+        </div>
+      </div>
 
-  <!-- STAGE 01 -->
-  <section class="workspace">
-    <div class="workspace-header">01 — Audit Registration</div>
+      <div class="stage">
+        <div class="stage-number">02</div>
+        <div class="stage-content">
+          <div class="stage-title">Structured Assessment</div>
+          <div class="stage-desc">
+            Weighted evaluation across defined compliance domains.
+          </div>
+        </div>
+      </div>
 
-    <div class="workspace-body">
+      <div class="stage">
+        <div class="stage-number">03</div>
+        <div class="stage-content">
+          <div class="stage-title">Exposure Determination</div>
+          <div class="stage-desc">
+            Deterministic calculation of quantified exposure profile.
+          </div>
+        </div>
+      </div>
 
-      <div class="field-column">
-
-        <label>Client Name</label>
-        <input type="text" id="clientName">
-
-        <label>Audit Title</label>
-        <input type="text" id="auditTitle">
-
-        <label>Location</label>
-        <input type="text" id="auditLocation">
-
-        <label>Lead Assessor</label>
-        <input type="text" id="auditAssessor">
-
-        <label>Assessment Date</label>
-        <input type="date" id="auditDate">
-
-        <button class="primary-btn" id="registerBtn">Register Audit</button>
-
+      <div class="stage">
+        <div class="stage-number">04</div>
+        <div class="stage-content">
+          <div class="stage-title">Executive Snapshot</div>
+          <div class="stage-desc">
+            Generation of structured findings and action register.
+          </div>
+        </div>
       </div>
 
     </div>
+
+    <div class="outcome-line">
+      Produces a quantified exposure profile, structured action register, and executive-ready compliance record.
+    </div>
+
+    <button class="primary-btn" id="initiateBtn">
+      Initiate Audit
+    </button>
+
   </section>
 
 </main>
 
 <footer class="footer">
-  © 2026 AuditFlow Pro. Professional Compliance Instrument.<br>
-  Structured assessment guidance only. Not legal advice.
+  © 2026 AuditFlow Pro. Structured compliance guidance instrument. Not legal advice.
 </footer>
 
-<script src="app.js?v=200"></script>
+<script src="app.js?v=300"></script>
 
 </body>
 </html>
