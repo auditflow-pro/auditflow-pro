@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflowpro_v3_clean";
+const STORAGE_KEY = "auditflowpro_v4_caps";
 
 let state = loadState();
 
@@ -18,14 +18,50 @@ function todayISO() {
   return d.toISOString().split("T")[0];
 }
 
+/* =========================
+   FORCE TITLE CASE (LIVE)
+   ========================= */
+
+function toTitleCase(str) {
+  return str
+    .toLowerCase()
+    .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+function attachCapitalisation() {
+  const clientInput = document.getElementById("clientName");
+  const auditInput = document.getElementById("auditTitle");
+
+  clientInput.addEventListener("input", () => {
+    const cursor = clientInput.selectionStart;
+    clientInput.value = toTitleCase(clientInput.value);
+    clientInput.setSelectionRange(cursor, cursor);
+  });
+
+  auditInput.addEventListener("input", () => {
+    const cursor = auditInput.selectionStart;
+    auditInput.value = toTitleCase(auditInput.value);
+    auditInput.setSelectionRange(cursor, cursor);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("auditDate").value = todayISO();
+  attachCapitalisation();
   renderAuditList();
 });
 
+/* =========================
+   CREATE AUDIT
+   ========================= */
+
 function createAudit() {
-  const clientName = document.getElementById("clientName").value.trim();
-  const auditTitle = document.getElementById("auditTitle").value.trim();
+  const clientName = toTitleCase(
+    document.getElementById("clientName").value.trim()
+  );
+  const auditTitle = toTitleCase(
+    document.getElementById("auditTitle").value.trim()
+  );
   const auditDate = document.getElementById("auditDate").value;
 
   if (!clientName || !auditTitle || !auditDate) {
@@ -56,6 +92,10 @@ function createAudit() {
   renderAuditList();
   renderActiveAudit();
 }
+
+/* =========================
+   RENDER
+   ========================= */
 
 function renderAuditList() {
   const container = document.getElementById("auditList");
