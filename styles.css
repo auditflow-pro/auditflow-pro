@@ -1,10 +1,6 @@
-/* ===============================
-   AuditFlow Pro – Professional UI
-   =============================== */
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f3f5f7;
+  background: #f4f6f8;
   margin: 0;
   padding: 30px;
   color: #1f2933;
@@ -14,28 +10,17 @@ h1 {
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 30px;
-  letter-spacing: -0.5px;
 }
 
-/* ===== Cards ===== */
-
 .card {
-  background: #ffffff;
+  background: white;
   padding: 24px;
   margin-bottom: 28px;
   border-radius: 6px;
   border: 1px solid #e3e6ea;
 }
 
-.card h2 {
-  font-size: 20px;
-  margin-bottom: 16px;
-  font-weight: 600;
-}
-
-/* ===== Inputs ===== */
-
-input {
+input, select {
   padding: 10px 12px;
   margin: 6px 8px 6px 0;
   border-radius: 4px;
@@ -43,13 +28,6 @@ input {
   font-size: 14px;
   min-width: 220px;
 }
-
-input:focus {
-  outline: none;
-  border-color: #334e68;
-}
-
-/* ===== Buttons ===== */
 
 button {
   padding: 8px 14px;
@@ -60,14 +38,11 @@ button {
   color: white;
   font-size: 13px;
   cursor: pointer;
-  transition: background 0.15s ease;
 }
 
 button:hover {
   background: #243b53;
 }
-
-/* ===== Badges ===== */
 
 .badge {
   padding: 4px 10px;
@@ -87,32 +62,24 @@ button:hover {
   color: white;
 }
 
-/* ===== Executive Section ===== */
-
-.executive {
-  background: #f9fafb;
-  padding: 18px;
-  border-left: 4px solid #334e68;
-  margin: 18px 0;
-}
-
-.executive h3 {
-  margin-top: 0;
-  font-size: 16px;
+.section-header {
   font-weight: 600;
+  margin-top: 20px;
 }
 
-.executive p {
-  margin: 6px 0;
-  font-size: 14px;
+.section-summary {
+  font-size: 13px;
+  margin: 4px 0 10px 0;
 }
 
-/* ===== Risk Bar ===== */
+.control-block {
+  margin-bottom: 10px;
+}
 
 .risk-bar-container {
-  height: 14px;
+  height: 12px;
   background: #e1e4e8;
-  border-radius: 7px;
+  border-radius: 6px;
   overflow: hidden;
   margin-top: 8px;
 }
@@ -126,36 +93,7 @@ button:hover {
 .high { background: #c05621; }
 .critical { background: #9b2c2c; }
 
-/* ===== Audit List ===== */
-
 .audit-item {
   padding: 10px 0;
   cursor: pointer;
-}
-
-.audit-item strong {
-  font-weight: 600;
-}
-
-.audit-item hr {
-  margin-top: 10px;
-  border: none;
-  border-top: 1px solid #e3e6ea;
-}
-
-/* ===== Controls ===== */
-
-.control-block {
-  margin-bottom: 16px;
-}
-
-.control-block strong {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-hr.section-divider {
-  border: none;
-  border-top: 1px solid #e3e6ea;
-  margin: 20px 0;
 }
