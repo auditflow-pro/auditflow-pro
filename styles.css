@@ -5,12 +5,12 @@ body {
   color: #1f2a36;
 }
 
-/* COMMAND STRIP */
+/* COMMAND BAR */
 
 .command-bar {
   background: #394957;
   color: white;
-  padding: 18px 28px;
+  padding: 18px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,21 +23,32 @@ body {
 
 .descriptor {
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.85;
+  line-height: 1.3;
+}
+
+.edition {
+  font-size: 11px;
+  opacity: 0.65;
+  margin-top: 4px;
 }
 
 .command-right {
   display: flex;
-  gap: 12px;
+  gap: 14px;
 }
 
 .command-btn {
   background: transparent;
   color: white;
   border: 1px solid rgba(255,255,255,0.4);
-  padding: 8px 14px;
+  padding: 9px 16px;
   font-size: 13px;
   cursor: pointer;
+}
+
+.primary-command {
+  border-color: rgba(255,255,255,0.8);
 }
 
 .command-btn:hover {
@@ -51,9 +62,9 @@ body {
 /* LAYOUT */
 
 .container {
-  max-width: 950px;
-  margin: 30px auto;
-  padding: 0 20px;
+  max-width: 960px;
+  margin: 36px auto;
+  padding: 0 24px;
 }
 
 /* DASHBOARD */
@@ -61,14 +72,14 @@ body {
 .dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-bottom: 30px;
+  gap: 20px;
+  margin-bottom: 34px;
 }
 
 .metric-block {
   background: white;
-  padding: 20px;
-  border: 1px solid #dde3ea;
+  padding: 18px 20px;
+  border: 1px solid #cfd6de;
 }
 
 .metric-label {
@@ -77,42 +88,62 @@ body {
 }
 
 .metric-value {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 600;
-  margin-top: 6px;
+  margin-top: 4px;
 }
-
-.risk-low { color: #2e7d32; }
-.risk-medium { color: #f57c00; }
-.risk-high { color: #c62828; }
 
 /* PANELS */
 
 .panel {
   background: white;
-  padding: 24px;
-  margin-bottom: 30px;
-  border: 1px solid #dde3ea;
+  padding: 26px 28px;
+  margin-bottom: 34px;
+  border: 1px solid #cfd6de;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 22px;
 }
 
 input {
   width: 100%;
-  padding: 14px;
-  margin-bottom: 14px;
-  border: 1px solid #cdd6df;
+  padding: 15px;
+  margin-bottom: 16px;
+  border: 1px solid #c6ced7;
   font-size: 15px;
 }
 
+/* EXECUTIVE BUTTON */
+
 .primary-btn {
-  background: #394957;
+  display: block;
+  margin: 24px auto 0;
+  min-width: 240px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
   color: white;
-  padding: 12px 22px;
+  background: #394957;
   border: none;
   cursor: pointer;
+  position: relative;
+}
+
+/* Thin executive highlight */
+.primary-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: rgba(255,255,255,0.35);
 }
 
 .primary-btn:hover {
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 /* REGISTRY */
@@ -122,16 +153,16 @@ input {
   grid-template-columns: 2fr 1fr 1fr;
   font-size: 12px;
   color: #6c7884;
-  border-bottom: 1px solid #dde3ea;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
+  border-bottom: 1px solid #cfd6de;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .audit-item {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  padding: 12px 0;
-  border-bottom: 1px solid #e5e9ee;
+  padding: 14px 0;
+  border-bottom: 1px solid #e4e9ef;
   cursor: pointer;
 }
 
@@ -139,9 +170,11 @@ input {
   background: #f7f9fb;
 }
 
+/* FOOTER */
+
 .footer {
   text-align: center;
-  padding: 30px 20px;
+  padding: 40px 20px;
   font-size: 12px;
   color: #6b7785;
 }
