@@ -10,26 +10,46 @@
 <body>
 
 <header class="topbar">
-  <div class="topbar-inner">
-    <div class="logo">AuditFlow Pro</div>
-    <div class="edition">Structured Audit & Compliance Instrument</div>
-  </div>
+  <div class="logo">AuditFlow Pro</div>
+  <div class="subtitle">Structured Audit & Compliance Instrument</div>
 </header>
 
 <main class="container">
 
-  <section class="card">
-    <h2>Create New Audit</h2>
-
-    <input type="text" id="clientName" placeholder="Client Name" autocapitalize="words">
-    <input type="text" id="auditTitle" placeholder="Audit Title" autocapitalize="words">
-    <input type="date" id="auditDate">
-
-    <button onclick="createAudit()">Create Audit</button>
+  <!-- DASHBOARD STRIP -->
+  <section class="dashboard">
+    <div class="metric">
+      <div class="metric-label">Total Audits</div>
+      <div class="metric-value" id="metricTotal">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Draft</div>
+      <div class="metric-value" id="metricDraft">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Final</div>
+      <div class="metric-value" id="metricFinal">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Avg Exposure</div>
+      <div class="metric-value" id="metricExposure">0%</div>
+    </div>
   </section>
 
+  <!-- WORKSPACE -->
   <section class="card">
-    <h2>Existing Audits</h2>
+    <h2>Initiate Audit</h2>
+
+    <input type="text" id="clientName" placeholder="Client Name">
+    <input type="text" id="auditTitle" placeholder="Audit Title">
+    <input type="date" id="auditDate">
+
+    <button onclick="createAudit()">Start Audit</button>
+  </section>
+
+  <!-- LEDGER -->
+  <section class="card">
+    <h2>Audit Registry</h2>
     <div id="auditList"></div>
   </section>
 
