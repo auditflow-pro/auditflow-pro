@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AuditFlow Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuditFlow Pro</title>
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-  <div class="container">
-
-    <h1 class="brand">AuditFlow Pro</h1>
-
-    <div class="card">
-      <h2>Create New Audit</h2>
-
-      <input
-        type="text"
-        id="clientName"
-        placeholder="Client Name"
-        autocomplete="organization"
-        autocapitalize="words"
-      >
-
-      <input
-        type="text"
-        id="auditTitle"
-        placeholder="Audit Title"
-        autocomplete="off"
-        autocapitalize="words"
-      >
-
-      <input
-        type="date"
-        id="auditDate"
-      >
-
-      <button onclick="createAudit()">Create Audit</button>
-    </div>
-
-    <div class="card">
-      <h2>Existing Audits</h2>
-      <div id="auditList"></div>
-    </div>
-
-    <div id="auditEngine" class="card"></div>
-
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">AuditFlow Pro</div>
+    <div class="status-indicator">Professional Edition</div>
   </div>
+</header>
 
-  <script src="app.js"></script>
+<main class="container">
+
+  <section class="card">
+    <h2>Create New Audit</h2>
+
+    <input type="text"
+           id="clientName"
+           placeholder="Client Name"
+           autocomplete="organization"
+           autocapitalize="words">
+
+    <input type="text"
+           id="auditTitle"
+           placeholder="Audit Title"
+           autocapitalize="words">
+
+    <input type="date" id="auditDate">
+
+    <button onclick="createAudit()">Create Audit</button>
+  </section>
+
+  <section class="card">
+    <h2>Existing Audits</h2>
+    <div id="auditList"></div>
+  </section>
+
+  <section id="auditEngine" class="card hidden"></section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    © 2026 AuditFlow Pro. All rights reserved.
+    <br>
+    This software provides structured audit guidance only.
+    It does not replace professional regulatory advice.
+  </div>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>
