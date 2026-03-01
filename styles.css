@@ -1,28 +1,48 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f4f6f8;
   margin: 0;
-  padding: 20px;
+  background: #eef2f6;
   color: #1f2a36;
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
+.topbar {
+  background: #2e3f52;
+  color: white;
+  padding: 14px 20px;
 }
 
-.brand {
-  font-size: 28px;
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 20px;
   font-weight: 600;
-  margin-bottom: 20px;
+}
+
+.status-indicator {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.container {
+  max-width: 650px;
+  margin: 30px auto;
+  padding: 0 20px;
 }
 
 .card {
   background: white;
   padding: 20px;
-  margin-bottom: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.hidden {
+  display: none;
 }
 
 input {
@@ -36,17 +56,22 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #3d556e;
+  border-color: #2e3f52;
 }
 
 button {
-  background: #3d556e;
+  background: #2e3f52;
   color: white;
   border: none;
-  padding: 12px;
+  padding: 12px 18px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
+}
+
+button.secondary {
+  background: #55697f;
+  margin-right: 10px;
 }
 
 button:hover {
@@ -54,11 +79,36 @@ button:hover {
 }
 
 .audit-item {
-  padding: 12px;
-  border-bottom: 1px solid #e2e6ea;
+  padding: 14px;
+  border-bottom: 1px solid #e5e9ee;
   cursor: pointer;
 }
 
 .audit-item:hover {
-  background: #f0f3f6;
+  background: #f3f6fa;
+}
+
+.audit-header {
+  margin-bottom: 20px;
+}
+
+.audit-meta {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.audit-status {
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.audit-actions {
+  margin-bottom: 20px;
+}
+
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  font-size: 12px;
+  color: #6b7785;
 }
