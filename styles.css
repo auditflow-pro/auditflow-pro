@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -10,7 +8,7 @@ html, body {
   color: #111821;
 }
 
-/* TITLE PLATE */
+/* HEADER */
 
 .title-plate {
   background: #16232e;
@@ -24,17 +22,10 @@ html, body {
   margin: 0 auto;
 }
 
-.brand-title {
-  font-size: 20px;
-  font-weight: 700;
-}
+.brand-title { font-size: 20px; font-weight: 700; }
+.brand-sub { font-size: 12px; opacity: 0.85; }
 
-.brand-sub {
-  font-size: 12px;
-  opacity: 0.85;
-}
-
-/* INSTRUMENT SURFACE */
+/* SURFACE */
 
 .instrument-surface {
   max-width: 1100px;
@@ -42,9 +33,7 @@ html, body {
   padding: 50px 20px 100px;
 }
 
-/* SURFACE HEADER */
-
-.surface-header {
+.section-header {
   font-size: 15px;
   font-weight: 600;
   padding-bottom: 14px;
@@ -53,13 +42,11 @@ html, body {
   letter-spacing: 0.3px;
 }
 
-/* BODY */
-
-.surface-body {
+.section-body {
   max-width: 720px;
 }
 
-/* FIELDS */
+/* FORM */
 
 .field-group {
   display: flex;
@@ -71,7 +58,6 @@ html, body {
   font-size: 12px;
   margin-bottom: 6px;
   color: #44525d;
-  letter-spacing: 0.3px;
 }
 
 .field-group input {
@@ -92,20 +78,13 @@ html, body {
   gap: 20px;
 }
 
-.half {
-  flex: 1;
-}
-
-/* NOTE */
+.half { flex: 1; }
 
 .procedural-note {
   font-size: 12px;
   color: #55616c;
-  margin-top: 4px;
   margin-bottom: 36px;
 }
-
-/* ACTION */
 
 .action-zone {
   display: flex;
@@ -127,34 +106,59 @@ html, body {
   background: #0f1a22;
 }
 
-/* LOCKED STATE */
+/* RECORD HEADER */
 
-.locked input {
-  background: #f5f7f9;
-  border-color: #e0e6eb;
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #cfd8df;
+  margin-bottom: 30px;
 }
 
-.lock-indicator {
-  font-size: 12px;
-  color: #16232e;
-  margin-bottom: 20px;
+.record-title {
+  font-size: 14px;
   font-weight: 600;
 }
 
+.link-btn {
+  background: none;
+  border: none;
+  color: #16232e;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.record-metadata {
+  max-width: 720px;
+  margin-bottom: 60px;
+}
+
+.record-item {
+  margin-bottom: 22px;
+}
+
+.meta-label {
+  font-size: 11px;
+  color: #55616c;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* STAGE 02 */
-
-.assessment-stage {
-  margin-top: 80px;
-}
-
-.hidden {
-  display: none;
-}
 
 .assessment-placeholder {
   font-size: 13px;
   color: #55616c;
 }
+
+.hidden { display: none; }
 
 /* FOOTER */
 
@@ -168,21 +172,7 @@ html, body {
 /* RESPONSIVE */
 
 @media (max-width: 600px) {
-
-  .instrument-surface {
-    padding: 36px 20px 80px;
-  }
-
-  .surface-body {
-    max-width: 100%;
-  }
-
-  .field-row {
-    flex-direction: column;
-  }
-
-  .action-zone {
-    justify-content: center;
-  }
-
+  .instrument-surface { padding: 36px 20px 80px; }
+  .field-row { flex-direction: column; }
+  .action-zone { justify-content: center; }
 }
