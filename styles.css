@@ -1,150 +1,162 @@
-/* =========================
-   GLOBAL BASE
-========================= */
-
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f4f5f7;
-  color: #1d1f24;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6f8;
+    color: #111;
 }
 
-#app {
-  max-width: 980px;
-  margin: 40px auto;
-  padding: 0 24px;
+.app-header {
+    background: #1c1f26;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* =========================
-   APPLICATION MODE
-========================= */
-
-header {
-  background: #0f1a2b;
-  color: white;
-  padding: 20px 24px;
+.brand-title {
+    font-size: 22px;
+    font-weight: bold;
 }
 
-header::after {
-  content: "";
-  display: block;
-  height: 4px;
-  background: #bfa14a;
-  margin-top: 18px;
+.brand-sub {
+    font-size: 14px;
+    opacity: 0.8;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
+.version-block {
+    font-size: 13px;
 }
 
-header .meta {
-  font-size: 13px;
-  margin-top: 6px;
+main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
 }
 
-header .status {
-  margin-top: 6px;
-  font-weight: 600;
-  font-size: 13px;
+.registration-panel,
+.domain-block,
+.exposure-block,
+.document-mode {
+    background: #fff;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
 }
 
-.panel {
-  background: white;
-  padding: 22px;
-  border: 1px solid #d8dde6;
-  margin-bottom: 28px;
+.field-group {
+    margin-bottom: 15px;
 }
 
-button {
-  padding: 8px 16px;
-  border: 1px solid #c9ced8;
-  background: white;
-  cursor: pointer;
+.field-group label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
 }
 
-button.primary {
-  background: #1d1f24;
-  color: white;
-  border: none;
+.field-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
-select {
-  margin-left: 12px;
-  padding: 4px 8px;
+.primary-btn {
+    padding: 12px 18px;
+    background: #1c1f26;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
 }
 
-.flag {
-  margin-top: 10px;
-  font-weight: 600;
-  color: #7a0c0c;
+.primary-btn:hover {
+    opacity: 0.9;
 }
 
-/* =========================
-   DOCUMENT MODE
-========================= */
-
-body.document-mode {
-  background: white;
+.hidden {
+    display: none;
 }
 
-body.document-mode #app {
-  max-width: none;
-  margin: 0;
-  padding: 40px;
+.domain-block h3 {
+    margin-top: 0;
 }
 
-body.document-mode header {
-  display: none;
+.question-block {
+    margin-bottom: 20px;
 }
 
-.document-container {
-  max-width: 850px;
-  margin: 0 auto;
-  font-size: 16px;
-  line-height: 1.6;
+.question-text {
+    margin-bottom: 10px;
+    font-weight: 600;
 }
 
-.document-container h1 {
-  margin-bottom: 4px;
+.answer-btn {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
 }
 
-.document-container hr {
-  margin: 24px 0;
-  border: none;
-  border-top: 1px solid #000;
+.answer-btn.selected {
+    background: #1c1f26;
+    color: #fff;
+}
+
+.answer-recorded {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.modified-flag {
+    font-size: 12px;
+    color: #a00000;
+}
+
+.exposure-block {
+    font-weight: bold;
+}
+
+.document-mode {
+    background: #fff;
+    padding: 40px;
 }
 
 .record-id {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
-.document-footer {
-  margin-top: 40px;
-  font-size: 13px;
+.record-actions {
+    margin-top: 30px;
 }
 
-/* =========================
-   PRINT MODE
-========================= */
+.export-options button {
+    margin-right: 10px;
+}
+
+.app-footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    background: #1c1f26;
+    color: #fff;
+}
 
 @media print {
+    .app-header,
+    .record-actions,
+    .app-footer {
+        display: none;
+    }
 
-  body {
-    background: white;
-  }
+    body {
+        background: #fff;
+    }
 
-  button {
-    display: none !important;
-  }
-
-  body.document-mode #app {
-    padding: 20mm;
-  }
-
-  .document-container {
-    max-width: none;
-  }
-
+    main {
+        margin: 0;
+        max-width: 100%;
+    }
 }
