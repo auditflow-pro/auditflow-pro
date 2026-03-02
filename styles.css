@@ -30,7 +30,7 @@ body {
 
 .brand-sub {
     font-size: 13px;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 main {
@@ -44,13 +44,13 @@ main {
 .exposure-block,
 .document-mode {
     background: #fff;
-    padding: 25px;
-    margin-bottom: 25px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
     border: 1px solid #ddd;
 }
 
 .field {
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
 .field label {
@@ -63,6 +63,15 @@ main {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+/* Remove autofill yellow */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
 }
 
 .primary-btn {
@@ -73,9 +82,15 @@ main {
     cursor: pointer;
 }
 
+.primary-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .validation {
-    background: #f8e8e8;
-    color: #a00000;
+    background: #f5e3e3;
+    color: #8a0000;
     padding: 10px;
     margin-bottom: 15px;
     font-size: 13px;
@@ -87,52 +102,60 @@ main {
 
 .domain-block h3 {
     margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .question-block {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .answer-btn {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 8px;
-    border: 1px solid #ccc;
-    background: #f9f9f9;
+    padding: 9px;
+    margin-bottom: 6px;
+    border: 1px solid #bbb;
+    background: #f8f8f8;
+    color: #333;
     cursor: pointer;
 }
 
+/* Selected states – darker institutional tone */
 .answer-btn.selected-yes {
-    background: #2e5d3b;
+    background: #2f5f3c;
     color: #fff;
+    border-color: #244b2f;
 }
 
 .answer-btn.selected-no {
-    background: #7a1f1f;
+    background: #7c1f1f;
     color: #fff;
+    border-color: #5e1616;
 }
 
 .answer-btn.selected-na {
     background: #555;
     color: #fff;
+    border-color: #444;
 }
 
 .answer-recorded {
     font-size: 12px;
-}
-
-.modified-flag {
-    font-size: 12px;
-    color: #7a1f1f;
+    color: #555;
+    margin-top: 2px;
 }
 
 .exposure-block {
     font-weight: bold;
+    padding: 16px;
 }
 
 .document-mode {
     background: #fff;
-    padding: 40px;
+    padding: 36px 40px;
+}
+
+.document-mode h2 {
+    margin-bottom: 14px;
 }
 
 .record-id {
