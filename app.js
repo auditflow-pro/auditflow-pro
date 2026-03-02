@@ -1,25 +1,14 @@
-/* ===============================
+/* ==========================================
    AuditFlow Pro v3.0
-   Registration Data Integrity Layer
-================================= */
+   Phase 2 — Audit Ledger Architecture
+========================================== */
 
-const INSTRUMENT_VERSION = "3.0";
-const STORAGE_NAMESPACE = `AFP_v${INSTRUMENT_VERSION}_REGISTRATION`;
-
-/* ===============================
-   Clear Old Versions Automatically
-================================= */
-
-(function clearLegacyStorage() {
-    Object.keys(localStorage).forEach(key => {
-        if (key.startsWith("AFP_v") && !key.startsWith(`AFP_v${INSTRUMENT_VERSION}`)) {
-            localStorage.removeItem(key);
-        }
-    });
-})();
+const VERSION = "3.0";
+const LEDGER_KEY = `AFP_v${VERSION}_LEDGER`;
+const DRAFT_KEY = `AFP_v${VERSION}_DRAFT`;
 
 /* ===============================
-   Field Map (Deterministic)
+   Field Map
 ================================= */
 
 const fieldMap = {
@@ -31,39 +20,111 @@ const fieldMap = {
 };
 
 /* ===============================
-   Load Stored Data Safely
+   Utility
 ================================= */
 
-function loadRegistration() {
-    const stored = localStorage.getItem(STORAGE_NAMESPACE);
-    if (!stored) return;
+function generateAuditID() {
+    return "AFP-" + Date.now();
+}
 
-    try {
-        const data = JSON.parse(stored);
+function getLedger() {
+    return JSON.parse(localStorage.getItem(LEDGER_KEY)) || [];
+}
 
-        Object.keys(fieldMap).forEach(key => {
-            if (data[key] !== undefined) {
-                fieldMap[key].value = data[key];
-            }
-        });
-
-    } catch (e) {
-        localStorage.removeItem(STORAGE_NAMESPACE);
-    }
+function saveLedger(ledger) {
+    localStorage.setItem(LEDGER_KEY, JSON.stringify(ledger));
 }
 
 /* ===============================
-   Save Registration Deterministically
+   Draft Persistence
 ================================= */
 
-function saveRegistration() {
-    const data = {};
+function saveDraft() {
+    const draft = {};
+    Object.keys(fieldMap).forEach(key => {
+        draft[key] = fieldMap[key].value;
+    });
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+}
+
+function loadDraft() {
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if (!draft) return;
 
     Object.keys(fieldMap).forEach(key => {
-        data[key] = fieldMap[key].value || "";
+        if (draft[key]) fieldMap[key].value = draft[key];
+    });
+}
+
+/* ===============================
+   Save Audit to Ledger
+================================= */
+
+function saveAudit() {
+
+    const audit = {};
+
+    Object.keys(fieldMap).forEach(key => {
+        audit[key] = fieldMap[key].value.trim();
     });
 
-    localStorage.setItem(STORAGE_NAMESPACE, JSON.stringify(data));
+    if (Object.values(audit).some(v => !v)) {
+        alert("All fields must be completed before saving.");
+        return;
+    }
+
+    audit.id = generateAuditID();
+    audit.timestamp = new Date().toISOString();
+    audit.version = VERSION;
+
+    const ledger = getLedger();
+    ledger.unshift(audit);
+    saveLedger(ledger);
+
+    localStorage.removeItem(DRAFT_KEY);
+    renderLedger();
+
+    alert("Audit saved to ledger.");
+}
+
+/* ===============================
+   Render Ledger
+================================= */
+
+function renderLedger() {
+    const ledgerList = document.getElementById("ledgerList");
+    ledgerList.innerHTML = "";
+
+    const ledger = getLedger();
+
+    if (ledger.length === 0) {
+        ledgerList.innerHTML = "<p>No saved audits.</p>";
+        return;
+    }
+
+    ledger.forEach(audit => {
+
+        const div = document.createElement("div");
+        div.className = "ledger-item";
+
+        div.innerHTML = `
+            <strong>${audit.auditTitle}</strong><br>
+            ${audit.client}<br>
+            ${audit.assessmentDate}<br>
+            <small>${audit.id}</small>
+        `;
+
+        ledgerList.appendChild(div);
+    });
+}
+
+/* ===============================
+   New Audit Reset
+================================= */
+
+function startNewAudit() {
+    Object.values(fieldMap).forEach(field => field.value = "");
+    localStorage.removeItem(DRAFT_KEY);
 }
 
 /* ===============================
@@ -71,36 +132,15 @@ function saveRegistration() {
 ================================= */
 
 Object.values(fieldMap).forEach(field => {
-    field.addEventListener("input", saveRegistration);
+    field.addEventListener("input", saveDraft);
 });
 
-/* ===============================
-   Commence Button Handler
-================================= */
-
-document.getElementById("commenceBtn").addEventListener("click", () => {
-
-    const registration = {};
-
-    Object.keys(fieldMap).forEach(key => {
-        registration[key] = fieldMap[key].value.trim();
-    });
-
-    if (!registration.consultant ||
-        !registration.organisation ||
-        !registration.client ||
-        !registration.auditTitle ||
-        !registration.assessmentDate) {
-
-        alert("All registration fields must be completed before proceeding.");
-        return;
-    }
-
-    console.log("Registration Locked:", registration);
-});
+document.getElementById("saveAuditBtn").addEventListener("click", saveAudit);
+document.getElementById("newAuditBtn").addEventListener("click", startNewAudit);
 
 /* ===============================
-   Initialize
+   Init
 ================================= */
 
-loadRegistration();
+loadDraft();
+renderLedger();
