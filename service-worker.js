@@ -1,10 +1,10 @@
-const CACHE_NAME = "auditflow-pro-v1600";
+const CACHE_NAME = "auditflow-pro-v2000";
 
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=1600",
-  "./app.js?v=1600",
+  "./styles.css?v=2000",
+  "./app.js?v=2000",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png"
