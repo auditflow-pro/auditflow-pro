@@ -1,11 +1,11 @@
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f3f4f6;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    background: #f2f3f5;
     color: #111;
 }
 
-/* Header */
+/* HEADER */
 
 .app-header {
     background: #1b1e24;
@@ -15,24 +15,27 @@ body {
 .header-inner {
     max-width: 900px;
     margin: auto;
-    padding: 22px 20px;
+    padding: 24px 22px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .brand-title {
     font-size: 20px;
     font-weight: 600;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
 }
 
 .brand-sub {
     font-size: 13px;
     opacity: 0.85;
+    margin-top: 4px;
 }
 
 .version {
     font-size: 14px;
+    opacity: 0.85;
 }
 
 .progress-flow {
@@ -40,13 +43,13 @@ body {
     margin: auto;
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px 14px 20px;
+    padding: 12px 22px 14px 22px;
     font-size: 12px;
     border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .progress-flow .step {
-    opacity: 0.45;
+    opacity: 0.4;
 }
 
 .progress-flow .step.active {
@@ -61,60 +64,82 @@ body {
     background: #b89b4c;
 }
 
-/* Layout */
+/* LAYOUT */
 
 main {
     max-width: 900px;
-    margin: 34px auto;
-    padding: 0 20px;
+    margin: 42px auto;
+    padding: 0 22px;
 }
 
 .panel,
 .domain-block,
 .document-mode {
     background: #ffffff;
-    padding: 28px 26px;
-    margin-bottom: 24px;
-    border: 1.5px solid #d4d6da;
+    padding: 34px 32px;
+    margin-bottom: 30px;
+    border: 1px solid #cfcfcf;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.panel h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
 }
 
 .panel-intro {
-    font-size: 13px;
+    font-size: 14px;
     color: #555;
-    margin-top: -6px;
-    margin-bottom: 18px;
+    margin-bottom: 26px;
 }
 
-/* Inputs */
+/* FIELDS */
 
 .field {
-    margin-bottom: 16px;
+    margin-bottom: 22px;
 }
 
 .field label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-size: 14px;
+    font-weight: 500;
+    color: #222;
 }
 
 .field input {
     width: 100%;
-    padding: 12px;
-    border: 1.5px solid #c5c7cb;
-    background: #ffffff;
+    height: 52px;
+    padding: 0 14px;
+    border: 2px solid #1b1e24;
+    background: #fafafa;
     font-size: 15px;
+    letter-spacing: 0.3px;
+    box-sizing: border-box;
+    transition: background 0.15s ease,
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+}
+
+/* Remove Chrome default styling */
+.field input,
+.field input:focus,
+.field input:active {
+    outline: none;
     border-radius: 0;
     appearance: none;
     -webkit-appearance: none;
     box-shadow: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.field input[type="date"] {
+/* Professional focus */
+.field input:focus {
     background: #ffffff;
-    color: #111;
+    border-color: #b89b4c;
+    box-shadow: 0 0 0 3px rgba(184,155,76,0.15);
 }
 
+/* Remove Chrome autofill yellow */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
@@ -122,81 +147,93 @@ input:-webkit-autofill:focus {
     -webkit-text-fill-color: #111 !important;
 }
 
-.field input:focus {
-    outline: none;
-    border-color: #1b1e24;
-    box-shadow: 0 0 0 2px rgba(27,30,36,0.08);
+/* DATE FIELD */
+.field input[type="date"] {
+    background: #fafafa;
+    color: #111;
 }
 
-/* Buttons */
+/* BUTTONS */
 
 .button-wrap {
-    margin-top: 10px;
+    margin-top: 14px;
 }
 
 .primary-btn {
-    padding: 13px 20px;
+    padding: 14px 24px;
     background: #1b1e24;
     color: #fff;
     border: none;
     cursor: pointer;
     font-size: 14px;
+    letter-spacing: 0.4px;
+    min-width: 220px;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background: #000;
 }
 
 .primary-btn:disabled {
-    opacity: 0.6;
+    background: #8c8c8c;
     cursor: not-allowed;
 }
 
 .secondary-btn {
-    background: #e0e0e0;
+    background: #e2e2e2;
     border: none;
     padding: 10px 16px;
 }
 
-/* Answers */
+/* ANSWER BUTTONS */
 
 .answer-btn {
     width: 100%;
-    padding: 9px;
-    margin-bottom: 6px;
-    border: 1px solid #bbb;
-    background: #f8f8f8;
+    padding: 11px;
+    margin-bottom: 8px;
+    border: 2px solid #1b1e24;
+    background: #f5f5f5;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s ease;
 }
 
 .answer-btn.selected-yes {
     background: #2f5f3c;
     color: #fff;
+    border-color: #2f5f3c;
 }
 
 .answer-btn.selected-no {
     background: #7c1f1f;
     color: #fff;
+    border-color: #7c1f1f;
 }
 
 .answer-btn.selected-na {
-    background: #555;
+    background: #4a4a4a;
     color: #fff;
+    border-color: #4a4a4a;
 }
 
 .answer-recorded {
-    font-size: 12px;
+    font-size: 13px;
+    margin: 6px 0 14px 0;
     color: #555;
-    margin-bottom: 8px;
 }
 
-/* Exposure */
+/* EXPOSURE */
 
 .exposure-output {
     border-left: 6px solid #1b1e24;
-    padding: 18px;
+    padding: 22px;
     font-weight: 600;
     font-size: 18px;
     background: #fafafa;
-    margin: 24px 0;
+    margin: 28px 0;
 }
 
-/* Modal */
+/* MODAL */
 
 .modal {
     position: fixed;
@@ -209,13 +246,13 @@ input:-webkit-autofill:focus {
 
 .modal-content {
     background: #fff;
-    padding: 28px;
+    padding: 32px;
     max-width: 420px;
-    width: 90%;
+    width: 92%;
 }
 
 .modal-actions {
-    margin-top: 22px;
+    margin-top: 26px;
     display: flex;
     justify-content: space-between;
 }
@@ -224,13 +261,17 @@ input:-webkit-autofill:focus {
     display: none;
 }
 
+/* FOOTER */
+
 footer {
     text-align: center;
-    padding: 18px;
+    padding: 22px;
     background: #1b1e24;
     color: #fff;
     font-size: 12px;
 }
+
+/* PRINT */
 
 @media print {
     .app-header,
