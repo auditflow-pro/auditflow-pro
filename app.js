@@ -13,13 +13,19 @@ const instrument = [
 
 let state = {
     answers: {},
-    initial: {},
-    sealed: false,
     recordId: "",
     timestamp: ""
 };
 
-document.getElementById("startBtn").addEventListener("click", startAssessment);
+const startBtn = document.getElementById("startBtn");
+const registrationError = document.getElementById("registrationError");
+
+["consultantName","clientName","auditTitle","assessmentDate"]
+.forEach(id => {
+    document.getElementById(id).addEventListener("input", validateRegistration);
+});
+
+startBtn.addEventListener("click", startAssessment);
 document.getElementById("sealBtn").addEventListener("click", sealAssessment);
 document.getElementById("exportBtn").addEventListener("click", () => {
     document.getElementById("exportOptions").classList.remove("hidden");
@@ -29,18 +35,22 @@ document.getElementById("cancelExportBtn").addEventListener("click", () => {
 });
 document.getElementById("printBtn").addEventListener("click", () => window.print());
 
-function startAssessment() {
-    const consultant = consultantName.value.trim();
-    const client = clientName.value.trim();
-    const title = auditTitle.value.trim();
-    const date = assessmentDate.value;
+function validateRegistration() {
+    const valid =
+        consultantName.value.trim() &&
+        clientName.value.trim() &&
+        auditTitle.value.trim() &&
+        assessmentDate.value;
 
-    if (!consultant || !client || !title || !date) {
-        const error = document.getElementById("registrationError");
-        error.textContent = "All registration fields must be completed before assessment can begin.";
-        error.classList.remove("hidden");
-        return;
+    startBtn.disabled = !valid;
+
+    if (valid) {
+        registrationError.classList.add("hidden");
     }
+}
+
+function startAssessment() {
+    if (startBtn.disabled) return;
 
     registrationPanel.classList.add("hidden");
     assessmentSection.classList.remove("hidden");
@@ -68,11 +78,10 @@ function renderDomains() {
             qText.textContent = q.text;
             qBlock.appendChild(qText);
 
-            ["YES", "NO", "N/A"].forEach(option => {
+            ["YES","NO","N/A"].forEach(option => {
                 const btn = document.createElement("button");
                 btn.className = "answer-btn";
                 btn.textContent = option;
-
                 btn.onclick = () => handleAnswer(dIndex, qIndex, option, btn, qBlock);
                 qBlock.appendChild(btn);
             });
@@ -86,9 +95,6 @@ function renderDomains() {
 
 function handleAnswer(dIndex, qIndex, value, btn, qBlock) {
     const key = `${dIndex}_${qIndex}`;
-
-    if (!state.initial[key]) state.initial[key] = value;
-
     state.answers[key] = value;
 
     const buttons = qBlock.querySelectorAll(".answer-btn");
@@ -104,19 +110,7 @@ function handleAnswer(dIndex, qIndex, value, btn, qBlock) {
         recorded.className = "answer-recorded";
         qBlock.appendChild(recorded);
     }
-    recorded.textContent = `Answer Recorded: ${value}`;
-
-    let modified = qBlock.querySelector(".modified-flag");
-    if (state.initial[key] !== value) {
-        if (!modified) {
-            modified = document.createElement("div");
-            modified.className = "modified-flag";
-            modified.textContent = "Status: Modified";
-            qBlock.appendChild(modified);
-        }
-    } else if (modified) {
-        modified.remove();
-    }
+    recorded.textContent = `Recorded: ${value}`;
 
     evaluateExposure();
 }
@@ -152,20 +146,20 @@ function sealAssessment() {
 function generateRecordId() {
     const now = new Date();
     const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const d = String(now.getDate()).padStart(2, '0');
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    const ss = String(now.getSeconds()).padStart(2, '0');
+    const m = String(now.getMonth()+1).padStart(2,'0');
+    const d = String(now.getDate()).padStart(2,'0');
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    const ss = String(now.getSeconds()).padStart(2,'0');
     return `AFP-${y}${m}${d}-${hh}${mm}${ss}`;
 }
 
 function formatTimestamp(date) {
     const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
-    const mm = String(date.getMinutes()).padStart(2, '0');
+    const m = String(date.getMonth()+1).padStart(2,'0');
+    const d = String(date.getDate()).padStart(2,'0');
+    const hh = String(date.getHours()).padStart(2,'0');
+    const mm = String(date.getMinutes()).padStart(2,'0');
     return `${y}-${m}-${d} ${hh}:${mm}`;
 }
 
@@ -174,7 +168,7 @@ function generateDocument() {
 
     content.innerHTML = `
         <h2>Exposure Determination Record</h2>
-        <p>AuditFlow Pro — Professional Instrument System</p>
+        <div style="margin-bottom:18px;">AuditFlow Pro — Professional Instrument System</div>
         <p><strong>Instrument Version:</strong> ${instrumentVersion}</p>
         <p class="record-id"><strong>Record ID:</strong> ${state.recordId}</p>
         <p><strong>Determination Timestamp:</strong> ${state.timestamp}</p>
