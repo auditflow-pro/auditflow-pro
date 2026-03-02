@@ -14,17 +14,22 @@ const instrument = [
 let state = { answers: {}, recordId: "", timestamp: "", exposure: "" };
 
 const startBtn = document.getElementById("startBtn");
+
 ["consultantName","clientName","auditTitle","assessmentDate"]
 .forEach(id => document.getElementById(id).addEventListener("input", validateRegistration));
 
 startBtn.addEventListener("click", startAssessment);
+
 document.getElementById("sealBtn").addEventListener("click", () => {
     document.getElementById("sealModal").classList.remove("hidden");
 });
+
 document.getElementById("cancelSealBtn").addEventListener("click", () => {
     document.getElementById("sealModal").classList.add("hidden");
 });
+
 document.getElementById("confirmSealBtn").addEventListener("click", sealAssessment);
+
 document.getElementById("exportBtn").addEventListener("click", () => window.print());
 
 function validateRegistration() {
@@ -64,7 +69,6 @@ function renderDomains() {
 
         domain.questions.forEach((q, qIndex) => {
             const qBlock = document.createElement("div");
-            qBlock.className = "question-block";
 
             const qText = document.createElement("div");
             qText.textContent = q.text;
@@ -125,6 +129,7 @@ function evaluateExposure(){
 
 function sealAssessment(){
     document.getElementById("sealModal").classList.add("hidden");
+
     state.recordId=generateRecordId();
     state.timestamp=formatTimestamp(new Date());
 
@@ -149,11 +154,11 @@ function generateDocument(){
 
     content.innerHTML=`
         <h2>Exposure Determination Record</h2>
-        <div style="font-weight:bold;letter-spacing:0.5px;margin-bottom:15px;">
+        <div style="font-weight:600;letter-spacing:0.5px;margin-bottom:15px;">
             AuditFlow Pro — Professional Instrument System
         </div>
 
-        <div style="border-left:6px solid #1b1e24;padding:15px;margin-bottom:20px;font-size:18px;font-weight:bold;">
+        <div style="border-left:6px solid #1b1e24;padding:15px;margin-bottom:20px;font-size:18px;font-weight:600;">
             Formal Exposure Determination: ${state.exposure}
         </div>
 
@@ -167,7 +172,7 @@ function generateDocument(){
 
         <h3>Disclaimer</h3>
         <p style="font-size:13px;">
-        This instrument provides a structured exposure determination based on recorded responses at the time of assessment. 
+        This instrument provides a structured exposure determination based on recorded responses at the time of assessment.
         It does not replace statutory compliance obligations or jurisdiction-specific regulatory requirements.
         </p>
 
