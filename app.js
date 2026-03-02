@@ -1,8 +1,6 @@
-let state = 0; // 0 Landing, 1 Registration, 2 Assessment, 3 Determination, 4 Snapshot
-
+let state = 0;
 let auditMeta = {};
 let findings = {};
-let overrideTriggered = false;
 
 const domains = [
   "Site & Environment",
@@ -11,12 +9,25 @@ const domains = [
   "People & Process"
 ];
 
-const severityMap = { Low:1, Moderate:2, High:3, Critical:4 };
-const controlMap = {
-  "Compliant":0.5,
-  "Improvement Required":1,
-  "Non-Compliant":1.5,
-  "Critical Failure":2
+const impactScale = {
+  "Minor": 1,
+  "Medical Treatment": 2,
+  "Major Injury / Shutdown": 3,
+  "Catastrophic": 4
+};
+
+const likelihoodScale = {
+  "Rare": 1,
+  "Possible": 2,
+  "Likely": 3,
+  "Almost Certain": 4
+};
+
+const controlScale = {
+  "Effective": 0.5,
+  "Partially Effective": 1,
+  "Weak": 1.5,
+  "Failing": 2
 };
 
 function render() {
@@ -26,16 +37,11 @@ function render() {
   header.innerHTML = "";
   main.innerHTML = "";
 
-  main.classList.add("fade");
-
-  setTimeout(() => {
-    if (state === 0) renderLanding(header, main);
-    if (state === 1) renderRegistration(header, main);
-    if (state === 2) renderAssessment(header, main);
-    if (state === 3) renderDetermination(header, main);
-    if (state === 4) renderSnapshot(header, main);
-    main.classList.add("show");
-  }, 50);
+  if (state === 0) renderLanding(header, main);
+  if (state === 1) renderRegistration(header, main);
+  if (state === 2) renderAssessment(header, main);
+  if (state === 3) renderDetermination(header, main);
+  if (state === 4) renderSnapshot(header, main);
 }
 
 function renderLanding(header, main) {
@@ -55,8 +61,8 @@ function renderRegistration(header, main) {
 
   main.innerHTML = `
   <div class="panel">
-    <input id="client" placeholder="Client Name" autocapitalize="words">
-    <input id="title" placeholder="Audit Title" autocapitalize="words">
+    <input id="client" placeholder="Client Name">
+    <input id="title" placeholder="Audit Title">
     <input id="date" type="date">
     <button class="primary" onclick="registerAudit()">Register Audit</button>
   </div>
@@ -83,28 +89,78 @@ function renderAssessment(header, main) {
     main.innerHTML += `
     <div class="panel">
       <h3>${domain}</h3>
-      <div id="list-${domain}"></div>
-      <button onclick="addFinding('${domain}')">Add Finding</button>
-      <div class="footer-line">
-        Domain Exposure Determination:
-        <span id="status-${domain}">Not Determined</span>
+      <div id="findings-${domain}"></div>
+      <button class="small" onclick="toggleEntry('${domain}')">Add Finding</button>
+
+      <div id="entry-${domain}" class="hidden">
+        <textarea id="desc-${domain}" placeholder="Finding Description"></textarea>
+        <select id="impact-${domain}">
+          <option>Minor</option>
+          <option>Medical Treatment</option>
+          <option>Major Injury / Shutdown</option>
+          <option>Catastrophic</option>
+        </select>
+        <select id="likelihood-${domain}">
+          <option>Rare</option>
+          <option>Possible</option>
+          <option>Likely</option>
+          <option>Almost Certain</option>
+        </select>
+        <select id="control-${domain}">
+          <option>Effective</option>
+          <option>Partially Effective</option>
+          <option>Weak</option>
+          <option>Failing</option>
+        </select>
+        <button class="primary small" onclick="saveFinding('${domain}')">Save Finding</button>
+      </div>
+
+      <div class="domain-footer">
+        Domain Exposure: <span id="status-${domain}">Not Determined</span>
       </div>
     </div>
     `;
   });
 
   main.innerHTML += `<button class="primary" onclick="nextState()">Proceed to Determination</button>`;
+  updateAllDomainExposure();
 }
 
-function addFinding(domain) {
-  const desc = prompt("Finding Description:");
-  const sev = prompt("Severity (Low/Moderate/High/Critical):");
-  const ctrl = prompt("Control Status (Compliant/Improvement Required/Non-Compliant/Critical Failure):");
+function toggleEntry(domain) {
+  const el = document.getElementById(`entry-${domain}`);
+  el.classList.toggle("hidden");
+}
 
-  if (!desc || !sev || !ctrl) return;
+function saveFinding(domain) {
+  const desc = document.getElementById(`desc-${domain}`).value;
+  const impact = document.getElementById(`impact-${domain}`).value;
+  const likelihood = document.getElementById(`likelihood-${domain}`).value;
+  const control = document.getElementById(`control-${domain}`).value;
 
-  findings[domain].push({ desc, sev, ctrl });
+  findings[domain].push({ desc, impact, likelihood, control });
   renderAssessment(document.getElementById("headerContent"), document.getElementById("main"));
+}
+
+function updateAllDomainExposure() {
+  domains.forEach(domain => {
+    const list = findings[domain];
+    if (list.length === 0) return;
+
+    let total = 0;
+    list.forEach(f => {
+      total += impactScale[f.impact] * likelihoodScale[f.likelihood] * controlScale[f.control];
+    });
+
+    const avg = total / list.length;
+    document.getElementById(`status-${domain}`).innerText = classify(avg);
+  });
+}
+
+function classify(score) {
+  if (score < 3) return "Controlled";
+  if (score < 8) return "Elevated";
+  if (score < 15) return "Significant";
+  return "Severe";
 }
 
 function renderDetermination(header, main) {
@@ -115,30 +171,10 @@ function renderDetermination(header, main) {
     </div>
   `;
 
-  let total = 0;
-  let count = 0;
-  overrideTriggered = false;
-
-  domains.forEach(domain => {
-    findings[domain].forEach(f => {
-      if (f.sev === "Critical" && f.ctrl === "Critical Failure") {
-        overrideTriggered = true;
-      }
-      total += severityMap[f.sev] * controlMap[f.ctrl];
-      count++;
-    });
-  });
-
-  let result = "Not Determined";
-  if (count > 0) {
-    result = overrideTriggered ? "Severe" : mapExposure(total / count);
-  }
-
   main.innerHTML = `
     <div class="panel">
       <h2>Determination Record</h2>
-      <p><strong>Overall Exposure Classification:</strong> ${result}</p>
-      ${overrideTriggered ? `<p><strong>Override Trigger Applied:</strong> Critical severity finding with Critical Failure control status identified.</p>` : ""}
+      <p>Exposure analysis completed.</p>
       <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
       <button class="primary" onclick="nextState()">Proceed to Executive Snapshot</button>
     </div>
@@ -159,13 +195,6 @@ function renderSnapshot(header, main) {
     <button onclick="state=0; render();">Close Audit</button>
   </div>
   `;
-}
-
-function mapExposure(score) {
-  if (score < 1.5) return "Controlled";
-  if (score < 3) return "Elevated";
-  if (score < 5) return "Significant";
-  return "Severe";
 }
 
 function nextState() {
