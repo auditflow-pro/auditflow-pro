@@ -1,31 +1,36 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #f5f6f8;
+    background: #f3f4f6;
     color: #111;
 }
 
 .app-header {
-    background: #1c1f26;
+    background: #1b1e24;
     color: #fff;
+}
+
+.header-inner {
+    max-width: 900px;
+    margin: auto;
     padding: 20px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+}
+
+.gold-band {
+    height: 4px;
+    background: #b89b4c;
 }
 
 .brand-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 .brand-sub {
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-.version-block {
     font-size: 13px;
+    opacity: 0.8;
 }
 
 main {
@@ -34,7 +39,7 @@ main {
     padding: 0 20px;
 }
 
-.registration-panel,
+.panel,
 .domain-block,
 .exposure-block,
 .document-mode {
@@ -44,34 +49,36 @@ main {
     border: 1px solid #ddd;
 }
 
-.field-group {
+.field {
     margin-bottom: 15px;
 }
 
-.field-group label {
+.field label {
     display: block;
     font-size: 13px;
     margin-bottom: 5px;
 }
 
-.field-group input {
+.field input {
     width: 100%;
     padding: 10px;
-    font-size: 14px;
     box-sizing: border-box;
 }
 
 .primary-btn {
     padding: 12px 18px;
-    background: #1c1f26;
+    background: #1b1e24;
     color: #fff;
     border: none;
     cursor: pointer;
-    font-size: 14px;
 }
 
-.primary-btn:hover {
-    opacity: 0.9;
+.validation {
+    background: #f8e8e8;
+    color: #a00000;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 13px;
 }
 
 .hidden {
@@ -86,33 +93,37 @@ main {
     margin-bottom: 20px;
 }
 
-.question-text {
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
 .answer-btn {
     width: 100%;
     padding: 10px;
     margin-bottom: 8px;
     border: 1px solid #ccc;
-    background: #fff;
+    background: #f9f9f9;
     cursor: pointer;
 }
 
-.answer-btn.selected {
-    background: #1c1f26;
+.answer-btn.selected-yes {
+    background: #2e5d3b;
+    color: #fff;
+}
+
+.answer-btn.selected-no {
+    background: #7a1f1f;
+    color: #fff;
+}
+
+.answer-btn.selected-na {
+    background: #555;
     color: #fff;
 }
 
 .answer-recorded {
     font-size: 12px;
-    margin-top: 5px;
 }
 
 .modified-flag {
     font-size: 12px;
-    color: #a00000;
+    color: #7a1f1f;
 }
 
 .exposure-block {
@@ -132,22 +143,18 @@ main {
     margin-top: 30px;
 }
 
-.export-options button {
-    margin-right: 10px;
-}
-
-.app-footer {
+footer {
     text-align: center;
     padding: 15px;
-    font-size: 12px;
-    background: #1c1f26;
+    background: #1b1e24;
     color: #fff;
+    font-size: 12px;
 }
 
 @media print {
     .app-header,
     .record-actions,
-    .app-footer {
+    footer {
         display: none;
     }
 
