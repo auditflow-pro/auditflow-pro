@@ -13,10 +13,8 @@
 <body>
 
 <header class="app-header">
-    <div class="header-inner">
-        <h1>AuditFlow Pro</h1>
-        <p>Institutional Exposure Determination Instrument</p>
-    </div>
+    <h1>AuditFlow Pro</h1>
+    <p>Institutional Exposure Determination Instrument</p>
 </header>
 
 <main class="app-main">
@@ -24,36 +22,36 @@
 <section class="card">
 
     <div class="version-block">
-        Version: v3.0 Global Institutional Baseline
+        Version: v3.1 Global Institutional Baseline
     </div>
 
     <h2>Audit Registration</h2>
 
-    <form id="registration-form" autocomplete="off" novalidate>
+    <form autocomplete="off" novalidate>
 
         <div class="form-group">
-            <label for="consultant">Consultant Name</label>
+            <label>Consultant Name</label>
             <input class="input-field" id="consultant" type="text" />
         </div>
 
         <div class="form-group">
-            <label for="organisation">Organisation</label>
+            <label>Organisation</label>
             <input class="input-field" id="organisation" type="text" />
         </div>
 
         <div class="form-group">
-            <label for="client">Client / Site Name</label>
+            <label>Client / Site Name</label>
             <input class="input-field" id="client" type="text" />
         </div>
 
         <div class="form-group">
-            <label for="auditTitle">Audit Title</label>
+            <label>Audit Title</label>
             <input class="input-field" id="auditTitle" type="text" />
         </div>
 
         <div class="form-group">
-            <label for="assessmentDate">Assessment Date</label>
-            <input class="input-field" id="assessmentDate" type="date" />
+            <label>Assessment Date</label>
+            <input class="input-field" id="assessmentDate" type="text" placeholder="DD MMM YYYY" />
         </div>
 
         <button type="button" id="saveAuditBtn" class="primary-button">
@@ -68,7 +66,7 @@
 
 </section>
 
-<section class="card ledger-card">
+<section class="card">
 
     <h3>Audit Ledger</h3>
     <div id="ledgerList"></div>
@@ -78,5 +76,10 @@
 </main>
 
 <script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+}
+</script>
 </body>
 </html>
