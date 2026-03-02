@@ -1,379 +1,174 @@
-/* =========================
-   AUDITFLOW PRO v1203
-   LOCKED STRUCTURAL BUILD
-========================= */
+const instrumentVersion = "v1.0";
 
-const INSTRUMENT_VERSION = "1.2";
-
-let state = 0;
-let recordStatus = "Draft";
-let recordID = null;
-let determinationTimestamp = null;
-
-let auditMeta = {};
-let responses = {};
-
-let globalExposure = "Controlled";
-let lifeSafetyGlobal = false;
-
-/* =========================
-   DOMAIN CONFIG
-========================= */
-
-const domains = [
-  {
-    name: "Site & Environment",
-    questions: [
-      { text: "Is housekeeping maintained to safe standard?", tier: 1 },
-      { text: "Are access routes clearly marked?", tier: 1 },
-      { text: "Is lighting adequate for safe operation?", tier: 1 },
-      { text: "Are environmental hazards controlled?", tier: 2 },
-      { text: "Are pedestrian and vehicle routes segregated?", tier: 2 },
-      { text: "Are required inspections completed?", tier: 3 },
-      { text: "Are statutory compliance notices up to date?", tier: 3 },
-      { text: "Are emergency escape routes unobstructed and compliant?", tier: 4 }
-    ]
-  },
-  {
-    name: "Equipment & Infrastructure",
-    questions: [
-      { text: "Is equipment maintained?", tier: 1 },
-      { text: "Are inspection records available?", tier: 1 },
-      { text: "Are maintenance intervals adhered to?", tier: 2 },
-      { text: "Are guarding systems intact?", tier: 2 },
-      { text: "Are statutory inspections current?", tier: 3 },
-      { text: "Are load ratings displayed?", tier: 3 },
-      { text: "Are emergency shutdown mechanisms functional?", tier: 4 }
-    ]
-  },
-  {
-    name: "Operational Controls",
-    questions: [
-      { text: "Are SOPs documented?", tier: 1 },
-      { text: "Are permits used where required?", tier: 2 },
-      { text: "Are isolation procedures followed?", tier: 3 },
-      { text: "Are emergency procedures tested?", tier: 3 },
-      { text: "Are critical safety controls tested and effective?", tier: 4 }
-    ]
-  },
-  {
-    name: "People & Process",
-    questions: [
-      { text: "Are training records maintained?", tier: 1 },
-      { text: "Are inductions completed?", tier: 2 },
-      { text: "Are competency assessments current?", tier: 3 },
-      { text: "Are high-risk task personnel formally competent?", tier: 4 }
-    ]
-  }
+const instrumentDefinition = [
+    {
+        domain: "Site & Environment",
+        tier4: true,
+        questions: [
+            { text: "Fire detection system fully operational?", tier: 4 },
+            { text: "Emergency exits unobstructed?", tier: 4 },
+            { text: "General housekeeping maintained?", tier: 2 }
+        ]
+    }
 ];
 
-/* ========================= */
+let state = {
+    answers: {},
+    initialAnswers: {},
+    sealed: false,
+    recordId: null,
+    sealTimestamp: null
+};
 
-function render() {
+document.getElementById("startAuditBtn").addEventListener("click", startAssessment);
+document.getElementById("sealBtn").addEventListener("click", sealAssessment);
+document.getElementById("exportBtn").addEventListener("click", () => {
+    document.getElementById("exportOptions").classList.remove("hidden");
+});
+document.getElementById("cancelExportBtn").addEventListener("click", () => {
+    document.getElementById("exportOptions").classList.add("hidden");
+});
+document.getElementById("printBtn").addEventListener("click", () => window.print());
 
-  if (state !== 3) {
-    document.body.classList.remove("document-mode");
-  }
+function startAssessment() {
+    const consultant = document.getElementById("consultantName").value;
+    const client = document.getElementById("clientName").value;
+    const title = document.getElementById("auditTitle").value;
+    const date = document.getElementById("assessmentDate").value;
 
-  renderHeader();
-  renderMain();
-}
-
-function renderHeader() {
-
-  const header = document.getElementById("header");
-
-  if (state === 3) {
-    header.innerHTML = "";
-    return;
-  }
-
-  if (state === 0) {
-    header.innerHTML = `
-      <h1>AuditFlow Pro</h1>
-      <div class="meta">Professional Exposure Determination Instrument</div>
-    `;
-    return;
-  }
-
-  header.innerHTML = `
-    <h1>Exposure Determination Instrument</h1>
-    <div class="meta">
-      Instrument Version: ${INSTRUMENT_VERSION}<br>
-      Record ID: ${recordID}<br>
-      Client: ${auditMeta.client} | Title: ${auditMeta.title} | Date: ${auditMeta.date}
-    </div>
-    <div class="status">Record Status: ${recordStatus}</div>
-  `;
-}
-
-function renderMain() {
-
-  const main = document.getElementById("main");
-  main.innerHTML = "";
-
-  if (state === 0) renderLanding(main);
-  if (state === 1) renderRegistration(main);
-  if (state === 2) renderAssessment(main);
-  if (state === 3) renderDocument(main);
-}
-
-/* ========================= */
-
-function renderLanding(main) {
-
-  main.innerHTML = `
-    <div class="panel">
-      <p>This instrument applies calibrated weighted exposure determination across structured compliance domains.</p>
-      <button class="primary" onclick="nextState()">Initiate Audit</button>
-    </div>
-  `;
-}
-
-function renderRegistration(main) {
-
-  main.innerHTML = `
-    <div class="panel">
-      <h2>Audit Registration</h2>
-      <input id="client" placeholder="Client Name">
-      <input id="title" placeholder="Audit Title">
-      <input id="date" type="date">
-      <button class="primary" onclick="registerAudit()">Register Audit</button>
-    </div>
-  `;
-}
-
-function generateRecordID() {
-
-  const now = new Date();
-
-  return "AF-" +
-    now.getFullYear() +
-    String(now.getMonth() + 1).padStart(2, '0') +
-    String(now.getDate()).padStart(2, '0') +
-    "-" +
-    String(now.getHours()).padStart(2, '0') +
-    String(now.getMinutes()).padStart(2, '0') +
-    String(now.getSeconds()).padStart(2, '0');
-}
-
-function registerAudit() {
-
-  auditMeta.client = document.getElementById("client").value;
-  auditMeta.title = document.getElementById("title").value;
-  auditMeta.date = document.getElementById("date").value;
-
-  recordID = generateRecordID();
-  recordStatus = "Active";
-
-  domains.forEach(d => {
-    responses[d.name] = d.questions.map(() => null);
-  });
-
-  nextState();
-}
-
-/* ========================= */
-
-function calculateDomainExposure(domain) {
-
-  let score = 0;
-  let lifeSafetyFailure = false;
-
-  domain.questions.forEach((q, i) => {
-
-    const answer = responses[domain.name][i];
-
-    if (answer === "NO") {
-
-      if (q.tier === 4) {
-        lifeSafetyFailure = true;
-        score += 5;
-      }
-      else if (q.tier === 3) score += 3;
-      else if (q.tier === 2) score += 2;
-      else score += 1;
+    if (!consultant || !client || !title || !date) {
+        alert("All registration fields must be completed.");
+        return;
     }
 
-  });
+    document.getElementById("registrationPanel").classList.add("hidden");
+    document.getElementById("assessmentSection").classList.remove("hidden");
 
-  let level = "Controlled";
-
-  if (score === 0) level = "Controlled";
-  else if (score <= 2) level = "Low Exposure";
-  else if (score <= 5) level = "Moderate Exposure";
-  else if (score <= 8) level = "Significant Exposure";
-  else level = "Critical Exposure";
-
-  return { level, flag: lifeSafetyFailure };
+    renderDomains();
 }
 
-function calculateGlobalExposure() {
+function renderDomains() {
+    const container = document.getElementById("domainsContainer");
+    container.innerHTML = "";
 
-  const ranking = {
-    "Controlled": 0,
-    "Low Exposure": 1,
-    "Moderate Exposure": 2,
-    "Significant Exposure": 3,
-    "Critical Exposure": 4
-  };
+    instrumentDefinition.forEach((domainObj, domainIndex) => {
+        const block = document.createElement("div");
+        block.className = "domain-block";
 
-  let highest = "Controlled";
-  lifeSafetyGlobal = false;
+        const title = document.createElement("h3");
+        title.textContent = domainObj.domain;
+        block.appendChild(title);
 
-  domains.forEach(domain => {
+        domainObj.questions.forEach((question, qIndex) => {
+            const qBlock = document.createElement("div");
+            qBlock.className = "question-block";
 
-    const result = calculateDomainExposure(domain);
+            const qText = document.createElement("div");
+            qText.className = "question-text";
+            qText.textContent = question.text;
+            qBlock.appendChild(qText);
 
-    if (result.flag) lifeSafetyGlobal = true;
+            ["YES", "NO", "N/A"].forEach(option => {
+                const btn = document.createElement("button");
+                btn.className = "answer-btn";
+                btn.textContent = option;
 
-    if (ranking[result.level] > ranking[highest]) {
-      highest = result.level;
+                btn.addEventListener("click", () => handleAnswer(domainIndex, qIndex, option, btn, qBlock));
+                qBlock.appendChild(btn);
+            });
+
+            block.appendChild(qBlock);
+        });
+
+        container.appendChild(block);
+    });
+}
+
+function handleAnswer(domainIndex, qIndex, value, btn, qBlock) {
+    const key = `${domainIndex}_${qIndex}`;
+
+    if (!state.initialAnswers[key]) {
+        state.initialAnswers[key] = value;
     }
 
-  });
+    state.answers[key] = value;
 
-  if (lifeSafetyGlobal && highest !== "Critical Exposure") {
-    highest = "Significant Exposure";
-  }
+    const buttons = qBlock.querySelectorAll(".answer-btn");
+    buttons.forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
 
-  globalExposure = highest;
+    let recordLine = qBlock.querySelector(".answer-recorded");
+    if (!recordLine) {
+        recordLine = document.createElement("div");
+        recordLine.className = "answer-recorded";
+        qBlock.appendChild(recordLine);
+    }
+
+    recordLine.textContent = `Answer Recorded: ${value}`;
+
+    let modifiedLine = qBlock.querySelector(".modified-flag");
+    if (state.initialAnswers[key] !== value) {
+        if (!modifiedLine) {
+            modifiedLine = document.createElement("div");
+            modifiedLine.className = "modified-flag";
+            modifiedLine.textContent = "Status: Modified";
+            qBlock.appendChild(modifiedLine);
+        }
+    } else if (modifiedLine) {
+        modifiedLine.remove();
+    }
+
+    evaluateExposure();
 }
 
-/* ========================= */
+function evaluateExposure() {
+    const exposureBlock = document.getElementById("globalExposureBlock");
+    exposureBlock.classList.remove("hidden");
 
-function renderAssessment(main) {
+    let critical = false;
 
-  calculateGlobalExposure();
-
-  domains.forEach(domain => {
-
-    main.innerHTML += `<div class="panel"><h3>${domain.name}</h3>`;
-
-    domain.questions.forEach((q, index) => {
-
-      main.innerHTML += `
-        <div>
-          ${q.text}
-          <select onchange="responses['${domain.name}'][${index}] = this.value; render();">
-            <option value="">--</option>
-            <option value="YES">YES</option>
-            <option value="NO">NO</option>
-            <option value="NA">N/A</option>
-          </select>
-        </div>
-      `;
+    instrumentDefinition.forEach((domainObj, dIndex) => {
+        domainObj.questions.forEach((q, qIndex) => {
+            const key = `${dIndex}_${qIndex}`;
+            if (q.tier === 4 && state.answers[key] === "NO") {
+                critical = true;
+            }
+        });
     });
 
-    const exposure = calculateDomainExposure(domain);
-
-    if (exposure.flag) {
-      main.innerHTML += `<div class="flag">Life Safety Control Failure Identified</div>`;
+    if (critical) {
+        exposureBlock.textContent = "Overall Exposure Classification: Critical Exposure";
+    } else {
+        exposureBlock.textContent = "Overall Exposure Classification: Controlled Exposure";
     }
-
-    main.innerHTML += `
-      <div><strong>Domain Exposure:</strong> ${exposure.level}</div>
-    </div>`;
-  });
-
-  main.innerHTML += `
-    <div class="panel">
-      <h3>Global Exposure Determination</h3>
-      ${lifeSafetyGlobal ? `<div class="flag">Life Safety Escalation Applied</div>` : ""}
-      <div><strong>Overall Exposure Classification:</strong> ${globalExposure}</div>
-    </div>
-  `;
-
-  main.innerHTML += `<button class="primary" onclick="seal()">Seal Determination</button>`;
 }
 
-function seal() {
+function sealAssessment() {
+    if (state.sealed) return;
 
-  calculateGlobalExposure();
+    state.sealed = true;
+    state.recordId = "AFP-" + Date.now();
+    state.sealTimestamp = new Date().toISOString();
 
-  if (globalExposure === "Critical Exposure") {
-    const confirmSeal = confirm("Critical Exposure identified. Confirm formal sealing?");
-    if (!confirmSeal) return;
-  }
-
-  determinationTimestamp = new Date().toLocaleString();
-  recordStatus = "Sealed";
-  state = 3;
-  render();
+    generateDocument();
 }
 
-/* =========================
-   DOCUMENT MODE
-========================= */
+function generateDocument() {
+    document.getElementById("assessmentSection").classList.add("hidden");
+    document.getElementById("documentSection").classList.remove("hidden");
 
-function renderDocument(main) {
+    const content = document.getElementById("documentContent");
 
-  document.body.classList.add("document-mode");
-
-  calculateGlobalExposure();
-
-  main.innerHTML = `
-    <div class="document-container">
-
-      <h1>AuditFlow Pro</h1>
-      <div>Exposure Determination Instrument</div>
-      <div>Instrument Version: ${INSTRUMENT_VERSION}</div>
-
-      <hr>
-
-      <p class="record-id"><strong>Record ID:</strong> ${recordID}</p>
-      <p><strong>Client:</strong> ${auditMeta.client}</p>
-      <p><strong>Audit Title:</strong> ${auditMeta.title}</p>
-      <p><strong>Audit Date:</strong> ${auditMeta.date}</p>
-      <p><strong>Determination Timestamp:</strong> ${determinationTimestamp}</p>
-
-      <hr>
-
-      <h2>Formal Determination</h2>
-
-      <p>
-      Based on calibrated weighted assessment across structured compliance domains,
-      the overall exposure classification at time of sealing is:
-      </p>
-
-      <p><strong>${globalExposure}</strong></p>
-
-      ${lifeSafetyGlobal ? `
-        <p><strong>Life Safety Escalation Triggered.</strong>
-        Tier-4 control failure(s) identified during assessment.</p>
-      ` : ""}
-
-      <hr>
-
-      <h2>Execution</h2>
-
-      <p>Consultant Name:</p>
-      <p>Signature: ________________________________</p>
-      <p>Date: ________________________________</p>
-
-      <br>
-
-      <p>Client Representative Name:</p>
-      <p>Signature: ________________________________</p>
-      <p>Date: ________________________________</p>
-
-      <hr>
-
-      <div class="document-footer">
-        Printed: ${new Date().toLocaleString()}
-      </div>
-
-      <div style="margin-top:20px;">
-        <button onclick="window.print()">Print / Save as PDF</button>
-      </div>
-
-    </div>
-  `;
+    content.innerHTML = `
+        <h2>Exposure Determination Record</h2>
+        <p><strong>Instrument Version:</strong> ${instrumentVersion}</p>
+        <p class="record-id"><strong>Record ID:</strong> ${state.recordId}</p>
+        <p><strong>Seal Timestamp:</strong> ${state.sealTimestamp}</p>
+        <hr />
+        <p>This determination has been produced using calibrated weighted exposure analysis across structured compliance domains.</p>
+        <hr />
+        <h3>Execution & Acceptance</h3>
+        <p>Consultant Signature: ________________________ Date: ____________</p>
+        <p>Client Representative Signature: ________________________ Date: ____________</p>
+    `;
 }
-
-function nextState() {
-  state++;
-  render();
-}
-
-render();
