@@ -4,104 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro — Exposure Determination Instrument</title>
-<link rel="stylesheet" href="styles.css?v=3001">
+<link rel="stylesheet" href="styles.css?v=1105">
 </head>
-
 <body>
 
-<header class="app-header">
-    <div class="header-inner">
-        <div class="brand">
-            <div class="brand-title">AuditFlow Pro</div>
-            <div class="brand-sub">Exposure Determination Instrument</div>
-        </div>
-        <div class="version">Instrument Version v1.0</div>
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-name">AuditFlow Pro</span>
+      <span class="brand-sub">Exposure Determination Instrument</span>
     </div>
-
-    <div class="progress-flow">
-        <div class="step active" id="step-registration">Registration</div>
-        <div class="step" id="step-assessment">Assessment</div>
-        <div class="step" id="step-determination">Determination</div>
-        <div class="step" id="step-issuance">Issuance</div>
-    </div>
-
-    <div class="gold-band"></div>
+  </div>
+  <div class="gold-bar"></div>
 </header>
 
-<main>
+<main class="container">
 
-<section id="registrationPanel" class="panel">
-    <h2>Audit Registration</h2>
-    <p class="panel-intro">
-        All fields must be completed prior to formal assessment initiation.
-    </p>
+<section id="registration" class="panel">
+  <h2>Audit Registration</h2>
 
-    <div class="field">
-        <label>Consultant Name</label>
-        <input id="consultantName" type="text" autocomplete="off">
-    </div>
+  <div class="field-group">
+    <label>Consultancy / Organisation</label>
+    <input id="orgName" type="text" autocomplete="off">
+  </div>
 
-    <div class="field">
-        <label>Client Name</label>
-        <input id="clientName" type="text" autocomplete="off">
-    </div>
+  <div class="field-group">
+    <label>Client / Site Name</label>
+    <input id="clientName" type="text" autocomplete="off">
+  </div>
 
-    <div class="field">
-        <label>Audit Title</label>
-        <input id="auditTitle" type="text" autocomplete="off">
-    </div>
+  <div class="field-group">
+    <label>Audit Title</label>
+    <input id="auditTitle" type="text" autocomplete="off">
+  </div>
 
-    <div class="field">
-        <label>Assessment Date</label>
-        <input id="assessmentDate" type="date">
-    </div>
+  <div class="field-group">
+    <label>Assessment Date</label>
+    <input id="assessmentDate" type="text" readonly placeholder="Select Date">
+  </div>
 
-    <div class="button-wrap">
-        <button id="startBtn" class="primary-btn" disabled>
-            Initiate Assessment
-        </button>
-    </div>
+  <button id="startAudit" class="btn-primary">Commence Assessment</button>
 </section>
 
-<section id="assessmentSection" class="hidden">
-    <div id="domainsContainer"></div>
-
-    <div id="globalExposure" class="exposure-output hidden"></div>
-
-    <div class="button-wrap">
-        <button id="sealBtn" class="primary-btn">Seal Assessment</button>
-    </div>
+<section id="assessment" class="panel hidden">
+  <h2>Structured Exposure Assessment</h2>
+  <div id="questionsContainer"></div>
+  <button id="completeAudit" class="btn-primary">Proceed to Determination</button>
 </section>
 
-<section id="documentSection" class="hidden document-mode">
-    <div id="documentContent"></div>
+<section id="determination" class="panel hidden">
+  <h2>Formal Exposure Determination</h2>
+  <div id="determinationResult"></div>
+  <button id="sealAudit" class="btn-primary">Seal & Generate Record</button>
+</section>
 
-    <div class="record-actions">
-        <h3>Record Actions</h3>
-        <button id="exportBtn" class="primary-btn">Export / Issue Record</button>
-    </div>
+<section id="record" class="panel hidden">
+  <h2>Exposure Determination Record</h2>
+  <div id="recordContent"></div>
+  <button id="exportPDF" class="btn-primary">Export PDF</button>
 </section>
 
 </main>
 
-<footer>
-    © AuditFlow Pro — Professional Instrument System
-</footer>
-
-<div id="sealModal" class="modal hidden">
-    <div class="modal-content">
-        <h3>Confirm Formal Sealing</h3>
-        <p>
-            This action will formally seal the exposure determination and generate
-            a time-stamped instrument record.
-        </p>
-        <div class="modal-actions">
-            <button id="confirmSealBtn" class="primary-btn">Confirm Seal</button>
-            <button id="cancelSealBtn" class="secondary-btn">Cancel</button>
-        </div>
-    </div>
-</div>
-
-<script src="app.js?v=3000"></script>
+<script src="app.js?v=1105"></script>
 </body>
 </html>
