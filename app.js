@@ -1,123 +1,167 @@
-document.addEventListener("DOMContentLoaded", () => {
+const domainsConfig = {
+  "Site & Environment": 1.0,
+  "Equipment & Infrastructure": 1.1,
+  "Operational Controls": 1.3,
+  "People & Process": 1.2
+};
 
-  const registerBtn = document.getElementById("registerBtn");
-  const unlockRegistrationBtn = document.getElementById("unlockRegistrationBtn");
+const severityMap = {
+  "Low": 1,
+  "Moderate": 2,
+  "High": 3,
+  "Critical": 4
+};
 
-  const formSection = document.getElementById("registrationFormSection");
-  const summarySection = document.getElementById("registrationSummarySection");
-  const architectureSection = document.getElementById("architectureSection");
-  const architectureSummarySection = document.getElementById("architectureSummarySection");
-  const assessmentSection = document.getElementById("assessmentSection");
+const controlMap = {
+  "Compliant": 0.5,
+  "Improvement Required": 1,
+  "Non-Compliant": 1.5,
+  "Critical Failure": 2
+};
 
-  const confirmArchitectureBtn = document.getElementById("confirmArchitectureBtn");
-  const weightInputs = document.querySelectorAll(".weight-input");
-  const weightTotal = document.getElementById("weightTotal");
+let findings = {};
 
-  /* -------- REGISTRATION -------- */
-
-  registerBtn.addEventListener("click", () => {
-
-    const client = document.getElementById("clientName").value.trim();
-    const location = document.getElementById("siteLocation").value.trim();
-    const ref = document.getElementById("assessmentRef").value.trim();
-    const date = document.getElementById("assessmentDate").value;
-
-    if (!client || !location || !ref || !date) return;
-
-    document.getElementById("summaryClient").textContent = client;
-    document.getElementById("summaryLocation").textContent = location;
-    document.getElementById("summaryRef").textContent = ref.toUpperCase();
-    document.getElementById("summaryDate").textContent =
-      new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      });
-
-    formSection.classList.add("hidden");
-    summarySection.classList.remove("hidden");
-    architectureSection.classList.remove("hidden");
+function init() {
+  const container = document.getElementById("domains");
+  Object.keys(domainsConfig).forEach(domain => {
+    findings[domain] = [];
+    container.appendChild(createDomainPanel(domain));
   });
 
-  unlockRegistrationBtn.addEventListener("click", () => {
-    summarySection.classList.add("hidden");
-    architectureSection.classList.add("hidden");
-    architectureSummarySection.classList.add("hidden");
-    assessmentSection.classList.add("hidden");
-    formSection.classList.remove("hidden");
+  document.getElementById("determineBtn").addEventListener("click", determineExposure);
+}
+
+function createDomainPanel(domain) {
+  const panel = document.createElement("div");
+  panel.className = "domain-panel";
+
+  const header = document.createElement("div");
+  header.className = "domain-header";
+
+  const title = document.createElement("h3");
+  title.textContent = domain;
+
+  const status = document.createElement("div");
+  status.id = `status-${domain}`;
+  status.className = "exposure-status";
+  status.textContent = "Not Determined";
+
+  header.appendChild(title);
+  header.appendChild(status);
+
+  const table = document.createElement("table");
+  table.className = "table";
+  table.innerHTML = `
+    <tr>
+      <th>Description</th>
+      <th>Severity</th>
+      <th>Control</th>
+      <th>Add</th>
+    </tr>
+    <tr>
+      <td><input type="text" id="desc-${domain}"></td>
+      <td>
+        <select id="sev-${domain}">
+          <option>Low</option>
+          <option>Moderate</option>
+          <option>High</option>
+          <option>Critical</option>
+        </select>
+      </td>
+      <td>
+        <select id="ctrl-${domain}">
+          <option>Compliant</option>
+          <option>Improvement Required</option>
+          <option>Non-Compliant</option>
+          <option>Critical Failure</option>
+        </select>
+      </td>
+      <td><button onclick="addFinding('${domain}')">+</button></td>
+    </tr>
+  `;
+
+  panel.appendChild(header);
+  panel.appendChild(table);
+
+  return panel;
+}
+
+function addFinding(domain) {
+  const desc = document.getElementById(`desc-${domain}`).value;
+  const sev = document.getElementById(`sev-${domain}`).value;
+  const ctrl = document.getElementById(`ctrl-${domain}`).value;
+
+  if (!desc) return;
+
+  findings[domain].push({ desc, sev, ctrl });
+  document.getElementById(`desc-${domain}`).value = "";
+
+  updateDomainStatus(domain);
+}
+
+function updateDomainStatus(domain) {
+  const list = findings[domain];
+  if (list.length === 0) {
+    document.getElementById(`status-${domain}`).textContent = "Not Determined";
+    return;
+  }
+
+  let total = 0;
+  list.forEach(f => {
+    total += severityMap[f.sev] * controlMap[f.ctrl] * domainsConfig[domain];
   });
 
-  /* -------- ARCHITECTURE -------- */
+  const avg = total / list.length;
+  document.getElementById(`status-${domain}`).textContent = mapExposure(avg);
+}
 
-  function updateTotal() {
-    let total = 0;
-    weightInputs.forEach(input => {
-      total += parseInt(input.value) || 0;
+function determineExposure() {
+  let override = false;
+  let total = 0;
+  let count = 0;
+
+  Object.keys(findings).forEach(domain => {
+    findings[domain].forEach(f => {
+      if (f.sev === "Critical" && f.ctrl === "Critical Failure") {
+        override = true;
+      }
+      total += severityMap[f.sev] * controlMap[f.ctrl] * domainsConfig[domain];
+      count++;
     });
+  });
 
-    weightTotal.textContent = "Total Allocation: " + total + "%";
+  let result = "Not Determined";
 
-    if (total === 100) {
-      weightTotal.classList.add("valid");
-      confirmArchitectureBtn.disabled = false;
+  if (count > 0) {
+    if (override) {
+      result = "Severe";
     } else {
-      weightTotal.classList.remove("valid");
-      confirmArchitectureBtn.disabled = true;
+      result = mapExposure(total / count);
     }
   }
 
-  weightInputs.forEach(input => {
-    input.addEventListener("input", updateTotal);
-  });
+  renderDetermination(result, override);
+}
 
-  updateTotal();
+function mapExposure(score) {
+  if (score < 1.5) return "Controlled";
+  if (score < 3) return "Elevated";
+  if (score < 5) return "Significant";
+  return "Severe";
+}
 
-  confirmArchitectureBtn.addEventListener("click", () => {
+function renderDetermination(result, override) {
+  const record = document.getElementById("determinationRecord");
+  const timestamp = new Date().toLocaleString();
 
-    let total = 0;
-    weightInputs.forEach(input => total += parseInt(input.value) || 0);
-    if (total !== 100) return;
+  record.innerHTML = `
+    <div class="record-panel">
+      <h3>Determination Record</h3>
+      <p><strong>Overall Exposure Classification:</strong> ${result}</p>
+      ${override ? `<p><strong>Override Trigger Applied:</strong> Critical severity finding with Critical Failure control status identified.</p>` : ""}
+      <p><strong>Determination Timestamp:</strong> ${timestamp}</p>
+    </div>
+  `;
+}
 
-    const summaryContainer = document.getElementById("architectureSummaryContent");
-    summaryContainer.innerHTML = "";
-
-    weightInputs.forEach(input => {
-      const domainLabel = input.closest(".architecture-grid")
-        .querySelector(`[data-domain="${input.dataset.domain}"]`);
-    });
-
-    const domains = [
-      "Site & Environment",
-      "Equipment & Infrastructure",
-      "Operational Controls",
-      "People & Process"
-    ];
-
-    weightInputs.forEach((input, index) => {
-
-      const item = document.createElement("div");
-      item.classList.add("record-item");
-
-      const label = document.createElement("div");
-      label.classList.add("meta-label");
-      label.textContent = domains[index];
-
-      const value = document.createElement("div");
-      value.classList.add("meta-value");
-      value.textContent = input.value + "% weighting";
-
-      item.appendChild(label);
-      item.appendChild(value);
-
-      summaryContainer.appendChild(item);
-
-      input.setAttribute("readonly", true);
-    });
-
-    architectureSection.classList.add("hidden");
-    architectureSummarySection.classList.remove("hidden");
-    assessmentSection.classList.remove("hidden");
-
-  });
-
-});
+init();
