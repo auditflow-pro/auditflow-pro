@@ -4,16 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro — Exposure Determination Instrument</title>
-<link rel="stylesheet" href="styles.css?v=1105">
+<link rel="stylesheet" href="styles.css?v=1201">
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <span class="brand-name">AuditFlow Pro</span>
-      <span class="brand-sub">Exposure Determination Instrument</span>
-    </div>
+<header class="app-header no-print">
+  <div class="brand-wrap">
+    <div class="brand-title">AuditFlow Pro</div>
+    <div class="brand-sub">Exposure Determination Instrument</div>
   </div>
   <div class="gold-bar"></div>
 </header>
@@ -23,24 +21,24 @@
 <section id="registration" class="panel">
   <h2>Audit Registration</h2>
 
-  <div class="field-group">
+  <div class="field">
     <label>Consultancy / Organisation</label>
     <input id="orgName" type="text" autocomplete="off">
   </div>
 
-  <div class="field-group">
+  <div class="field">
     <label>Client / Site Name</label>
     <input id="clientName" type="text" autocomplete="off">
   </div>
 
-  <div class="field-group">
+  <div class="field">
     <label>Audit Title</label>
     <input id="auditTitle" type="text" autocomplete="off">
   </div>
 
-  <div class="field-group">
+  <div class="field">
     <label>Assessment Date</label>
-    <input id="assessmentDate" type="text" readonly placeholder="Select Date">
+    <input id="assessmentDate" type="date">
   </div>
 
   <button id="startAudit" class="btn-primary">Commence Assessment</button>
@@ -54,18 +52,17 @@
 
 <section id="determination" class="panel hidden">
   <h2>Formal Exposure Determination</h2>
-  <div id="determinationResult"></div>
-  <button id="sealAudit" class="btn-primary">Seal & Generate Record</button>
+  <div id="determinationBlock"></div>
+  <button id="sealAudit" class="btn-primary">Seal Assessment</button>
 </section>
 
 <section id="record" class="panel hidden">
-  <h2>Exposure Determination Record</h2>
   <div id="recordContent"></div>
-  <button id="exportPDF" class="btn-primary">Export PDF</button>
+  <button id="exportPDF" class="btn-primary no-print">Export PDF</button>
 </section>
 
 </main>
 
-<script src="app.js?v=1105"></script>
+<script src="app.js?v=1201"></script>
 </body>
 </html>
