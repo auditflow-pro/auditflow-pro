@@ -11,29 +11,21 @@ const instrument = [
     }
 ];
 
-let state = {
-    answers: {},
-    recordId: "",
-    timestamp: ""
-};
+let state = { answers: {}, recordId: "", timestamp: "", exposure: "" };
 
 const startBtn = document.getElementById("startBtn");
-const registrationError = document.getElementById("registrationError");
-
 ["consultantName","clientName","auditTitle","assessmentDate"]
-.forEach(id => {
-    document.getElementById(id).addEventListener("input", validateRegistration);
-});
+.forEach(id => document.getElementById(id).addEventListener("input", validateRegistration));
 
 startBtn.addEventListener("click", startAssessment);
-document.getElementById("sealBtn").addEventListener("click", sealAssessment);
-document.getElementById("exportBtn").addEventListener("click", () => {
-    document.getElementById("exportOptions").classList.remove("hidden");
+document.getElementById("sealBtn").addEventListener("click", () => {
+    document.getElementById("sealModal").classList.remove("hidden");
 });
-document.getElementById("cancelExportBtn").addEventListener("click", () => {
-    document.getElementById("exportOptions").classList.add("hidden");
+document.getElementById("cancelSealBtn").addEventListener("click", () => {
+    document.getElementById("sealModal").classList.add("hidden");
 });
-document.getElementById("printBtn").addEventListener("click", () => window.print());
+document.getElementById("confirmSealBtn").addEventListener("click", sealAssessment);
+document.getElementById("exportBtn").addEventListener("click", () => window.print());
 
 function validateRegistration() {
     const valid =
@@ -43,18 +35,18 @@ function validateRegistration() {
         assessmentDate.value;
 
     startBtn.disabled = !valid;
+}
 
-    if (valid) {
-        registrationError.classList.add("hidden");
-    }
+function setStep(activeId) {
+    document.querySelectorAll(".progress-flow .step")
+        .forEach(step => step.classList.remove("active"));
+    document.getElementById(activeId).classList.add("active");
 }
 
 function startAssessment() {
-    if (startBtn.disabled) return;
-
     registrationPanel.classList.add("hidden");
     assessmentSection.classList.remove("hidden");
-
+    setStep("step-assessment");
     renderDomains();
 }
 
@@ -82,7 +74,7 @@ function renderDomains() {
                 const btn = document.createElement("button");
                 btn.className = "answer-btn";
                 btn.textContent = option;
-                btn.onclick = () => handleAnswer(dIndex, qIndex, option, btn, qBlock);
+                btn.onclick = () => handleAnswer(dIndex,qIndex,option,btn,qBlock);
                 qBlock.appendChild(btn);
             });
 
@@ -93,91 +85,98 @@ function renderDomains() {
     });
 }
 
-function handleAnswer(dIndex, qIndex, value, btn, qBlock) {
+function handleAnswer(dIndex,qIndex,value,btn,qBlock){
     const key = `${dIndex}_${qIndex}`;
     state.answers[key] = value;
 
-    const buttons = qBlock.querySelectorAll(".answer-btn");
-    buttons.forEach(b => b.className = "answer-btn");
+    qBlock.querySelectorAll(".answer-btn").forEach(b => b.className="answer-btn");
 
-    if (value === "YES") btn.classList.add("selected-yes");
-    if (value === "NO") btn.classList.add("selected-no");
-    if (value === "N/A") btn.classList.add("selected-na");
+    if(value==="YES") btn.classList.add("selected-yes");
+    if(value==="NO") btn.classList.add("selected-no");
+    if(value==="N/A") btn.classList.add("selected-na");
 
     let recorded = qBlock.querySelector(".answer-recorded");
-    if (!recorded) {
-        recorded = document.createElement("div");
-        recorded.className = "answer-recorded";
+    if(!recorded){
+        recorded=document.createElement("div");
+        recorded.className="answer-recorded";
         qBlock.appendChild(recorded);
     }
-    recorded.textContent = `Recorded: ${value}`;
+    recorded.textContent=`Recorded: ${value}`;
 
     evaluateExposure();
 }
 
-function evaluateExposure() {
-    const exposureBlock = document.getElementById("globalExposure");
-    exposureBlock.classList.remove("hidden");
-
-    let critical = false;
-
-    instrument.forEach((domain, dIndex) => {
-        domain.questions.forEach((q, qIndex) => {
-            const key = `${dIndex}_${qIndex}`;
-            if (q.tier === 4 && state.answers[key] === "NO") critical = true;
+function evaluateExposure(){
+    let critical=false;
+    instrument.forEach((domain,dIndex)=>{
+        domain.questions.forEach((q,qIndex)=>{
+            if(q.tier===4 && state.answers[`${dIndex}_${qIndex}`]==="NO"){
+                critical=true;
+            }
         });
     });
 
-    exposureBlock.textContent = critical
-        ? "Overall Exposure Classification: Critical Exposure"
-        : "Overall Exposure Classification: Controlled Exposure";
+    state.exposure = critical ? "Critical Exposure" : "Controlled Exposure";
+
+    const block=document.getElementById("globalExposure");
+    block.classList.remove("hidden");
+    block.innerHTML=`Formal Exposure Determination:<br>${state.exposure}`;
 }
 
-function sealAssessment() {
-    state.recordId = generateRecordId();
-    state.timestamp = formatTimestamp(new Date());
+function sealAssessment(){
+    document.getElementById("sealModal").classList.add("hidden");
+    state.recordId=generateRecordId();
+    state.timestamp=formatTimestamp(new Date());
 
     assessmentSection.classList.add("hidden");
     documentSection.classList.remove("hidden");
+    setStep("step-issuance");
 
     generateDocument();
 }
 
-function generateRecordId() {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth()+1).padStart(2,'0');
-    const d = String(now.getDate()).padStart(2,'0');
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    const ss = String(now.getSeconds()).padStart(2,'0');
-    return `AFP-${y}${m}${d}-${hh}${mm}${ss}`;
+function generateRecordId(){
+    const now=new Date();
+    return `AFP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}${String(now.getSeconds()).padStart(2,'0')}`;
 }
 
-function formatTimestamp(date) {
-    const y = date.getFullYear();
-    const m = String(date.getMonth()+1).padStart(2,'0');
-    const d = String(date.getDate()).padStart(2,'0');
-    const hh = String(date.getHours()).padStart(2,'0');
-    const mm = String(date.getMinutes()).padStart(2,'0');
-    return `${y}-${m}-${d} ${hh}:${mm}`;
+function formatTimestamp(date){
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
 }
 
-function generateDocument() {
-    const content = document.getElementById("documentContent");
+function generateDocument(){
+    const content=document.getElementById("documentContent");
 
-    content.innerHTML = `
+    content.innerHTML=`
         <h2>Exposure Determination Record</h2>
-        <div style="margin-bottom:18px;">AuditFlow Pro — Professional Instrument System</div>
+        <div style="font-weight:bold;letter-spacing:0.5px;margin-bottom:15px;">
+            AuditFlow Pro — Professional Instrument System
+        </div>
+
+        <div style="border-left:6px solid #1b1e24;padding:15px;margin-bottom:20px;font-size:18px;font-weight:bold;">
+            Formal Exposure Determination: ${state.exposure}
+        </div>
+
         <p><strong>Instrument Version:</strong> ${instrumentVersion}</p>
-        <p class="record-id"><strong>Record ID:</strong> ${state.recordId}</p>
+        <p><strong>Record ID:</strong> ${state.recordId}</p>
         <p><strong>Determination Timestamp:</strong> ${state.timestamp}</p>
+
         <hr>
+
         <p>This determination has been produced using calibrated weighted exposure analysis across structured compliance domains.</p>
+
+        <h3>Disclaimer</h3>
+        <p style="font-size:13px;">
+        This instrument provides a structured exposure determination based on recorded responses at the time of assessment. 
+        It does not replace statutory compliance obligations or jurisdiction-specific regulatory requirements.
+        </p>
+
         <hr>
+
         <h3>Execution & Acceptance</h3>
         <p>Consultant Signature: ________________________ Date: ____________</p>
         <p>Client Representative Signature: ________________________ Date: ____________</p>
+
         <hr>
         <p style="font-size:12px;">Issued by AuditFlow Pro</p>
     `;
