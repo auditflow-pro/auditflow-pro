@@ -18,19 +18,39 @@ body {
     justify-content: space-between;
 }
 
-.gold-band {
-    height: 4px;
-    background: #b89b4c;
-}
-
 .brand-title {
     font-size: 20px;
     font-weight: bold;
+    letter-spacing: 0.5px;
 }
 
 .brand-sub {
     font-size: 13px;
     opacity: 0.85;
+}
+
+.progress-flow {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 8px 20px 12px 20px;
+    opacity: 0.8;
+}
+
+.progress-flow .step {
+    opacity: 0.5;
+}
+
+.progress-flow .step.active {
+    opacity: 1;
+    font-weight: bold;
+}
+
+.gold-band {
+    height: 4px;
+    background: #b89b4c;
 }
 
 main {
@@ -41,37 +61,21 @@ main {
 
 .panel,
 .domain-block,
-.exposure-block,
 .document-mode {
     background: #fff;
-    padding: 22px 24px;
-    margin-bottom: 22px;
+    padding: 22px;
+    margin-bottom: 20px;
     border: 1px solid #ddd;
 }
 
 .field {
-    margin-bottom: 14px;
-}
-
-.field label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 5px;
+    margin-bottom: 12px;
 }
 
 .field input {
     width: 100%;
     padding: 10px;
-    box-sizing: border-box;
     border: 1px solid #ccc;
-    background: #fff;
-}
-
-/* Remove autofill yellow */
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-    box-shadow: 0 0 0px 1000px #ffffff inset !important;
 }
 
 .primary-btn {
@@ -83,87 +87,72 @@ input:-webkit-autofill:focus {
 }
 
 .primary-btn:disabled {
-    background: #555;
-    cursor: not-allowed;
     opacity: 0.6;
-}
-
-.validation {
-    background: #f5e3e3;
-    color: #8a0000;
-    padding: 10px;
-    margin-bottom: 15px;
-    font-size: 13px;
-}
-
-.hidden {
-    display: none;
-}
-
-.domain-block h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.question-block {
-    margin-bottom: 16px;
+    cursor: not-allowed;
 }
 
 .answer-btn {
     width: 100%;
-    padding: 9px;
-    margin-bottom: 6px;
+    padding: 8px;
+    margin-bottom: 5px;
     border: 1px solid #bbb;
     background: #f8f8f8;
-    color: #333;
-    cursor: pointer;
 }
 
-/* Selected states – darker institutional tone */
 .answer-btn.selected-yes {
     background: #2f5f3c;
     color: #fff;
-    border-color: #244b2f;
 }
 
 .answer-btn.selected-no {
     background: #7c1f1f;
     color: #fff;
-    border-color: #5e1616;
 }
 
 .answer-btn.selected-na {
     background: #555;
     color: #fff;
-    border-color: #444;
 }
 
 .answer-recorded {
     font-size: 12px;
     color: #555;
-    margin-top: 2px;
+    margin-bottom: 6px;
 }
 
-.exposure-block {
+.exposure-output {
+    border-left: 6px solid #1b1e24;
+    padding: 18px;
     font-weight: bold;
-    padding: 16px;
+    font-size: 18px;
+    background: #fafafa;
+    margin: 20px 0;
 }
 
-.document-mode {
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
     background: #fff;
-    padding: 36px 40px;
+    padding: 25px;
+    max-width: 400px;
+    width: 90%;
 }
 
-.document-mode h2 {
-    margin-bottom: 14px;
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 
-.record-id {
-    white-space: nowrap;
-}
-
-.record-actions {
-    margin-top: 30px;
+.hidden {
+    display: none;
 }
 
 footer {
@@ -183,10 +172,5 @@ footer {
 
     body {
         background: #fff;
-    }
-
-    main {
-        margin: 0;
-        max-width: 100%;
     }
 }
