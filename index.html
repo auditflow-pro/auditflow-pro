@@ -3,78 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AuditFlow Pro — Exposure Determination Instrument</title>
+<title>AuditFlow Pro — Professional Exposure Determination Instrument</title>
 
-<link rel="stylesheet" href="styles.css?v=6001">
+<link rel="stylesheet" href="styles.css?v=1100">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1f2a33">
+
+<meta name="theme-color" content="#0f1c2e">
 </head>
 
 <body>
 
-<header class="app-header no-print">
-  <div class="brand-title">AuditFlow Pro</div>
-  <div class="brand-sub">Professional Exposure Determination Instrument</div>
+<header>
+  <h1>AuditFlow Pro</h1>
+  <p>Professional Exposure Determination Instrument</p>
   <div class="gold-bar"></div>
 </header>
 
-<main class="container">
+<main id="app"></main>
 
-<section id="registration" class="panel">
-  <h2>Audit Registration</h2>
-
-  <label>Consultant Name</label>
-  <input id="consultantName" type="text">
-
-  <label>Organisation</label>
-  <input id="orgName" type="text">
-
-  <label>Client</label>
-  <input id="clientName" type="text">
-
-  <label>Audit Title</label>
-  <input id="auditTitle" type="text">
-
-  <label>Assessment Date</label>
-  <input id="assessmentDate" type="date">
-
-  <button id="startAudit" class="btn-primary">Commence Assessment</button>
-</section>
-
-<section id="assessment" class="panel hidden">
-  <h2>Structured Exposure Assessment</h2>
-  <div id="questionsContainer"></div>
-
-  <div class="nav-row">
-    <button id="backToRegistration" class="btn-secondary">Back</button>
-    <button id="completeAudit" class="btn-primary">Proceed to Determination</button>
-  </div>
-</section>
-
-<section id="determination" class="panel hidden">
-  <h2>Exposure Analysis</h2>
-  <div id="analysisPreview"></div>
-
-  <div class="nav-row">
-    <button id="backToAssessment" class="btn-secondary">Back</button>
-    <button id="sealAudit" class="btn-primary">Seal & Generate Report</button>
-  </div>
-</section>
-
-<section id="record" class="panel hidden">
-  <div id="recordContent"></div>
-  <button id="exportPDF" class="btn-primary no-print">
-    Export Professional Report (PDF)
-  </button>
-</section>
-
-</main>
-
-<script src="app.js?v=6001"></script>
+<script src="app.js?v=1100"></script>
 
 <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
