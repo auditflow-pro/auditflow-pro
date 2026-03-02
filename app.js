@@ -1,129 +1,99 @@
-const questions = [
-  { section: "Fire Safety", text: "Fire detection system operational?", weight: 3 },
-  { section: "Fire Safety", text: "Emergency exits unobstructed?", weight: 3 },
-  { section: "Electrical Safety", text: "Electrical systems maintained?", weight: 2 },
-  { section: "General Safety", text: "Housekeeping standards acceptable?", weight: 1 }
+const VERSION = "v1.1";
+const CONTROLS = [
+  { id:1, text:"Fire detection system operational?", weight:4 },
+  { id:2, text:"Emergency exits unobstructed?", weight:4 },
+  { id:3, text:"Fire extinguishers inspected and in date?", weight:4 },
+  { id:4, text:"Electrical systems maintained?", weight:3 },
+  { id:5, text:"Portable appliance testing current?", weight:3 },
+  { id:6, text:"Distribution boards secured and labelled?", weight:3 },
+  { id:7, text:"Housekeeping standards acceptable?", weight:2 },
+  { id:8, text:"Access/egress routes clearly marked?", weight:2 },
+  { id:9, text:"Hazard signage visible and appropriate?", weight:2 },
+  { id:10, text:"Staff aware of emergency procedures?", weight:2 }
 ];
 
 let responses = {};
-let totalScore = 0;
-let classification = "";
+let meta = {};
 
-startAudit.onclick = () => {
-  registration.classList.add("hidden");
-  assessment.classList.remove("hidden");
-  renderQuestions();
-};
+const app = document.getElementById("app");
 
-backToRegistration.onclick = () => {
-  assessment.classList.add("hidden");
-  registration.classList.remove("hidden");
-};
-
-backToAssessment.onclick = () => {
-  determination.classList.add("hidden");
-  assessment.classList.remove("hidden");
-};
-
-function renderQuestions() {
-  questionsContainer.innerHTML = "";
-  questions.forEach((q,i)=>{
-    const block=document.createElement("div");
-    block.innerHTML=`
-      <p><strong>${q.section}</strong></p>
-      <p>${q.text}</p>
-      <button onclick="record(${i},'YES')">YES</button>
-      <button onclick="record(${i},'NO')">NO</button>
-      <button onclick="record(${i},'N/A')">N/A</button>
-      <hr>
-    `;
-    questionsContainer.appendChild(block);
-  });
+function renderRegistration() {
+  app.innerHTML = `
+  <div class="card">
+    <h2>Audit Registration</h2>
+    <input id="consultant" placeholder="Consultant Name">
+    <input id="organisation" placeholder="Organisation">
+    <input id="client" placeholder="Client">
+    <input id="title" placeholder="Audit Title">
+    <input id="date" type="date">
+    <button class="primary" onclick="startAssessment()">Commence Assessment</button>
+  </div>`;
 }
 
-function record(i,val){ responses[i]=val; }
+function startAssessment() {
+  meta = {
+    consultant: consultant.value,
+    organisation: organisation.value,
+    client: client.value,
+    title: title.value,
+    date: date.value
+  };
+  renderAssessment();
+}
 
-completeAudit.onclick=()=>{
-  totalScore=0;
-  questions.forEach((q,i)=>{
-    if(responses[i]==="NO") totalScore+=q.weight;
+function renderAssessment() {
+  let html = `<div class="card"><h2>Structured Exposure Assessment</h2>`;
+  CONTROLS.forEach(c=>{
+    html+=`
+    <div class="option-group">
+      <p><strong>${c.text}</strong></p>
+      <button onclick="setResponse(${c.id},'YES')">YES</button>
+      <button onclick="setResponse(${c.id},'NO')">NO</button>
+      <button onclick="setResponse(${c.id},'NA')">N/A</button>
+    </div>`;
   });
+  html+=`<button class="primary" onclick="determine()">Proceed to Determination</button></div>`;
+  app.innerHTML=html;
+}
 
-  if(totalScore>=5) classification="CRITICAL EXPOSURE IDENTIFIED";
-  else if(totalScore>=3) classification="MAJOR EXPOSURE IDENTIFIED";
-  else if(totalScore>=1) classification="MODERATE EXPOSURE IDENTIFIED";
-  else classification="CONTROLLED EXPOSURE STATUS";
+function setResponse(id,value){
+  responses[id]=value;
+}
 
-  analysisPreview.innerHTML=`
-    <p><strong>Total Weighted Exposure Score:</strong> ${totalScore}</p>
-    <div class="determination-box">
-      FORMAL EXPOSURE DETERMINATION: ${classification}
-    </div>
-  `;
-
-  assessment.classList.add("hidden");
-  determination.classList.remove("hidden");
-};
-
-sealAudit.onclick=()=>{
-  const now=new Date();
-  const recordID=`AFP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}-${now.getHours()}${now.getMinutes()}`;
-
-  let breakdown="";
-  const sections=[...new Set(questions.map(q=>q.section))];
-
-  sections.forEach(sec=>{
-    let secScore=0;
-    let secItems="";
-    questions.forEach((q,i)=>{
-      if(q.section===sec){
-        if(responses[i]==="NO") secScore+=q.weight;
-        secItems+=`<p>${q.text} — ${responses[i]||"N/A"}</p>`;
+function determine(){
+  let total=0;
+  let max=0;
+  CONTROLS.forEach(c=>{
+    if(responses[c.id]!=="NA"){
+      max+=c.weight*2;
+      if(responses[c.id]==="NO"){
+        total+=c.weight*2;
       }
-    });
-    breakdown+=`
-      <h3>${sec}</h3>
-      <p><strong>Section Score:</strong> ${secScore}</p>
-      ${secItems}
-      <hr>
-    `;
+    }
   });
 
-  recordContent.innerHTML=`
-    <h1>Exposure Determination Report</h1>
-    <p><strong>Record ID:</strong> ${recordID}</p>
-    <p><strong>Consultant:</strong> ${consultantName.value}</p>
-    <p><strong>Organisation:</strong> ${orgName.value}</p>
-    <p><strong>Client:</strong> ${clientName.value}</p>
-    <p><strong>Audit:</strong> ${auditTitle.value}</p>
-    <p><strong>Date:</strong> ${assessmentDate.value}</p>
+  const percent = max===0?0:Math.round((total/max)*100);
 
-    <div class="page-break"></div>
+  let level="";
+  if(percent<=10) level="Level 1 – Controlled Environment";
+  else if(percent<=25) level="Level 2 – Managed Exposure";
+  else if(percent<=50) level="Level 3 – Significant Exposure";
+  else level="Level 4 – Critical Exposure";
 
-    <h2>Exposure Analysis Summary</h2>
-    <p><strong>Total Weighted Exposure Score:</strong> ${totalScore}</p>
-    <div class="determination-box">
-      FORMAL EXPOSURE DETERMINATION: ${classification}
-    </div>
+  renderResult(percent,level,total,max);
+}
 
-    <div class="page-break"></div>
+function renderResult(percent,level,total,max){
+  app.innerHTML=`
+  <div class="card">
+    <h2>Formal Exposure Determination</h2>
+    <p><strong>Instrument Version:</strong> ${VERSION}</p>
+    <p><strong>Weighted Exposure Score:</strong> ${total} / ${max}</p>
+    <p><strong>Exposure Ratio:</strong> ${percent}%</p>
+    <h3>${level}</h3>
+    <button class="secondary" onclick="renderAssessment()">Back</button>
+    <button class="primary" onclick="location.reload()">New Assessment</button>
+  </div>`;
+}
 
-    <h2>Section Breakdown</h2>
-    ${breakdown}
-
-    <div class="page-break"></div>
-
-    <h2>Exposure Classification Scale</h2>
-    <p>Critical (≥5), Major (3–4), Moderate (1–2), Controlled (0)</p>
-
-    <h2>Formal Sealing</h2>
-    <p>This report has been formally sealed and any alteration invalidates the record ID.</p>
-
-    <footer>AuditFlow Pro — Exposure Determination Instrument</footer>
-  `;
-
-  determination.classList.add("hidden");
-  record.classList.remove("hidden");
-};
-
-exportPDF.onclick=()=>window.print();
+renderRegistration();
