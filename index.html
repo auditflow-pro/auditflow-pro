@@ -11,9 +11,7 @@
 <header class="header">
   <div class="header-inner">
     <h1>AuditFlow Pro</h1>
-    <div class="header-actions">
-      <button id="determineBtn" class="primary-btn">Determine Exposure</button>
-    </div>
+    <button id="determineBtn" class="primary-btn">Determine Exposure</button>
   </div>
 </header>
 
@@ -37,12 +35,36 @@
 
 <div id="domains"></div>
 
-<section class="stage" id="determinationSection">
+<section class="stage">
   <h2>Stage 04 — Exposure Determination</h2>
   <div id="determinationRecord"></div>
 </section>
 
 </main>
+
+<!-- Modal -->
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Register Finding</h3>
+    <textarea id="modalDesc" placeholder="Finding Description"></textarea>
+    <select id="modalSeverity">
+      <option>Low</option>
+      <option>Moderate</option>
+      <option>High</option>
+      <option>Critical</option>
+    </select>
+    <select id="modalControl">
+      <option>Compliant</option>
+      <option>Improvement Required</option>
+      <option>Non-Compliant</option>
+      <option>Critical Failure</option>
+    </select>
+    <div class="modal-actions">
+      <button id="cancelModal">Cancel</button>
+      <button id="saveFinding" class="primary-btn">Register Finding</button>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 </body>
