@@ -1,15 +1,19 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
-  background: #eef0f4;
+  background: #eef1f5;
   color: #111;
 }
 
 header {
   background: linear-gradient(135deg,#0f1c2e,#1b2d48);
   color: white;
-  text-align: center;
-  padding: 30px 20px 15px;
+  padding: 30px 20px 20px;
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: auto;
 }
 
 .gold-bar {
@@ -19,38 +23,58 @@ header {
 }
 
 main {
-  padding: 30px 20px 60px;
-  max-width: 780px;
+  padding: 40px 20px 80px;
+  max-width: 850px;
   margin: auto;
 }
 
 .card {
   background: white;
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 35px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
   margin-bottom: 30px;
 }
 
-.progress {
+.instrument-meta {
   font-size: 0.85rem;
-  opacity: 0.6;
-  margin-bottom: 15px;
+  opacity: 0.65;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
 }
 
-input {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0 20px;
-  border-radius: 10px;
-  border: 2px solid #2f3b46;
+.domain-title {
+  margin-top: 35px;
+  border-bottom: 2px solid #e2e5ea;
+  padding-bottom: 6px;
+}
+
+.response-group {
+  margin-top: 12px;
+  margin-bottom: 22px;
+}
+
+.response-option {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #2f3b46;
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.response-option.selected {
+  background: #1b2d48;
+  color: white;
 }
 
 button.primary {
   background: linear-gradient(135deg,#1b2d48,#0f1c2e);
   color: white;
-  padding: 14px 22px;
-  border-radius: 12px;
+  padding: 14px 24px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
 }
@@ -59,7 +83,14 @@ button.secondary {
   background: white;
   border: 2px solid #2f3b46;
   padding: 12px 18px;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   margin-right: 10px;
+}
+
+.certificate-block {
+  border: 2px solid #1b2d48;
+  padding: 25px;
+  border-radius: 10px;
+  margin-top: 25px;
 }
