@@ -1,28 +1,71 @@
 /* =========================
-   STATE ENGINE
+   INSTRUMENT CORE
 ========================= */
+
+const INSTRUMENT_VERSION = "1.0";
 
 let state = 0;
 let recordStatus = "Draft";
 let recordID = null;
 let determinationTimestamp = null;
+let overrideData = null;
 
 let auditMeta = {};
-let findings = {};
-
-const domains = [
-  "Site & Environment",
-  "Equipment & Infrastructure",
-  "Operational Controls",
-  "People & Process"
-];
-
-const impactScale = { Minor:1, "Medical Treatment":2, "Major Injury / Shutdown":3, Catastrophic:4 };
-const likelihoodScale = { Rare:1, Possible:2, Likely:3, "Almost Certain":4 };
-const controlScale = { Effective:0.5, "Partially Effective":1, Weak:1.5, Failing:2 };
+let responses = {};
 
 /* =========================
-   RENDER CORE
+   DOMAIN CONFIG
+========================= */
+
+const domains = [
+  {
+    name: "Site & Environment",
+    questions: [
+      { text: "Is housekeeping maintained to safe standard?", tier: 1 },
+      { text: "Are access routes clearly marked?", tier: 1 },
+      { text: "Is lighting adequate for safe operation?", tier: 1 },
+      { text: "Are environmental hazards controlled?", tier: 2 },
+      { text: "Are pedestrian and vehicle routes segregated?", tier: 2 },
+      { text: "Are required inspections completed?", tier: 3 },
+      { text: "Are statutory compliance notices up to date?", tier: 3 },
+      { text: "Are emergency escape routes unobstructed and compliant?", tier: 4 }
+    ]
+  },
+  {
+    name: "Equipment & Infrastructure",
+    questions: [
+      { text: "Is equipment maintained?", tier: 1 },
+      { text: "Are inspection records available?", tier: 1 },
+      { text: "Are maintenance intervals adhered to?", tier: 2 },
+      { text: "Are guarding systems intact?", tier: 2 },
+      { text: "Are statutory inspections current?", tier: 3 },
+      { text: "Are load ratings displayed?", tier: 3 },
+      { text: "Are emergency shutdown mechanisms functional?", tier: 4 }
+    ]
+  },
+  {
+    name: "Operational Controls",
+    questions: [
+      { text: "Are SOPs documented?", tier: 1 },
+      { text: "Are permits used where required?", tier: 2 },
+      { text: "Are isolation procedures followed?", tier: 3 },
+      { text: "Are emergency procedures tested?", tier: 3 },
+      { text: "Are critical safety controls tested and effective?", tier: 4 }
+    ]
+  },
+  {
+    name: "People & Process",
+    questions: [
+      { text: "Are training records maintained?", tier: 1 },
+      { text: "Are inductions completed?", tier: 2 },
+      { text: "Are competency assessments current?", tier: 3 },
+      { text: "Are high-risk task personnel formally competent?", tier: 4 }
+    ]
+  }
+];
+
+/* =========================
+   RENDER ENGINE
 ========================= */
 
 function render() {
@@ -44,6 +87,7 @@ function renderHeader() {
   header.innerHTML = `
     <h1>Exposure Determination Instrument</h1>
     <div class="meta">
+      Instrument Version: ${INSTRUMENT_VERSION}<br>
       Record ID: ${recordID}<br>
       Client: ${auditMeta.client} | Title: ${auditMeta.title} | Date: ${auditMeta.date}
     </div>
@@ -58,26 +102,19 @@ function renderMain() {
   if (state === 0) renderLanding(main);
   if (state === 1) renderRegistration(main);
   if (state === 2) renderAssessment(main);
-  if (state === 3) renderDetermination(main);
-  if (state === 4) renderSnapshot(main);
+  if (state === 3) renderSnapshot(main);
 }
 
-/* =========================
-   LANDING
-========================= */
+/* ========================= */
 
 function renderLanding(main) {
   main.innerHTML = `
     <div class="panel">
-      <p>This instrument provides calibrated exposure determination for professional compliance environments.</p>
+      <p>This instrument applies calibrated weighted exposure determination across structured compliance domains.</p>
       <button class="primary" onclick="nextState()">Initiate Audit</button>
     </div>
   `;
 }
-
-/* =========================
-   REGISTRATION
-========================= */
 
 function renderRegistration(main) {
   main.innerHTML = `
@@ -93,13 +130,12 @@ function renderRegistration(main) {
 
 function generateRecordID() {
   const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth()+1).padStart(2,'0');
-  const d = String(now.getDate()).padStart(2,'0');
-  const h = String(now.getHours()).padStart(2,'0');
-  const min = String(now.getMinutes()).padStart(2,'0');
-  const s = String(now.getSeconds()).padStart(2,'0');
-  return `AF-${y}${m}${d}-${h}${min}${s}`;
+  return "AF-" + now.getFullYear() +
+    String(now.getMonth()+1).padStart(2,'0') +
+    String(now.getDate()).padStart(2,'0') + "-" +
+    String(now.getHours()).padStart(2,'0') +
+    String(now.getMinutes()).padStart(2,'0') +
+    String(now.getSeconds()).padStart(2,'0');
 }
 
 function registerAudit() {
@@ -109,126 +145,121 @@ function registerAudit() {
 
   recordID = generateRecordID();
   recordStatus = "Active";
-  domains.forEach(d => findings[d] = []);
+
+  domains.forEach(d => {
+    responses[d.name] = d.questions.map(() => null);
+  });
 
   nextState();
 }
 
-/* =========================
-   ASSESSMENT
-========================= */
+/* ========================= */
 
 function renderAssessment(main) {
+
   domains.forEach(domain => {
+
+    main.innerHTML += `<div class="panel"><h3>${domain.name}</h3>`;
+
+    domain.questions.forEach((q, index) => {
+
+      main.innerHTML += `
+        <div>
+          ${q.text}
+          <select onchange="setResponse('${domain.name}', ${index}, this.value)">
+            <option value="">--</option>
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+            <option value="NA">N/A</option>
+          </select>
+        </div>
+      `;
+    });
+
+    const exposure = calculateDomainExposure(domain);
+
+    if (exposure.flag) {
+      main.innerHTML += `<div class="flag">Life Safety Control Failure Identified</div>`;
+    }
+
     main.innerHTML += `
-      <div class="panel">
-        <h3>${domain}</h3>
-        <div id="findings-${domain}"></div>
-        <button class="small" onclick="toggleEntry('${domain}')">Add Finding</button>
-
-        <div id="entry-${domain}" class="hidden">
-          <textarea id="desc-${domain}" placeholder="Finding Description"></textarea>
-          <select id="impact-${domain}">
-            <option>Minor</option>
-            <option>Medical Treatment</option>
-            <option>Major Injury / Shutdown</option>
-            <option>Catastrophic</option>
-          </select>
-          <select id="likelihood-${domain}">
-            <option>Rare</option>
-            <option>Possible</option>
-            <option>Likely</option>
-            <option>Almost Certain</option>
-          </select>
-          <select id="control-${domain}">
-            <option>Effective</option>
-            <option>Partially Effective</option>
-            <option>Weak</option>
-            <option>Failing</option>
-          </select>
-          <button class="primary small" onclick="saveFinding('${domain}')">Save</button>
-        </div>
-
-        <div class="domain-footer">
-          Exposure: <span id="status-${domain}">Not Determined</span>
-        </div>
-      </div>
-    `;
+      <div><strong>Domain Exposure:</strong> ${exposure.level}</div>
+    </div>`;
   });
 
-  main.innerHTML += `<button class="primary" onclick="sealDetermination()">Seal Determination</button>`;
-
-  updateExposure();
+  main.innerHTML += `<button class="primary" onclick="seal()">Seal Determination</button>`;
 }
 
-function toggleEntry(domain) {
-  document.getElementById(`entry-${domain}`).classList.toggle("hidden");
-}
+/* ========================= */
 
-function saveFinding(domain) {
-  const desc = document.getElementById(`desc-${domain}`).value;
-  const impact = document.getElementById(`impact-${domain}`).value;
-  const likelihood = document.getElementById(`likelihood-${domain}`).value;
-  const control = document.getElementById(`control-${domain}`).value;
-
-  findings[domain].push({desc, impact, likelihood, control});
+function setResponse(domainName, index, value) {
+  responses[domainName][index] = value;
   render();
 }
 
-function updateExposure() {
-  domains.forEach(domain => {
-    if (!findings[domain] || findings[domain].length === 0) return;
-    let total = 0;
-    findings[domain].forEach(f => {
-      total += impactScale[f.impact] * likelihoodScale[f.likelihood] * controlScale[f.control];
-    });
-    const avg = total / findings[domain].length;
-    document.getElementById(`status-${domain}`).innerText = classify(avg);
+function calculateDomainExposure(domain) {
+
+  let score = 0;
+  let lifeSafetyFailure = false;
+
+  domain.questions.forEach((q, i) => {
+    const answer = responses[domain.name][i];
+    if (answer === "NO") {
+      if (q.tier === 4) {
+        lifeSafetyFailure = true;
+        score += 5;
+      } else if (q.tier === 3) score += 3;
+      else if (q.tier === 2) score += 2;
+      else score += 1;
+    }
   });
+
+  let level = "Controlled";
+
+  if (score === 0) level = "Controlled";
+  else if (score <= 2) level = "Low Exposure";
+  else if (score <= 5) level = "Moderate Exposure";
+  else if (score <= 8) level = "Significant Exposure";
+  else level = "Critical Exposure";
+
+  if (lifeSafetyFailure && level === "Moderate Exposure") {
+    level = "Significant Exposure";
+  }
+
+  return { level, flag: lifeSafetyFailure };
 }
 
-function classify(score) {
-  if (score < 3) return "Controlled";
-  if (score < 8) return "Elevated";
-  if (score < 15) return "Significant";
-  return "Severe";
-}
+/* ========================= */
 
-/* =========================
-   SEAL
-========================= */
-
-function sealDetermination() {
+function seal() {
   determinationTimestamp = new Date().toLocaleString();
   recordStatus = "Sealed";
-  state = 4;
+  state = 3;
   render();
 }
 
-/* =========================
-   SNAPSHOT
-========================= */
+/* ========================= */
 
 function renderSnapshot(main) {
 
   main.innerHTML = `
     <div class="panel">
-      <h2>Executive Snapshot</h2>
+      <h2>Executive Determination Record</h2>
+      <p><strong>Instrument Version:</strong> ${INSTRUMENT_VERSION}</p>
+      <p><strong>Record ID:</strong> ${recordID}</p>
       <p><strong>Determination Timestamp:</strong> ${determinationTimestamp}</p>
       <button onclick="window.print()">Print / Save as PDF</button>
     </div>
 
     <div class="panel">
       <h3>Signatures</h3>
-      <p>Consultant Signature: ____________________________</p>
-      <p>Name: ____________________________</p>
-      <p>Date: ____________________________</p>
-
+      <p>Consultant Signature: ________________________</p>
+      <p>Name: ________________________</p>
+      <p>Date: ________________________</p>
       <br>
-
-      <p>Client Representative Signature: ____________________________</p>
-      <p>Name: ____________________________</p>
-      <p>Date: ____________________________</p>
+      <p>Client Representative Signature: ________________________</p>
+      <p>Name: ________________________</p>
+      <p>Date: ________________________</p>
     </div>
 
     <footer>
