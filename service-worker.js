@@ -1,20 +1,45 @@
-const CACHE_NAME = "auditflow-pro-v1";
-const FILES_TO_CACHE = [
+const CACHE_NAME="auditflow-pro-v6";
+
+const ASSETS=[
   "./",
   "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.json"
+  "./styles.css?v=6001",
+  "./app.js?v=6001",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+self.addEventListener("install",e=>{
+  self.skipWaiting();
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache=>cache.addAll(ASSETS))
   );
 });
 
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+self.addEventListener("activate",e=>{
+  e.waitUntil(
+    caches.keys().then(keys=>{
+      return Promise.all(
+        keys.map(key=>{
+          if(key!==CACHE_NAME) return caches.delete(key);
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+self.addEventListener("fetch",e=>{
+  if(e.request.method!=="GET") return;
+
+  e.respondWith(
+    fetch(e.request)
+      .then(res=>{
+        const clone=res.clone();
+        caches.open(CACHE_NAME).then(cache=>cache.put(e.request,clone));
+        return res;
+      })
+      .catch(()=>caches.match(e.request))
   );
 });
