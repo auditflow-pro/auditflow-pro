@@ -23,17 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ref = ref.toUpperCase();
 
-    // Populate summary
     document.getElementById("summaryClient").textContent = client;
     document.getElementById("summaryLocation").textContent = location;
     document.getElementById("summaryRef").textContent = ref;
-    document.getElementById("summaryDate").textContent = new Date(date).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
+    document.getElementById("summaryDate").textContent =
+      new Date(date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
 
-    // Transition
     formSection.classList.add("hidden");
     summarySection.classList.remove("hidden");
     assessmentSection.classList.remove("hidden");
