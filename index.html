@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro — Exposure Determination Instrument</title>
-<link rel="stylesheet" href="styles.css?v=3001">
+
+<link rel="stylesheet" href="styles.css?v=6001">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1f2a33">
 </head>
+
 <body>
 
 <header class="app-header no-print">
@@ -42,6 +44,7 @@
 <section id="assessment" class="panel hidden">
   <h2>Structured Exposure Assessment</h2>
   <div id="questionsContainer"></div>
+
   <div class="nav-row">
     <button id="backToRegistration" class="btn-secondary">Back</button>
     <button id="completeAudit" class="btn-primary">Proceed to Determination</button>
@@ -51,6 +54,7 @@
 <section id="determination" class="panel hidden">
   <h2>Exposure Analysis</h2>
   <div id="analysisPreview"></div>
+
   <div class="nav-row">
     <button id="backToAssessment" class="btn-secondary">Back</button>
     <button id="sealAudit" class="btn-primary">Seal & Generate Report</button>
@@ -59,15 +63,18 @@
 
 <section id="record" class="panel hidden">
   <div id="recordContent"></div>
-  <button id="exportPDF" class="btn-primary no-print">Export Professional Report (PDF)</button>
+  <button id="exportPDF" class="btn-primary no-print">
+    Export Professional Report (PDF)
+  </button>
 </section>
 
 </main>
 
-<script src="app.js?v=3001"></script>
+<script src="app.js?v=6001"></script>
+
 <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 
