@@ -1,10 +1,9 @@
-/* =========================================
-   AUDITFLOW PRO — REGISTRATION ENGINE v600
-========================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const btn = document.getElementById("commenceBtn");
+  const registrationBlock = document.getElementById("registrationBlock");
+  const assessmentStage = document.getElementById("assessmentStage");
+  const registrationNote = document.getElementById("registrationNote");
 
   btn.addEventListener("click", () => {
 
@@ -14,15 +13,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = document.getElementById("assessmentDate").value;
 
     if (!client || !location || !ref || !date) {
+      registrationNote.textContent = "All scope parameters must be defined prior to commencement.";
       return;
     }
 
-    // Normalize reference code only (professional discipline)
+    // Normalize reference
     ref = ref.toUpperCase();
     document.getElementById("assessmentRef").value = ref;
 
-    // Placeholder transition — replace with assessment load
-    window.location.hash = "assessment";
+    // Lock registration
+    registrationBlock.classList.add("locked");
+    const inputs = registrationBlock.querySelectorAll("input");
+    inputs.forEach(input => input.setAttribute("readonly", true));
+
+    // Replace note with lock indicator
+    registrationNote.textContent = "Registration Locked";
+    registrationNote.classList.add("lock-indicator");
+
+    // Hide button
+    btn.style.display = "none";
+
+    // Reveal Stage 02
+    assessmentStage.classList.remove("hidden");
 
   });
 
