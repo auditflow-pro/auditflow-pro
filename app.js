@@ -6,31 +6,45 @@ const questions = [
 ];
 
 let responses = {};
-let classification = "";
 let totalScore = 0;
+let classification = "";
+
+startAudit.onclick = () => {
+  registration.classList.add("hidden");
+  assessment.classList.remove("hidden");
+  renderQuestions();
+};
+
+backToRegistration.onclick = () => {
+  assessment.classList.add("hidden");
+  registration.classList.remove("hidden");
+};
+
+backToAssessment.onclick = () => {
+  determination.classList.add("hidden");
+  assessment.classList.remove("hidden");
+};
 
 function renderQuestions() {
   questionsContainer.innerHTML = "";
-  questions.forEach((q, i) => {
-    const block = document.createElement("div");
-    block.innerHTML = `
+  questions.forEach((q,i)=>{
+    const block=document.createElement("div");
+    block.innerHTML=`
       <p><strong>${q.section}</strong></p>
       <p>${q.text}</p>
-      <button onclick="recordResponse(${i},'YES')">YES</button>
-      <button onclick="recordResponse(${i},'NO')">NO</button>
-      <button onclick="recordResponse(${i},'N/A')">N/A</button>
+      <button onclick="record(${i},'YES')">YES</button>
+      <button onclick="record(${i},'NO')">NO</button>
+      <button onclick="record(${i},'N/A')">N/A</button>
       <hr>
     `;
     questionsContainer.appendChild(block);
   });
 }
 
-function recordResponse(index, value) {
-  responses[index] = value;
-}
+function record(i,val){ responses[i]=val; }
 
-completeAudit.onclick = () => {
-  totalScore = 0;
+completeAudit.onclick=()=>{
+  totalScore=0;
   questions.forEach((q,i)=>{
     if(responses[i]==="NO") totalScore+=q.weight;
   });
@@ -40,7 +54,7 @@ completeAudit.onclick = () => {
   else if(totalScore>=1) classification="MODERATE EXPOSURE IDENTIFIED";
   else classification="CONTROLLED EXPOSURE STATUS";
 
-  analysisPreview.innerHTML = `
+  analysisPreview.innerHTML=`
     <p><strong>Total Weighted Exposure Score:</strong> ${totalScore}</p>
     <div class="determination-box">
       FORMAL EXPOSURE DETERMINATION: ${classification}
@@ -51,29 +65,26 @@ completeAudit.onclick = () => {
   determination.classList.remove("hidden");
 };
 
-sealAudit.onclick = () => {
+sealAudit.onclick=()=>{
+  const now=new Date();
+  const recordID=`AFP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}-${now.getHours()}${now.getMinutes()}`;
 
-  const now = new Date();
-  const recordID = `AFP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}-${String(now.getHours()).padStart(2,"0")}${String(now.getMinutes()).padStart(2,"0")}`;
-
-  let sectionBreakdown = "";
-
-  const sections = [...new Set(questions.map(q=>q.section))];
+  let breakdown="";
+  const sections=[...new Set(questions.map(q=>q.section))];
 
   sections.forEach(sec=>{
-    let sectionScore=0;
-    let sectionItems="";
+    let secScore=0;
+    let secItems="";
     questions.forEach((q,i)=>{
       if(q.section===sec){
-        if(responses[i]==="NO") sectionScore+=q.weight;
-        sectionItems+=`<p>${q.text} — ${responses[i]||"N/A"}</p>`;
+        if(responses[i]==="NO") secScore+=q.weight;
+        secItems+=`<p>${q.text} — ${responses[i]||"N/A"}</p>`;
       }
     });
-
-    sectionBreakdown+=`
+    breakdown+=`
       <h3>${sec}</h3>
-      <p><strong>Section Score:</strong> ${sectionScore}</p>
-      ${sectionItems}
+      <p><strong>Section Score:</strong> ${secScore}</p>
+      ${secItems}
       <hr>
     `;
   });
@@ -97,30 +108,16 @@ sealAudit.onclick = () => {
 
     <div class="page-break"></div>
 
-    <h2>Section-Level Assessment Breakdown</h2>
-    ${sectionBreakdown}
+    <h2>Section Breakdown</h2>
+    ${breakdown}
 
     <div class="page-break"></div>
 
     <h2>Exposure Classification Scale</h2>
     <p>Critical (≥5), Major (3–4), Moderate (1–2), Controlled (0)</p>
 
-    <h2>Required Action Guidance</h2>
-    <p>Where Critical or Major exposure is identified, immediate corrective action planning is required. Moderate exposure requires scheduled remediation. Controlled status requires ongoing monitoring.</p>
-
-    <h2>Methodology</h2>
-    <p>Determination generated using calibrated weighted exposure criteria embedded within AuditFlow Pro.</p>
-
-    <h2>Disclaimer</h2>
-    <p>This instrument provides structured exposure determination and does not replace statutory regulatory requirements.</p>
-
-    <div class="page-break"></div>
-
     <h2>Formal Sealing</h2>
-    <p>This report has been formally sealed and time-stamped. Any alteration invalidates the record ID.</p>
-
-    <p>Consultant Signature ____________________________</p>
-    <p>Client Representative Signature ____________________________</p>
+    <p>This report has been formally sealed and any alteration invalidates the record ID.</p>
 
     <footer>AuditFlow Pro — Exposure Determination Instrument</footer>
   `;
