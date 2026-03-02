@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
-<link rel="stylesheet" href="styles.css?v=800">
+<link rel="stylesheet" href="styles.css?v=900">
 </head>
 
 <body>
@@ -63,38 +63,44 @@
 
   </section>
 
-  <!-- SEALED REGISTRATION HEADER -->
+  <!-- SEALED REGISTRATION PANEL -->
   <section id="registrationSummarySection" class="hidden">
 
-    <div class="record-header">
-      <div class="record-title">
-        Audit Registration — Registered
-      </div>
-      <div class="record-unlock">
-        <button id="unlockBtn" class="link-btn">Unlock Registration</button>
-      </div>
-    </div>
+    <div class="record-panel">
 
-    <div class="record-metadata">
-      <div class="record-item">
-        <div class="meta-label">Client / Organisation</div>
-        <div class="meta-value" id="summaryClient"></div>
+      <div class="record-panel-header">
+        <div class="record-title">
+          Audit Registration — Registered
+        </div>
+        <button id="unlockBtn" class="unlock-btn">
+          Unlock Registration
+        </button>
       </div>
 
-      <div class="record-item">
-        <div class="meta-label">Site / Location</div>
-        <div class="meta-value" id="summaryLocation"></div>
+      <div class="record-metadata">
+
+        <div class="record-item">
+          <div class="meta-label">Client / Organisation</div>
+          <div class="meta-value" id="summaryClient"></div>
+        </div>
+
+        <div class="record-item">
+          <div class="meta-label">Site / Location</div>
+          <div class="meta-value" id="summaryLocation"></div>
+        </div>
+
+        <div class="record-item">
+          <div class="meta-label">Assessment Reference</div>
+          <div class="meta-value" id="summaryRef"></div>
+        </div>
+
+        <div class="record-item">
+          <div class="meta-label">Date</div>
+          <div class="meta-value" id="summaryDate"></div>
+        </div>
+
       </div>
 
-      <div class="record-item">
-        <div class="meta-label">Assessment Reference</div>
-        <div class="meta-value" id="summaryRef"></div>
-      </div>
-
-      <div class="record-item">
-        <div class="meta-label">Date</div>
-        <div class="meta-value" id="summaryDate"></div>
-      </div>
     </div>
 
   </section>
@@ -120,7 +126,7 @@
   © 2026 AuditFlow Pro. Structured compliance guidance instrument. Not legal advice.
 </footer>
 
-<script src="app.js?v=800"></script>
+<script src="app.js?v=900"></script>
 
 </body>
 </html>
