@@ -1,3 +1,7 @@
+/* =========================
+   GLOBAL BASE
+========================= */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -11,7 +15,9 @@ body {
   padding: 0 24px;
 }
 
-/* HEADER */
+/* =========================
+   APPLICATION MODE
+========================= */
 
 header {
   background: #0f1a2b;
@@ -44,17 +50,11 @@ header .status {
   font-size: 13px;
 }
 
-/* PANELS */
-
 .panel {
   background: white;
   padding: 22px;
   border: 1px solid #d8dde6;
   margin-bottom: 28px;
-}
-
-h2, h3 {
-  margin-top: 0;
 }
 
 button {
@@ -81,7 +81,53 @@ select {
   color: #7a0c0c;
 }
 
-/* PRINT */
+/* =========================
+   DOCUMENT MODE
+========================= */
+
+body.document-mode {
+  background: white;
+}
+
+body.document-mode #app {
+  max-width: none;
+  margin: 0;
+  padding: 40px;
+}
+
+body.document-mode header {
+  display: none;
+}
+
+.document-container {
+  max-width: 850px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.document-container h1 {
+  margin-bottom: 4px;
+}
+
+.document-container hr {
+  margin: 24px 0;
+  border: none;
+  border-top: 1px solid #000;
+}
+
+.record-id {
+  white-space: nowrap;
+}
+
+.document-footer {
+  margin-top: 40px;
+  font-size: 13px;
+}
+
+/* =========================
+   PRINT MODE
+========================= */
 
 @media print {
 
@@ -93,29 +139,12 @@ select {
     display: none !important;
   }
 
-  header {
-    background: white;
-    color: black;
+  body.document-mode #app {
+    padding: 20mm;
   }
 
-  header::after {
-    background: black;
+  .document-container {
+    max-width: none;
   }
 
-  .panel {
-    border: none;
-    page-break-inside: avoid;
-  }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    font-size: 12px;
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid black;
-    padding: 8px 24px;
-  }
 }
