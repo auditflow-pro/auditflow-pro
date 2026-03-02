@@ -1,34 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AuditFlow Pro — Institutional Exposure Instrument</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>AuditFlow Pro — Institutional Exposure Determination Instrument</title>
 
-<link rel="stylesheet" href="styles.css?v=2000">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f1c2e">
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0f1c2e" />
+
+<link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-<header>
-  <div class="header-inner">
-    <h1>AuditFlow Pro</h1>
-    <p>Institutional Exposure Determination Instrument</p>
-    <div class="gold-bar"></div>
-  </div>
+<header class="app-header">
+    <div class="header-inner">
+        <h1>AuditFlow Pro</h1>
+        <p>Institutional Exposure Determination Instrument</p>
+    </div>
 </header>
 
-<main id="app"></main>
+<main class="app-main">
 
-<script src="app.js?v=2000"></script>
+    <section class="card">
 
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
+        <div class="version-block">
+            Version: v3.0 Global Institutional Baseline
+        </div>
+
+        <h2>Audit Registration</h2>
+
+        <form id="registration-form" novalidate>
+
+            <div class="form-group">
+                <label for="consultant">Consultant Name</label>
+                <input class="input-field" id="consultant" type="text" placeholder="Consultant Name" />
+            </div>
+
+            <div class="form-group">
+                <label for="organisation">Organisation</label>
+                <input class="input-field" id="organisation" type="text" placeholder="Organisation" />
+            </div>
+
+            <div class="form-group">
+                <label for="client">Client / Site Name</label>
+                <input class="input-field" id="client" type="text" placeholder="Client / Site Name" />
+            </div>
+
+            <div class="form-group">
+                <label for="auditTitle">Audit Title</label>
+                <input class="input-field" id="auditTitle" type="text" placeholder="Audit Title" />
+            </div>
+
+            <div class="form-group">
+                <label for="assessmentDate">Assessment Date</label>
+                <input class="input-field" id="assessmentDate" type="date" />
+            </div>
+
+            <button type="button" class="primary-button">
+                Commence Assessment
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="app.js"></script>
 
 </body>
 </html>
