@@ -1,19 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AuditFlow Pro</title>
-
-<link rel="stylesheet" href="styles.css?v=1203">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AuditFlow Pro — Exposure Determination Instrument</title>
+<link rel="stylesheet" href="styles.css?v=1200" />
 </head>
+
 <body>
 
-<div id="app">
-  <header id="header"></header>
-  <main id="main"></main>
-</div>
+<header class="app-header">
+    <div class="brand-block">
+        <div class="brand-title">AuditFlow Pro</div>
+        <div class="brand-sub">Exposure Determination Instrument</div>
+    </div>
+    <div class="version-block">
+        Instrument Version v1.0
+    </div>
+</header>
 
-<script src="app.js?v=1203"></script>
+<main id="app">
+
+    <section class="registration-panel" id="registrationPanel">
+        <h2>Audit Registration</h2>
+
+        <div class="field-group">
+            <label>Consultant Name</label>
+            <input id="consultantName" type="text" autocomplete="off" />
+        </div>
+
+        <div class="field-group">
+            <label>Client Name</label>
+            <input id="clientName" type="text" autocomplete="off" />
+        </div>
+
+        <div class="field-group">
+            <label>Audit Title</label>
+            <input id="auditTitle" type="text" autocomplete="off" />
+        </div>
+
+        <div class="field-group">
+            <label>Assessment Date</label>
+            <input id="assessmentDate" type="date" />
+        </div>
+
+        <button id="startAuditBtn" class="primary-btn">Initiate Assessment</button>
+    </section>
+
+    <section id="assessmentSection" class="hidden">
+        <div id="domainsContainer"></div>
+
+        <div id="globalExposureBlock" class="exposure-block hidden"></div>
+
+        <div class="seal-block">
+            <button id="sealBtn" class="primary-btn">Seal Assessment</button>
+        </div>
+    </section>
+
+    <section id="documentSection" class="hidden document-mode">
+        <div id="documentContent"></div>
+
+        <div class="record-actions">
+            <h3>Record Actions</h3>
+            <button id="exportBtn" class="primary-btn">Export / Issue Record</button>
+
+            <div id="exportOptions" class="hidden export-options">
+                <button id="printBtn">Print / Save as PDF</button>
+                <button id="cancelExportBtn">Cancel</button>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="app-footer">
+    © AuditFlow Pro — Professional Instrument System
+</footer>
+
+<script src="app.js?v=1200"></script>
 </body>
 </html>
