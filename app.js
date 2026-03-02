@@ -1,39 +1,54 @@
 const questions = [
-  "Fire detection system operational?",
-  "Emergency exits unobstructed?",
-  "Electrical systems maintained?",
-  "Housekeeping standards acceptable?"
+  { text: "Fire detection system operational?", weight: 3 },
+  { text: "Emergency exits unobstructed?", weight: 3 },
+  { text: "Electrical systems maintained?", weight: 2 },
+  { text: "Housekeeping standards acceptable?", weight: 1 }
 ];
 
 let responses = {};
+let determinationResult = "";
 let recordID = "";
 let sealTimestamp = "";
 
-const container = document.getElementById("questionsContainer");
+/* NAVIGATION */
 
-document.getElementById("startAudit").onclick = () => {
-  if (!orgName.value || !clientName.value || !auditTitle.value || !assessmentDate.value) {
+startAudit.onclick = () => {
+  if (!consultantName.value || !orgName.value || !clientName.value || !auditTitle.value || !assessmentDate.value) {
     alert("All registration fields must be completed.");
     return;
   }
 
-  document.getElementById("registration").classList.add("hidden");
-  document.getElementById("assessment").classList.remove("hidden");
+  registration.classList.add("hidden");
+  assessment.classList.remove("hidden");
+  renderQuestions();
+};
 
-  container.innerHTML = "";
+backToRegistration.onclick = () => {
+  assessment.classList.add("hidden");
+  registration.classList.remove("hidden");
+};
 
+backToAssessment.onclick = () => {
+  determination.classList.add("hidden");
+  assessment.classList.remove("hidden");
+};
+
+/* RENDER QUESTIONS */
+
+function renderQuestions() {
+  questionsContainer.innerHTML = "";
   questions.forEach((q, i) => {
     const block = document.createElement("div");
     block.className = "question";
     block.innerHTML = `
-      <div><strong>${q}</strong></div>
+      <div><strong>${q.text}</strong></div>
       <div class="answer-row">
         <button class="yes">YES</button>
         <button class="no">NO</button>
         <button class="na">N/A</button>
       </div>
     `;
-    container.appendChild(block);
+    questionsContainer.appendChild(block);
 
     const buttons = block.querySelectorAll("button");
     buttons.forEach(btn => {
@@ -44,66 +59,96 @@ document.getElementById("startAudit").onclick = () => {
       };
     });
   });
+}
+
+/* DETERMINATION ENGINE */
+
+completeAudit.onclick = () => {
+
+  let score = 0;
+
+  questions.forEach((q, i) => {
+    if (responses[i] === "NO") {
+      score += q.weight;
+    }
+  });
+
+  if (score >= 5) {
+    determinationResult = "CRITICAL EXPOSURE IDENTIFIED";
+  } else if (score >= 3) {
+    determinationResult = "MAJOR EXPOSURE IDENTIFIED";
+  } else if (score >= 1) {
+    determinationResult = "MODERATE EXPOSURE IDENTIFIED";
+  } else {
+    determinationResult = "CONTROLLED EXPOSURE STATUS";
+  }
+
+  assessment.classList.add("hidden");
+  determination.classList.remove("hidden");
+
+  determinationBlock.innerHTML = `
+    <div class="determination-box">
+      FORMAL EXPOSURE DETERMINATION: ${determinationResult}
+    </div>
+  `;
 };
 
-document.getElementById("completeAudit").onclick = () => {
-  document.getElementById("assessment").classList.add("hidden");
-  document.getElementById("determination").classList.remove("hidden");
+/* SEAL */
 
-  const critical = Object.values(responses).includes("NO");
+sealAudit.onclick = () => {
 
-  document.getElementById("determinationBlock").innerHTML =
-    `<div class="determination-box">
-      FORMAL EXPOSURE DETERMINATION: 
-      ${critical ? "CRITICAL EXPOSURE IDENTIFIED" : "NO CRITICAL EXPOSURE IDENTIFIED"}
-    </div>`;
-};
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,"0");
+  const d = String(now.getDate()).padStart(2,"0");
+  const h = String(now.getHours()).padStart(2,"0");
+  const min = String(now.getMinutes()).padStart(2,"0");
 
-document.getElementById("sealAudit").onclick = () => {
-  recordID = "AFP-" + Date.now();
-  sealTimestamp = new Date().toISOString();
+  recordID = `AFP-${y}${m}${d}-${h}${min}`;
+  sealTimestamp = now.toISOString();
 
-  document.getElementById("determination").classList.add("hidden");
-  document.getElementById("record").classList.remove("hidden");
+  determination.classList.add("hidden");
+  record.classList.remove("hidden");
 
-  let html = `
+  recordContent.innerHTML = `
     <h2>Exposure Determination Record</h2>
+
     <p><strong>Record ID:</strong> ${recordID}</p>
     <p><strong>Instrument Version:</strong> v1.0</p>
     <p><strong>Seal Timestamp:</strong> ${sealTimestamp}</p>
+
     <hr>
+
+    <p><strong>Consultant:</strong> ${consultantName.value}</p>
     <p><strong>Organisation:</strong> ${orgName.value}</p>
     <p><strong>Client:</strong> ${clientName.value}</p>
     <p><strong>Audit:</strong> ${auditTitle.value}</p>
     <p><strong>Date:</strong> ${assessmentDate.value}</p>
-    <hr>
-  `;
 
-  questions.forEach((q, i) => {
-    html += `<p><strong>${q}</strong> — ${responses[i] || "N/A"}</p>`;
-  });
-
-  html += `
     <hr>
+
+    ${questions.map((q,i)=>`
+      <p><strong>${q.text}</strong> — ${responses[i] || "N/A"}</p>
+    `).join("")}
+
+    <hr>
+
     <div class="determination-box">
-      FORMAL EXPOSURE DETERMINATION CONFIRMED
+      FORMAL EXPOSURE DETERMINATION: ${determinationResult}
     </div>
 
-    <p><strong>Disclaimer:</strong> 
-    This instrument provides a structured exposure determination based on recorded responses at the time of assessment. It does not replace statutory compliance obligations or jurisdiction-specific regulatory requirements.</p>
+    <p><strong>Methodology:</strong> Determination generated using calibrated weighted exposure criteria embedded within AuditFlow Pro.</p>
 
-    <div class="signature-block">
-      <div class="signature-line"></div>
-      <p>Consultant Signature</p>
+    <p><strong>Disclaimer:</strong> This instrument provides a structured exposure determination based on recorded responses at the time of assessment. It does not replace statutory compliance obligations or jurisdiction-specific regulatory requirements.</p>
 
-      <div class="signature-line"></div>
-      <p>Client Representative Signature</p>
-    </div>
+    <p>This record has been formally sealed and time-stamped. Any alteration invalidates the record ID.</p>
+
+    <div class="signature-line"></div>
+    <p>Consultant Signature</p>
+
+    <div class="signature-line"></div>
+    <p>Client Representative Signature</p>
   `;
-
-  document.getElementById("recordContent").innerHTML = html;
 };
 
-document.getElementById("exportPDF").onclick = () => {
-  window.print();
-};
+exportPDF.onclick = () => window.print();
