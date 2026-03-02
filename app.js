@@ -1,4 +1,4 @@
-const VERSION = "v1.6 Institutional";
+const VERSION = "v2.0 Institutional Baseline";
 
 const CONTROLS = [
   { id:1, domain:"Fire Safety", text:"Fire detection system operational?", weight:4 },
@@ -14,7 +14,6 @@ const CONTROLS = [
 ];
 
 let responses = {};
-let index = 0;
 
 const app = document.getElementById("app");
 
@@ -25,32 +24,39 @@ function renderRegistration(){
       Version: ${VERSION} | Methodology: Weighted Domain Severity Model
     </div>
     <h2>Audit Registration</h2>
-    <input id="consultant" placeholder="Consultant Name">
-    <input id="organisation" placeholder="Organisation">
-    <input id="client" placeholder="Client">
-    <input id="title" placeholder="Audit Title">
+
+    <label>Consultant Name</label>
+    <input id="consultant">
+
+    <label>Organisation</label>
+    <input id="organisation">
+
+    <label>Client</label>
+    <input id="client">
+
+    <label>Audit Title</label>
+    <input id="title">
+
+    <label>Assessment Date</label>
     <input id="date" type="date">
-    <button class="primary" onclick="start()">Commence Assessment</button>
+
+    <button class="primary" onclick="renderAssessment()">Commence Assessment</button>
   </div>`;
 }
 
-function start(){
-  renderAssessment();
-}
-
 function renderAssessment(){
-
   let grouped = {};
   CONTROLS.forEach(c=>{
     if(!grouped[c.domain]) grouped[c.domain]=[];
     grouped[c.domain].push(c);
   });
 
-  let html = `<div class="card">
-  <div class="instrument-meta">
-    Version: ${VERSION} | Structured Institutional Classification
-  </div>
-  <h2>Structured Exposure Assessment</h2>`;
+  let html = `
+  <div class="card">
+    <div class="instrument-meta">
+      Version: ${VERSION} | Structured Institutional Classification
+    </div>
+    <h2>Structured Exposure Assessment</h2>`;
 
   Object.keys(grouped).forEach(domain=>{
     html += `<div class="domain-title"><strong>${domain}</strong></div>`;
@@ -80,19 +86,15 @@ function selectResponse(id,val){
 }
 
 function determine(){
-
-  let total=0, max=0;
-
+  let total=0,max=0;
   CONTROLS.forEach(c=>{
     if(responses[c.id]!=="NA"){
-      max += c.weight*2;
-      if(responses[c.id]==="NO"){
-        total += c.weight*2;
-      }
+      max+=c.weight*2;
+      if(responses[c.id]==="NO") total+=c.weight*2;
     }
   });
 
-  const percent = max===0?0:Math.round((total/max)*100);
+  const percent=max===0?0:Math.round((total/max)*100);
 
   let level="";
   if(percent<=10) level="Level 1 – Controlled Environment";
@@ -100,14 +102,20 @@ function determine(){
   else if(percent<=50) level="Level 3 – Significant Exposure";
   else level="Level 4 – Critical Exposure";
 
-  app.innerHTML = `
+  const id="AFP-"+Date.now();
+  const timestamp=new Date().toISOString();
+
+  app.innerHTML=`
   <div class="card">
     <div class="instrument-meta">
       Version: ${VERSION} | Deterministic Classification Output
     </div>
+
     <h2>Institutional Determination</h2>
 
     <div class="certificate-block">
+      <p><strong>Determination ID:</strong> ${id}</p>
+      <p><strong>Timestamp:</strong> ${timestamp}</p>
       <p><strong>Exposure Ratio:</strong> ${percent}%</p>
       <h3>${level}</h3>
       <p>This determination is derived from weighted domain severity modelling.</p>
