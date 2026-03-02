@@ -1,13 +1,10 @@
 {
-  "name": "AuditFlow Pro — Exposure Determination Instrument",
-  "short_name": "AuditFlow Pro",
-  "description": "Professional offline exposure determination instrument with structured audit reporting and sealed record generation.",
-  "start_url": "./index.html",
-  "scope": "./",
+  "name": "AuditFlow Pro",
+  "short_name": "AuditFlow",
+  "start_url": ".",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#1f2a33",
+  "theme_color": "#0f1c2e",
   "icons": [
     {
       "src": "icon-192.png",
