@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
-<link rel="stylesheet" href="styles.css?v=700">
+<link rel="stylesheet" href="styles.css?v=800">
 </head>
 
 <body>
@@ -18,63 +18,101 @@
 
 <main class="instrument-surface">
 
-  <!-- STAGE 01 -->
-  <div class="surface-header">
-    Audit Registration
-  </div>
+  <!-- STAGE 01 FORM -->
+  <section id="registrationFormSection">
 
-  <div class="surface-body" id="registrationBlock">
-
-    <div class="field-group">
-      <label>Client / Organisation</label>
-      <input type="text" id="clientName" autocomplete="off">
+    <div class="section-header">
+      Audit Registration
     </div>
 
-    <div class="field-group">
-      <label>Site / Location</label>
-      <input type="text" id="siteLocation" autocomplete="off">
-    </div>
+    <div class="section-body">
 
-    <div class="field-row">
-      <div class="field-group half">
-        <label>Assessment Reference</label>
-        <input type="text" id="assessmentRef" autocomplete="off">
+      <div class="field-group">
+        <label>Client / Organisation</label>
+        <input type="text" id="clientName">
       </div>
 
-      <div class="field-group half">
-        <label>Date</label>
-        <input type="date" id="assessmentDate">
+      <div class="field-group">
+        <label>Site / Location</label>
+        <input type="text" id="siteLocation">
+      </div>
+
+      <div class="field-row">
+        <div class="field-group half">
+          <label>Assessment Reference</label>
+          <input type="text" id="assessmentRef">
+        </div>
+
+        <div class="field-group half">
+          <label>Date</label>
+          <input type="date" id="assessmentDate">
+        </div>
+      </div>
+
+      <div class="procedural-note" id="registrationNote">
+        All scope parameters must be defined prior to commencement.
+      </div>
+
+      <div class="action-zone">
+        <button class="primary-btn" id="registerBtn">
+          Register Audit
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SEALED REGISTRATION HEADER -->
+  <section id="registrationSummarySection" class="hidden">
+
+    <div class="record-header">
+      <div class="record-title">
+        Audit Registration — Registered
+      </div>
+      <div class="record-unlock">
+        <button id="unlockBtn" class="link-btn">Unlock Registration</button>
       </div>
     </div>
 
-    <div class="procedural-note" id="registrationNote">
-      All scope parameters must be defined prior to commencement.
+    <div class="record-metadata">
+      <div class="record-item">
+        <div class="meta-label">Client / Organisation</div>
+        <div class="meta-value" id="summaryClient"></div>
+      </div>
+
+      <div class="record-item">
+        <div class="meta-label">Site / Location</div>
+        <div class="meta-value" id="summaryLocation"></div>
+      </div>
+
+      <div class="record-item">
+        <div class="meta-label">Assessment Reference</div>
+        <div class="meta-value" id="summaryRef"></div>
+      </div>
+
+      <div class="record-item">
+        <div class="meta-label">Date</div>
+        <div class="meta-value" id="summaryDate"></div>
+      </div>
     </div>
 
-    <div class="action-zone">
-      <button class="primary-btn" id="commenceBtn">
-        Proceed to Assessment
-      </button>
-    </div>
-
-  </div>
+  </section>
 
   <!-- STAGE 02 -->
-  <div id="assessmentStage" class="assessment-stage hidden">
+  <section id="assessmentSection" class="hidden">
 
-    <div class="surface-header stage-two-header">
+    <div class="section-header">
       Structured Assessment
     </div>
 
-    <div class="surface-body">
-
+    <div class="section-body">
       <div class="assessment-placeholder">
         Assessment framework will render here.
       </div>
-
     </div>
 
-  </div>
+  </section>
 
 </main>
 
@@ -82,7 +120,7 @@
   © 2026 AuditFlow Pro. Structured compliance guidance instrument. Not legal advice.
 </footer>
 
-<script src="app.js?v=700"></script>
+<script src="app.js?v=800"></script>
 
 </body>
 </html>
