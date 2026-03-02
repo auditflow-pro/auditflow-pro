@@ -1,4 +1,4 @@
-const VERSION = "v1.2 Elite";
+const VERSION = "v1.3 Elite Advisory";
 
 const CONTROLS = [
   { id:1, text:"Fire detection system operational?", weight:4 },
@@ -87,9 +87,11 @@ function resetAll(){
 }
 
 function determine(){
+
   let total=0;
   let max=0;
   let failed=[];
+  let passed=[];
 
   CONTROLS.forEach(c=>{
     if(responses[c.id]!=="NA"){
@@ -97,6 +99,8 @@ function determine(){
       if(responses[c.id]==="NO"){
         total+=c.weight*2;
         failed.push(c.text);
+      } else if(responses[c.id]==="YES"){
+        passed.push(c.text);
       }
     }
   });
@@ -109,6 +113,11 @@ function determine(){
   else if(percent<=50) level="Level 3 – Significant Exposure";
   else level="Level 4 – Critical Exposure";
 
+  renderResult(percent,level,total,max,failed,passed);
+}
+
+function renderResult(percent,level,total,max,failed,passed){
+
   app.innerHTML=`
   <div class="card">
     <h2>Formal Exposure Determination</h2>
@@ -118,16 +127,64 @@ function determine(){
     <h3>${level}</h3>
 
     <h4>Determination Basis</h4>
-    <p>Failed Controls:</p>
     <ul>${failed.map(f=>`<li>${f}</li>`).join("")}</ul>
 
     <button class="secondary" onclick="renderRegistration()">New Assessment</button>
-    <button class="primary" onclick="exportPDF('${percent}','${level}',${total},${max})">Generate Report</button>
+    <button class="primary" onclick="generatePDF('${percent}','${level}',${total},${max},${JSON.stringify(failed)})">
+      Generate Professional Report
+    </button>
   </div>`;
 }
 
-function exportPDF(percent,level,total,max){
-  window.print();
+function generatePDF(percent,level,total,max,failedJSON){
+
+  const failed = JSON.parse(failedJSON);
+  const timestamp = new Date().toLocaleString();
+
+  const report = `
+  <div>
+    <h1>AuditFlow Pro — Exposure Determination Report</h1>
+    <p><strong>Instrument Version:</strong> ${VERSION}</p>
+    <p><strong>Generated:</strong> ${timestamp}</p>
+    <hr>
+
+    <h2>Registration Details</h2>
+    <p><strong>Consultant:</strong> ${meta.consultant}</p>
+    <p><strong>Organisation:</strong> ${meta.organisation}</p>
+    <p><strong>Client:</strong> ${meta.client}</p>
+    <p><strong>Audit Title:</strong> ${meta.title}</p>
+    <p><strong>Assessment Date:</strong> ${meta.date}</p>
+
+    <div style="page-break-after:always;"></div>
+
+    <h2>Exposure Summary</h2>
+    <p><strong>Weighted Score:</strong> ${total} / ${max}</p>
+    <p><strong>Exposure Ratio:</strong> ${percent}%</p>
+    <h3>${level}</h3>
+
+    <div style="page-break-after:always;"></div>
+
+    <h2>Failed Controls</h2>
+    <ul>${failed.map(f=>`<li>${f}</li>`).join("")}</ul>
+
+    <h2>Advisory Framework</h2>
+    <p><strong>Immediate Action:</strong> Address failed life-safety controls without delay.</p>
+    <p><strong>Short-Term:</strong> Implement corrective plan within defined review period.</p>
+    <p><strong>Review Interval:</strong> Reassess following remediation actions.</p>
+
+    <div style="page-break-after:always;"></div>
+
+    <h2>Formal Sealing</h2>
+    <p>This document represents a structured exposure determination based on weighted domain severity modelling.</p>
+    <br><br>
+    <p>Consultant Signature: ____________________________</p>
+    <p>Client Representative Signature: ____________________________</p>
+  </div>`;
+
+  const printWindow = window.open("", "", "width=900,height=700");
+  printWindow.document.write(report);
+  printWindow.document.close();
+  printWindow.print();
 }
 
 renderRegistration();
