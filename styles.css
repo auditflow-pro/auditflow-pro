@@ -8,8 +8,6 @@ html, body {
   color: #111821;
 }
 
-/* HEADER */
-
 .title-plate {
   background: #16232e;
   color: #ffffff;
@@ -17,15 +15,10 @@ html, body {
   border-bottom: 2px solid #c8a94a;
 }
 
-.title-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+.title-inner { max-width: 1100px; margin: 0 auto; }
 
 .brand-title { font-size: 20px; font-weight: 700; }
 .brand-sub { font-size: 12px; opacity: 0.85; }
-
-/* SURFACE */
 
 .instrument-surface {
   max-width: 1100px;
@@ -39,20 +32,11 @@ html, body {
   padding-bottom: 14px;
   border-bottom: 1px solid #cfd8df;
   margin-bottom: 40px;
-  letter-spacing: 0.3px;
 }
 
-.section-body {
-  max-width: 720px;
-}
+.section-body { max-width: 720px; }
 
-/* FORM */
-
-.field-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 26px;
-}
+.field-group { display: flex; flex-direction: column; margin-bottom: 26px; }
 
 .field-group label {
   font-size: 12px;
@@ -66,18 +50,9 @@ html, body {
   font-size: 14px;
   border: 1px solid #ccd6dd;
   background: #ffffff;
-  outline: none;
 }
 
-.field-group input:focus {
-  border-color: #16232e;
-}
-
-.field-row {
-  display: flex;
-  gap: 20px;
-}
-
+.field-row { display: flex; gap: 20px; }
 .half { flex: 1; }
 
 .procedural-note {
@@ -86,13 +61,10 @@ html, body {
   margin-bottom: 36px;
 }
 
-.action-zone {
-  display: flex;
-  justify-content: flex-end;
-}
+.action-zone { display: flex; justify-content: flex-end; }
 
 .primary-btn {
-  width: 200px;
+  width: 220px;
   height: 44px;
   font-size: 13px;
   font-weight: 600;
@@ -102,11 +74,10 @@ html, body {
   cursor: pointer;
 }
 
-.primary-btn:hover {
-  background: #0f1a22;
+.primary-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
-
-/* RECORD PANEL (GRAVITAS) */
 
 .record-panel {
   max-width: 820px;
@@ -123,18 +94,15 @@ html, body {
   margin-bottom: 24px;
 }
 
-.record-title {
-  font-size: 14px;
-  font-weight: 600;
-}
+.record-title { font-size: 14px; font-weight: 600; }
 
 .unlock-btn {
   background: none;
   border: none;
   font-size: 12px;
-  color: #16232e;
-  cursor: pointer;
   text-decoration: underline;
+  cursor: pointer;
+  color: #16232e;
 }
 
 .record-metadata {
@@ -143,10 +111,7 @@ html, body {
   gap: 28px 40px;
 }
 
-.record-item {
-  display: flex;
-  flex-direction: column;
-}
+.record-item { display: flex; flex-direction: column; }
 
 .meta-label {
   font-size: 11px;
@@ -159,38 +124,45 @@ html, body {
   font-weight: 500;
 }
 
-/* STAGE 02 */
+/* ARCHITECTURE */
 
-.assessment-placeholder {
+.architecture-grid {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 18px 30px;
+  margin-bottom: 30px;
+}
+
+.arch-item { display: contents; }
+
+.arch-label {
   font-size: 13px;
-  color: #55616c;
+  font-weight: 500;
+}
+
+.weight-input {
+  height: 36px;
+  padding: 0 8px;
+  font-size: 14px;
+  border: 1px solid #ccd6dd;
+}
+
+.architecture-total {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.architecture-total.valid {
+  font-weight: 600;
+  color: #16232e;
 }
 
 .hidden { display: none; }
-
-/* FOOTER */
 
 .footer {
   text-align: center;
   padding: 60px 20px;
   font-size: 11px;
   color: #6b7682;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 768px) {
-
-  .record-metadata {
-    grid-template-columns: 1fr;
-  }
-
-  .field-row {
-    flex-direction: column;
-  }
-
-  .action-zone {
-    justify-content: center;
-  }
-
 }
