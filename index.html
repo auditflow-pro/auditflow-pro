@@ -4,194 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
-<link rel="stylesheet" href="styles.css?v=1000">
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<header class="title-plate">
-  <div class="title-inner">
-    <div class="brand-title">AuditFlow Pro</div>
-    <div class="brand-sub">Professional Compliance Instrument</div>
+<header class="header">
+  <div class="header-inner">
+    <h1>AuditFlow Pro</h1>
+    <div class="header-actions">
+      <button id="determineBtn" class="primary-btn">Determine Exposure</button>
+    </div>
   </div>
 </header>
 
-<main class="instrument-surface">
+<main class="container">
 
-  <!-- STAGE 01 — REGISTRATION -->
-  <section id="registrationFormSection">
+<section class="stage">
+  <h2>Stage 01 — Audit Registration</h2>
+  <div class="form-grid">
+    <input id="clientName" type="text" placeholder="Client Name" autocapitalize="words">
+    <input id="auditTitle" type="text" placeholder="Audit Title" autocapitalize="words">
+    <input id="auditDate" type="date">
+  </div>
+</section>
 
-    <div class="section-header">
-      Audit Registration
-    </div>
+<section class="stage">
+  <h2>Stage 02 — Assessment Architecture — Calibrated</h2>
+  <p class="muted">
+    This instrument applies a predefined exposure calibration model across four core domains.
+  </p>
+</section>
 
-    <div class="section-body">
+<div id="domains"></div>
 
-      <div class="field-group">
-        <label>Client / Organisation</label>
-        <input type="text" id="clientName">
-      </div>
-
-      <div class="field-group">
-        <label>Site / Location</label>
-        <input type="text" id="siteLocation">
-      </div>
-
-      <div class="field-row">
-        <div class="field-group half">
-          <label>Assessment Reference</label>
-          <input type="text" id="assessmentRef">
-        </div>
-
-        <div class="field-group half">
-          <label>Date</label>
-          <input type="date" id="assessmentDate">
-        </div>
-      </div>
-
-      <div class="procedural-note" id="registrationNote">
-        All scope parameters must be defined prior to commencement.
-      </div>
-
-      <div class="action-zone">
-        <button class="primary-btn" id="registerBtn">
-          Register Audit
-        </button>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- SEALED REGISTRATION PANEL -->
-  <section id="registrationSummarySection" class="hidden">
-
-    <div class="record-panel">
-
-      <div class="record-panel-header">
-        <div class="record-title">
-          Audit Registration — Registered
-        </div>
-        <button id="unlockRegistrationBtn" class="unlock-btn">
-          Unlock Registration
-        </button>
-      </div>
-
-      <div class="record-metadata">
-        <div class="record-item">
-          <div class="meta-label">Client / Organisation</div>
-          <div class="meta-value" id="summaryClient"></div>
-        </div>
-
-        <div class="record-item">
-          <div class="meta-label">Site / Location</div>
-          <div class="meta-value" id="summaryLocation"></div>
-        </div>
-
-        <div class="record-item">
-          <div class="meta-label">Assessment Reference</div>
-          <div class="meta-value" id="summaryRef"></div>
-        </div>
-
-        <div class="record-item">
-          <div class="meta-label">Date</div>
-          <div class="meta-value" id="summaryDate"></div>
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- STAGE 02 — ARCHITECTURE -->
-  <section id="architectureSection" class="hidden">
-
-    <div class="record-panel">
-
-      <div class="record-panel-header">
-        <div class="record-title">
-          Assessment Architecture — Configuration
-        </div>
-      </div>
-
-      <div class="architecture-grid">
-
-        <div class="arch-item">
-          <div class="arch-label">Site & Environment</div>
-          <input type="number" min="0" max="100" value="25" class="weight-input" data-domain="environment">
-        </div>
-
-        <div class="arch-item">
-          <div class="arch-label">Equipment & Infrastructure</div>
-          <input type="number" min="0" max="100" value="25" class="weight-input" data-domain="infrastructure">
-        </div>
-
-        <div class="arch-item">
-          <div class="arch-label">Operational Controls</div>
-          <input type="number" min="0" max="100" value="25" class="weight-input" data-domain="operations">
-        </div>
-
-        <div class="arch-item">
-          <div class="arch-label">People & Process</div>
-          <input type="number" min="0" max="100" value="25" class="weight-input" data-domain="people">
-        </div>
-
-      </div>
-
-      <div class="architecture-total" id="weightTotal">
-        Total Allocation: 100%
-      </div>
-
-      <div class="action-zone">
-        <button class="primary-btn" id="confirmArchitectureBtn">
-          Confirm Architecture
-        </button>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- SEALED ARCHITECTURE HEADER -->
-  <section id="architectureSummarySection" class="hidden">
-
-    <div class="record-panel">
-
-      <div class="record-panel-header">
-        <div class="record-title">
-          Assessment Architecture — Locked
-        </div>
-      </div>
-
-      <div class="record-metadata" id="architectureSummaryContent">
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- STAGE 03 -->
-  <section id="assessmentSection" class="hidden">
-
-    <div class="section-header">
-      Structured Assessment
-    </div>
-
-    <div class="section-body">
-      <div class="assessment-placeholder">
-        Domain-based scoring framework will render here.
-      </div>
-    </div>
-
-  </section>
+<section class="stage" id="determinationSection">
+  <h2>Stage 04 — Exposure Determination</h2>
+  <div id="determinationRecord"></div>
+</section>
 
 </main>
 
-<footer class="footer">
-  © 2026 AuditFlow Pro. Structured compliance guidance instrument. Not legal advice.
-</footer>
-
-<script src="app.js?v=1000"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
