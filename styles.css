@@ -1,103 +1,85 @@
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f4f5f7;
-  color: #1a1a1a;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #e9ebef;
+  color: #111;
 }
 
-.app-header {
-  background: linear-gradient(180deg,#1e2a36,#16202a);
+header {
+  background: linear-gradient(135deg, #0f1c2e, #1c2d45);
   color: white;
-  padding: 28px 0;
   text-align: center;
+  padding: 30px 20px 15px;
 }
 
-.brand-title { font-size: 26px; font-weight: 700; }
-.brand-sub { font-size: 13px; opacity: 0.85; }
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
 
-.gold-bar { height: 4px; background: #c6a34b; }
+header p {
+  margin: 5px 0 0;
+  opacity: 0.9;
+}
 
-.container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+.gold-bar {
+  height: 4px;
+  background: #c7a740;
+  margin-top: 15px;
+}
 
-.panel {
+main {
+  padding: 30px 20px 60px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.card {
   background: white;
-  padding: 40px;
-  border-radius: 14px;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.05);
-  margin-bottom: 40px;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
 }
 
-.hidden { display: none; }
-
-label { display: block; margin-top: 18px; font-weight: 600; }
+h2 {
+  margin-top: 0;
+}
 
 input {
   width: 100%;
   padding: 14px;
-  border: 2px solid #2f3b46;
+  margin: 10px 0 20px;
   border-radius: 10px;
-  margin-top: 6px;
+  border: 2px solid #2e3a46;
+  font-size: 1rem;
 }
 
-button {
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-primary {
-  margin-top: 28px;
-  padding: 14px 22px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(180deg,#2f3b46,#1f2a33);
+button.primary {
+  background: linear-gradient(135deg, #1c2d45, #0f1c2e);
   color: white;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-.btn-secondary {
-  padding: 14px 22px;
-  border-radius: 10px;
-  border: 2px solid #2f3b46;
+button.secondary {
   background: white;
+  border: 2px solid #2e3a46;
+  color: #1c2d45;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
-.nav-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
+.option-group {
+  margin-bottom: 25px;
 }
 
-.determination-box {
-  border: 2px solid #000;
-  padding: 20px;
-  margin: 25px 0;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-@media print {
-
-  body { background: white; font-size: 12pt; }
-
-  .no-print, .app-header, button {
-    display: none !important;
-  }
-
-  .panel {
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-  }
-
-  .page-break { page-break-before: always; }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    font-size: 10pt;
-    width: 100%;
-    border-top: 1px solid black;
-    padding-top: 4px;
-  }
+.option-group button {
+  margin-right: 10px;
+  margin-top: 10px;
 }
