@@ -106,15 +106,21 @@ html, body {
   background: #0f1a22;
 }
 
-/* RECORD HEADER */
+/* RECORD PANEL (GRAVITAS) */
 
-.record-header {
+.record-panel {
+  max-width: 820px;
+  border: 1px solid #d5dde3;
+  background: #ffffff;
+  padding: 28px 30px 32px;
+  margin-bottom: 60px;
+}
+
+.record-panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #cfd8df;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .record-title {
@@ -122,22 +128,24 @@ html, body {
   font-weight: 600;
 }
 
-.link-btn {
+.unlock-btn {
   background: none;
   border: none;
-  color: #16232e;
   font-size: 12px;
+  color: #16232e;
   cursor: pointer;
   text-decoration: underline;
 }
 
 .record-metadata {
-  max-width: 720px;
-  margin-bottom: 60px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 40px;
 }
 
 .record-item {
-  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
 }
 
 .meta-label {
@@ -171,8 +179,18 @@ html, body {
 
 /* RESPONSIVE */
 
-@media (max-width: 600px) {
-  .instrument-surface { padding: 36px 20px 80px; }
-  .field-row { flex-direction: column; }
-  .action-zone { justify-content: center; }
+@media (max-width: 768px) {
+
+  .record-metadata {
+    grid-template-columns: 1fr;
+  }
+
+  .field-row {
+    flex-direction: column;
+  }
+
+  .action-zone {
+    justify-content: center;
+  }
+
 }
