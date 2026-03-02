@@ -8,62 +8,14 @@
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <h1>AuditFlow Pro</h1>
-    <button id="determineBtn" class="primary-btn">Determine Exposure</button>
-  </div>
+<div id="app">
+
+<header id="header">
+  <div id="headerContent"></div>
 </header>
 
-<main class="container">
+<main id="main"></main>
 
-<section class="stage">
-  <h2>Stage 01 — Audit Registration</h2>
-  <div class="form-grid">
-    <input id="clientName" type="text" placeholder="Client Name" autocapitalize="words">
-    <input id="auditTitle" type="text" placeholder="Audit Title" autocapitalize="words">
-    <input id="auditDate" type="date">
-  </div>
-</section>
-
-<section class="stage">
-  <h2>Stage 02 — Assessment Architecture — Calibrated</h2>
-  <p class="muted">
-    This instrument applies a predefined exposure calibration model across four core domains.
-  </p>
-</section>
-
-<div id="domains"></div>
-
-<section class="stage">
-  <h2>Stage 04 — Exposure Determination</h2>
-  <div id="determinationRecord"></div>
-</section>
-
-</main>
-
-<!-- Modal -->
-<div id="modalOverlay" class="modal-overlay hidden">
-  <div class="modal">
-    <h3>Register Finding</h3>
-    <textarea id="modalDesc" placeholder="Finding Description"></textarea>
-    <select id="modalSeverity">
-      <option>Low</option>
-      <option>Moderate</option>
-      <option>High</option>
-      <option>Critical</option>
-    </select>
-    <select id="modalControl">
-      <option>Compliant</option>
-      <option>Improvement Required</option>
-      <option>Non-Compliant</option>
-      <option>Critical Failure</option>
-    </select>
-    <div class="modal-actions">
-      <button id="cancelModal">Cancel</button>
-      <button id="saveFinding" class="primary-btn">Register Finding</button>
-    </div>
-  </div>
 </div>
 
 <script src="app.js"></script>
