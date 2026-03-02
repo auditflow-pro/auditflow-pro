@@ -1,11 +1,11 @@
 body {
     margin: 0;
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-    background: #f2f3f5;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f3f4f6;
     color: #111;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .app-header {
     background: #1b1e24;
@@ -49,7 +49,7 @@ body {
 }
 
 .progress-flow .step {
-    opacity: 0.4;
+    opacity: 0.45;
 }
 
 .progress-flow .step.active {
@@ -64,11 +64,11 @@ body {
     background: #b89b4c;
 }
 
-/* LAYOUT */
+/* ================= LAYOUT ================= */
 
 main {
     max-width: 900px;
-    margin: 42px auto;
+    margin: 50px auto;
     padding: 0 22px;
 }
 
@@ -76,70 +76,68 @@ main {
 .domain-block,
 .document-mode {
     background: #ffffff;
-    padding: 34px 32px;
-    margin-bottom: 30px;
-    border: 1px solid #cfcfcf;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    padding: 38px 38px;
+    margin-bottom: 34px;
+    border: 1px solid #e0e2e6;   /* softened */
 }
 
 .panel h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-size: 30px;
+    margin-bottom: 16px;
 }
 
 .panel-intro {
     font-size: 14px;
-    color: #555;
-    margin-bottom: 26px;
+    color: #5a5a5a;
+    margin-bottom: 30px;
 }
 
-/* FIELDS */
+/* ================= FIELDS ================= */
 
 .field {
-    margin-bottom: 22px;
+    margin-bottom: 28px;
 }
 
 .field label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-size: 14px;
     font-weight: 500;
-    color: #222;
+    letter-spacing: 0.2px;
 }
 
+/* Engineered but restrained input */
 .field input {
     width: 100%;
-    height: 52px;
-    padding: 0 14px;
-    border: 2px solid #1b1e24;
-    background: #fafafa;
+    height: 54px;
+    padding: 0 16px;
     font-size: 15px;
     letter-spacing: 0.3px;
     box-sizing: border-box;
-    transition: background 0.15s ease,
-                border-color 0.15s ease,
+
+    background: #ffffff;
+    border: 1.5px solid #2f3238;  /* softened dark */
+    border-radius: 2px;
+
+    transition: border-color 0.15s ease,
                 box-shadow 0.15s ease;
 }
 
-/* Remove Chrome default styling */
-.field input,
+/* Remove browser defaults */
 .field input:focus,
 .field input:active {
     outline: none;
-    border-radius: 0;
     appearance: none;
     -webkit-appearance: none;
-    box-shadow: none;
 }
 
-/* Professional focus */
+/* Premium focus state */
 .field input:focus {
-    background: #ffffff;
     border-color: #b89b4c;
-    box-shadow: 0 0 0 3px rgba(184,155,76,0.15);
+    box-shadow: 0 0 0 2px rgba(184,155,76,0.18);
 }
 
-/* Remove Chrome autofill yellow */
+/* Kill Chrome autofill */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
@@ -147,27 +145,21 @@ input:-webkit-autofill:focus {
     -webkit-text-fill-color: #111 !important;
 }
 
-/* DATE FIELD */
-.field input[type="date"] {
-    background: #fafafa;
-    color: #111;
-}
-
-/* BUTTONS */
+/* ================= BUTTON ================= */
 
 .button-wrap {
-    margin-top: 14px;
+    margin-top: 18px;
 }
 
 .primary-btn {
-    padding: 14px 24px;
+    padding: 14px 30px;
     background: #1b1e24;
     color: #fff;
     border: none;
-    cursor: pointer;
     font-size: 14px;
-    letter-spacing: 0.4px;
-    min-width: 220px;
+    letter-spacing: 0.5px;
+    min-width: 280px;
+    transition: background 0.15s ease;
 }
 
 .primary-btn:hover:not(:disabled) {
@@ -179,22 +171,15 @@ input:-webkit-autofill:focus {
     cursor: not-allowed;
 }
 
-.secondary-btn {
-    background: #e2e2e2;
-    border: none;
-    padding: 10px 16px;
-}
-
-/* ANSWER BUTTONS */
+/* ================= ANSWERS ================= */
 
 .answer-btn {
     width: 100%;
-    padding: 11px;
-    margin-bottom: 8px;
-    border: 2px solid #1b1e24;
-    background: #f5f5f5;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1.5px solid #2f3238;
+    background: #ffffff;
     font-weight: 500;
-    cursor: pointer;
     transition: all 0.12s ease;
 }
 
@@ -218,11 +203,11 @@ input:-webkit-autofill:focus {
 
 .answer-recorded {
     font-size: 13px;
-    margin: 6px 0 14px 0;
+    margin: 8px 0 14px 0;
     color: #555;
 }
 
-/* EXPOSURE */
+/* ================= EXPOSURE ================= */
 
 .exposure-output {
     border-left: 6px solid #1b1e24;
@@ -230,10 +215,10 @@ input:-webkit-autofill:focus {
     font-weight: 600;
     font-size: 18px;
     background: #fafafa;
-    margin: 28px 0;
+    margin: 30px 0;
 }
 
-/* MODAL */
+/* ================= MODAL ================= */
 
 .modal {
     position: fixed;
@@ -261,7 +246,7 @@ input:-webkit-autofill:focus {
     display: none;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer {
     text-align: center;
@@ -271,7 +256,7 @@ footer {
     font-size: 12px;
 }
 
-/* PRINT */
+/* ================= PRINT ================= */
 
 @media print {
     .app-header,
