@@ -7,7 +7,6 @@
 
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#0f1c2e" />
-
 <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -57,11 +56,22 @@
             <input class="input-field" id="assessmentDate" type="date" />
         </div>
 
-        <button type="button" id="commenceBtn" class="primary-button">
-            Commence Assessment
+        <button type="button" id="saveAuditBtn" class="primary-button">
+            Save & Continue
+        </button>
+
+        <button type="button" id="newAuditBtn" class="secondary-button">
+            Start New Audit
         </button>
 
     </form>
+
+</section>
+
+<section class="card ledger-card">
+
+    <h3>Audit Ledger</h3>
+    <div id="ledgerList"></div>
 
 </section>
 
