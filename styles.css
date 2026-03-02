@@ -5,6 +5,8 @@ body {
     color: #111;
 }
 
+/* Header */
+
 .app-header {
     background: #1b1e24;
     color: #fff;
@@ -13,15 +15,15 @@ body {
 .header-inner {
     max-width: 900px;
     margin: auto;
-    padding: 20px;
+    padding: 22px 20px;
     display: flex;
     justify-content: space-between;
 }
 
 .brand-title {
     font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
 }
 
 .brand-sub {
@@ -29,23 +31,29 @@ body {
     opacity: 0.85;
 }
 
+.version {
+    font-size: 14px;
+}
+
 .progress-flow {
     max-width: 900px;
     margin: auto;
     display: flex;
     justify-content: space-between;
+    padding: 10px 20px 14px 20px;
     font-size: 12px;
-    padding: 8px 20px 12px 20px;
-    opacity: 0.8;
+    border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .progress-flow .step {
-    opacity: 0.5;
+    opacity: 0.45;
 }
 
 .progress-flow .step.active {
     opacity: 1;
-    font-weight: bold;
+    font-weight: 600;
+    border-bottom: 2px solid #b89b4c;
+    padding-bottom: 4px;
 }
 
 .gold-band {
@@ -53,37 +61,86 @@ body {
     background: #b89b4c;
 }
 
+/* Layout */
+
 main {
     max-width: 900px;
-    margin: 30px auto;
+    margin: 34px auto;
     padding: 0 20px;
 }
 
 .panel,
 .domain-block,
 .document-mode {
-    background: #fff;
-    padding: 22px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
+    background: #ffffff;
+    padding: 28px 26px;
+    margin-bottom: 24px;
+    border: 1.5px solid #d4d6da;
 }
 
+.panel-intro {
+    font-size: 13px;
+    color: #555;
+    margin-top: -6px;
+    margin-bottom: 18px;
+}
+
+/* Inputs */
+
 .field {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
 }
 
 .field input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    border: 1.5px solid #c5c7cb;
+    background: #ffffff;
+    font-size: 15px;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input[type="date"] {
+    background: #ffffff;
+    color: #111;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #111 !important;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: #1b1e24;
+    box-shadow: 0 0 0 2px rgba(27,30,36,0.08);
+}
+
+/* Buttons */
+
+.button-wrap {
+    margin-top: 10px;
 }
 
 .primary-btn {
-    padding: 12px 18px;
+    padding: 13px 20px;
     background: #1b1e24;
     color: #fff;
     border: none;
     cursor: pointer;
+    font-size: 14px;
 }
 
 .primary-btn:disabled {
@@ -91,10 +148,18 @@ main {
     cursor: not-allowed;
 }
 
+.secondary-btn {
+    background: #e0e0e0;
+    border: none;
+    padding: 10px 16px;
+}
+
+/* Answers */
+
 .answer-btn {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 5px;
+    padding: 9px;
+    margin-bottom: 6px;
     border: 1px solid #bbb;
     background: #f8f8f8;
 }
@@ -117,22 +182,26 @@ main {
 .answer-recorded {
     font-size: 12px;
     color: #555;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
+
+/* Exposure */
 
 .exposure-output {
     border-left: 6px solid #1b1e24;
     padding: 18px;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 18px;
     background: #fafafa;
-    margin: 20px 0;
+    margin: 24px 0;
 }
+
+/* Modal */
 
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.55);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,13 +209,13 @@ main {
 
 .modal-content {
     background: #fff;
-    padding: 25px;
-    max-width: 400px;
+    padding: 28px;
+    max-width: 420px;
     width: 90%;
 }
 
 .modal-actions {
-    margin-top: 20px;
+    margin-top: 22px;
     display: flex;
     justify-content: space-between;
 }
@@ -157,7 +226,7 @@ main {
 
 footer {
     text-align: center;
-    padding: 15px;
+    padding: 18px;
     background: #1b1e24;
     color: #fff;
     font-size: 12px;
@@ -168,9 +237,5 @@ footer {
     .record-actions,
     footer {
         display: none;
-    }
-
-    body {
-        background: #fff;
     }
 }
