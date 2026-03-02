@@ -1,11 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const btn = document.getElementById("commenceBtn");
-  const registrationBlock = document.getElementById("registrationBlock");
-  const assessmentStage = document.getElementById("assessmentStage");
-  const registrationNote = document.getElementById("registrationNote");
+  const registerBtn = document.getElementById("registerBtn");
+  const unlockBtn = document.getElementById("unlockBtn");
 
-  btn.addEventListener("click", () => {
+  const formSection = document.getElementById("registrationFormSection");
+  const summarySection = document.getElementById("registrationSummarySection");
+  const assessmentSection = document.getElementById("assessmentSection");
+
+  const note = document.getElementById("registrationNote");
+
+  registerBtn.addEventListener("click", () => {
 
     const client = document.getElementById("clientName").value.trim();
     const location = document.getElementById("siteLocation").value.trim();
@@ -13,29 +17,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = document.getElementById("assessmentDate").value;
 
     if (!client || !location || !ref || !date) {
-      registrationNote.textContent = "All scope parameters must be defined prior to commencement.";
+      note.textContent = "All scope parameters must be defined prior to commencement.";
       return;
     }
 
-    // Normalize reference
     ref = ref.toUpperCase();
-    document.getElementById("assessmentRef").value = ref;
 
-    // Lock registration
-    registrationBlock.classList.add("locked");
-    const inputs = registrationBlock.querySelectorAll("input");
-    inputs.forEach(input => input.setAttribute("readonly", true));
+    // Populate summary
+    document.getElementById("summaryClient").textContent = client;
+    document.getElementById("summaryLocation").textContent = location;
+    document.getElementById("summaryRef").textContent = ref;
+    document.getElementById("summaryDate").textContent = new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
 
-    // Replace note with lock indicator
-    registrationNote.textContent = "Registration Locked";
-    registrationNote.classList.add("lock-indicator");
+    // Transition
+    formSection.classList.add("hidden");
+    summarySection.classList.remove("hidden");
+    assessmentSection.classList.remove("hidden");
 
-    // Hide button
-    btn.style.display = "none";
+  });
 
-    // Reveal Stage 02
-    assessmentStage.classList.remove("hidden");
-
+  unlockBtn.addEventListener("click", () => {
+    summarySection.classList.add("hidden");
+    assessmentSection.classList.add("hidden");
+    formSection.classList.remove("hidden");
   });
 
 });
