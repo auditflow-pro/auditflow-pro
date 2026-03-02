@@ -1,267 +1,71 @@
-body {
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f3f4f6;
-    color: #111;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuditFlow Pro — Exposure Determination Instrument</title>
+<link rel="stylesheet" href="styles.css?v=1105">
+</head>
+<body>
 
-/* ================= HEADER ================= */
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-name">AuditFlow Pro</span>
+      <span class="brand-sub">Exposure Determination Instrument</span>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+</header>
 
-.app-header {
-    background: #1b1e24;
-    color: #fff;
-}
+<main class="container">
 
-.header-inner {
-    max-width: 900px;
-    margin: auto;
-    padding: 24px 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+<section id="registration" class="panel">
+  <h2>Audit Registration</h2>
 
-.brand-title {
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
+  <div class="field-group">
+    <label>Consultancy / Organisation</label>
+    <input id="orgName" type="text" autocomplete="off">
+  </div>
 
-.brand-sub {
-    font-size: 13px;
-    opacity: 0.85;
-    margin-top: 4px;
-}
+  <div class="field-group">
+    <label>Client / Site Name</label>
+    <input id="clientName" type="text" autocomplete="off">
+  </div>
 
-.version {
-    font-size: 14px;
-    opacity: 0.85;
-}
+  <div class="field-group">
+    <label>Audit Title</label>
+    <input id="auditTitle" type="text" autocomplete="off">
+  </div>
 
-.progress-flow {
-    max-width: 900px;
-    margin: auto;
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 22px 14px 22px;
-    font-size: 12px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-}
+  <div class="field-group">
+    <label>Assessment Date</label>
+    <input id="assessmentDate" type="text" readonly placeholder="Select Date">
+  </div>
 
-.progress-flow .step {
-    opacity: 0.45;
-}
+  <button id="startAudit" class="btn-primary">Commence Assessment</button>
+</section>
 
-.progress-flow .step.active {
-    opacity: 1;
-    font-weight: 600;
-    border-bottom: 2px solid #b89b4c;
-    padding-bottom: 4px;
-}
+<section id="assessment" class="panel hidden">
+  <h2>Structured Exposure Assessment</h2>
+  <div id="questionsContainer"></div>
+  <button id="completeAudit" class="btn-primary">Proceed to Determination</button>
+</section>
 
-.gold-band {
-    height: 4px;
-    background: #b89b4c;
-}
+<section id="determination" class="panel hidden">
+  <h2>Formal Exposure Determination</h2>
+  <div id="determinationResult"></div>
+  <button id="sealAudit" class="btn-primary">Seal & Generate Record</button>
+</section>
 
-/* ================= LAYOUT ================= */
+<section id="record" class="panel hidden">
+  <h2>Exposure Determination Record</h2>
+  <div id="recordContent"></div>
+  <button id="exportPDF" class="btn-primary">Export PDF</button>
+</section>
 
-main {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 0 22px;
-}
+</main>
 
-.panel,
-.domain-block,
-.document-mode {
-    background: #ffffff;
-    padding: 38px 38px;
-    margin-bottom: 34px;
-    border: 1px solid #e0e2e6;   /* softened */
-}
-
-.panel h2 {
-    font-size: 30px;
-    margin-bottom: 16px;
-}
-
-.panel-intro {
-    font-size: 14px;
-    color: #5a5a5a;
-    margin-bottom: 30px;
-}
-
-/* ================= FIELDS ================= */
-
-.field {
-    margin-bottom: 28px;
-}
-
-.field label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-}
-
-/* Engineered but restrained input */
-.field input {
-    width: 100%;
-    height: 54px;
-    padding: 0 16px;
-    font-size: 15px;
-    letter-spacing: 0.3px;
-    box-sizing: border-box;
-
-    background: #ffffff;
-    border: 1.5px solid #2f3238;  /* softened dark */
-    border-radius: 2px;
-
-    transition: border-color 0.15s ease,
-                box-shadow 0.15s ease;
-}
-
-/* Remove browser defaults */
-.field input:focus,
-.field input:active {
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-}
-
-/* Premium focus state */
-.field input:focus {
-    border-color: #b89b4c;
-    box-shadow: 0 0 0 2px rgba(184,155,76,0.18);
-}
-
-/* Kill Chrome autofill */
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-    box-shadow: 0 0 0px 1000px #ffffff inset !important;
-    -webkit-text-fill-color: #111 !important;
-}
-
-/* ================= BUTTON ================= */
-
-.button-wrap {
-    margin-top: 18px;
-}
-
-.primary-btn {
-    padding: 14px 30px;
-    background: #1b1e24;
-    color: #fff;
-    border: none;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    min-width: 280px;
-    transition: background 0.15s ease;
-}
-
-.primary-btn:hover:not(:disabled) {
-    background: #000;
-}
-
-.primary-btn:disabled {
-    background: #8c8c8c;
-    cursor: not-allowed;
-}
-
-/* ================= ANSWERS ================= */
-
-.answer-btn {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 10px;
-    border: 1.5px solid #2f3238;
-    background: #ffffff;
-    font-weight: 500;
-    transition: all 0.12s ease;
-}
-
-.answer-btn.selected-yes {
-    background: #2f5f3c;
-    color: #fff;
-    border-color: #2f5f3c;
-}
-
-.answer-btn.selected-no {
-    background: #7c1f1f;
-    color: #fff;
-    border-color: #7c1f1f;
-}
-
-.answer-btn.selected-na {
-    background: #4a4a4a;
-    color: #fff;
-    border-color: #4a4a4a;
-}
-
-.answer-recorded {
-    font-size: 13px;
-    margin: 8px 0 14px 0;
-    color: #555;
-}
-
-/* ================= EXPOSURE ================= */
-
-.exposure-output {
-    border-left: 6px solid #1b1e24;
-    padding: 22px;
-    font-weight: 600;
-    font-size: 18px;
-    background: #fafafa;
-    margin: 30px 0;
-}
-
-/* ================= MODAL ================= */
-
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: #fff;
-    padding: 32px;
-    max-width: 420px;
-    width: 92%;
-}
-
-.modal-actions {
-    margin-top: 26px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.hidden {
-    display: none;
-}
-
-/* ================= FOOTER ================= */
-
-footer {
-    text-align: center;
-    padding: 22px;
-    background: #1b1e24;
-    color: #fff;
-    font-size: 12px;
-}
-
-/* ================= PRINT ================= */
-
-@media print {
-    .app-header,
-    .record-actions,
-    footer {
-        display: none;
-    }
-}
+<script src="app.js?v=1105"></script>
+</body>
+</html>
