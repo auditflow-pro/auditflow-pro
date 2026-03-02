@@ -1,20 +1,19 @@
-const VERSION = "v1.5 Institutional";
+const VERSION = "v1.6 Institutional";
 
 const CONTROLS = [
-  { id:1, domain:"Fire", text:"Fire detection system operational?", weight:4 },
-  { id:2, domain:"Fire", text:"Emergency exits unobstructed?", weight:4 },
-  { id:3, domain:"Fire", text:"Fire extinguishers inspected and in date?", weight:4 },
-  { id:4, domain:"Electrical", text:"Electrical systems maintained?", weight:3 },
-  { id:5, domain:"Electrical", text:"Portable appliance testing current?", weight:3 },
-  { id:6, domain:"Electrical", text:"Distribution boards secured?", weight:3 },
-  { id:7, domain:"General", text:"Housekeeping standards acceptable?", weight:2 },
-  { id:8, domain:"General", text:"Access routes clearly marked?", weight:2 },
-  { id:9, domain:"General", text:"Hazard signage visible?", weight:2 },
-  { id:10, domain:"General", text:"Staff aware of emergency procedures?", weight:2 }
+  { id:1, domain:"Fire Safety", text:"Fire detection system operational?", weight:4 },
+  { id:2, domain:"Fire Safety", text:"Emergency exits unobstructed?", weight:4 },
+  { id:3, domain:"Fire Safety", text:"Fire extinguishers inspected and in date?", weight:4 },
+  { id:4, domain:"Electrical Safety", text:"Electrical systems maintained?", weight:3 },
+  { id:5, domain:"Electrical Safety", text:"Portable appliance testing current?", weight:3 },
+  { id:6, domain:"Electrical Safety", text:"Distribution boards secured?", weight:3 },
+  { id:7, domain:"General Safety", text:"Housekeeping standards acceptable?", weight:2 },
+  { id:8, domain:"General Safety", text:"Access routes clearly marked?", weight:2 },
+  { id:9, domain:"General Safety", text:"Hazard signage visible?", weight:2 },
+  { id:10, domain:"General Safety", text:"Staff aware of emergency procedures?", weight:2 }
 ];
 
 let responses = {};
-let meta = {};
 let index = 0;
 
 const app = document.getElementById("app");
@@ -22,6 +21,9 @@ const app = document.getElementById("app");
 function renderRegistration(){
   app.innerHTML = `
   <div class="card">
+    <div class="instrument-meta">
+      Version: ${VERSION} | Methodology: Weighted Domain Severity Model
+    </div>
     <h2>Audit Registration</h2>
     <input id="consultant" placeholder="Consultant Name">
     <input id="organisation" placeholder="Organisation">
@@ -33,60 +35,59 @@ function renderRegistration(){
 }
 
 function start(){
-  meta = {
-    consultant: consultant.value,
-    organisation: organisation.value,
-    client: client.value,
-    title: title.value,
-    date: date.value
-  };
-  renderQuestion();
+  renderAssessment();
 }
 
-function renderQuestion(){
-  const c = CONTROLS[index];
-  app.innerHTML = `
-  <div class="card">
-    <div class="progress">Control ${index+1} of ${CONTROLS.length}</div>
-    <h2>${c.text}</h2>
-    <button onclick="answer('YES')">YES</button>
-    <button onclick="answer('NO')">NO</button>
-    <button onclick="answer('NA')">N/A</button>
-    <br><br>
-    ${index>0?'<button class="secondary" onclick="back()">Back</button>':''}
-    <button class="secondary" onclick="resetAll()">Reset</button>
+function renderAssessment(){
+
+  let grouped = {};
+  CONTROLS.forEach(c=>{
+    if(!grouped[c.domain]) grouped[c.domain]=[];
+    grouped[c.domain].push(c);
+  });
+
+  let html = `<div class="card">
+  <div class="instrument-meta">
+    Version: ${VERSION} | Structured Institutional Classification
+  </div>
+  <h2>Structured Exposure Assessment</h2>`;
+
+  Object.keys(grouped).forEach(domain=>{
+    html += `<div class="domain-title"><strong>${domain}</strong></div>`;
+    grouped[domain].forEach(c=>{
+      html += `
+        <p>${c.text}</p>
+        <div class="response-group">
+          ${["YES","NO","NA"].map(v=>`
+            <span class="response-option ${responses[c.id]===v?"selected":""}"
+              onclick="selectResponse(${c.id},'${v}')">${v}</span>
+          `).join("")}
+        </div>`;
+    });
+  });
+
+  html += `
+    <button class="secondary" onclick="renderRegistration()">Back</button>
+    <button class="primary" onclick="determine()">Determine Exposure</button>
   </div>`;
+
+  app.innerHTML = html;
 }
 
-function answer(val){
-  responses[CONTROLS[index].id]=val;
-  if(index<CONTROLS.length-1){
-    index++;
-    renderQuestion();
-  } else {
-    determine();
-  }
+function selectResponse(id,val){
+  responses[id]=val;
+  renderAssessment();
 }
-
-function back(){ index--; renderQuestion(); }
-function resetAll(){ responses={}; index=0; renderRegistration(); }
 
 function determine(){
 
-  let total=0;
-  let max=0;
-  let domainScores={Fire:0,Electrical:0,General:0};
-  let domainMax={Fire:0,Electrical:0,General:0};
-  let failed=[];
+  let total=0, max=0;
 
   CONTROLS.forEach(c=>{
     if(responses[c.id]!=="NA"){
-      domainMax[c.domain]+=c.weight*2;
-      max+=c.weight*2;
+      max += c.weight*2;
       if(responses[c.id]==="NO"){
-        domainScores[c.domain]+=c.weight*2;
-        total+=c.weight*2;
-        failed.push(c);
+        total += c.weight*2;
       }
     }
   });
@@ -99,46 +100,20 @@ function determine(){
   else if(percent<=50) level="Level 3 – Significant Exposure";
   else level="Level 4 – Critical Exposure";
 
-  const recordID = generateRecordID();
-
-  renderResult(percent,level,total,max,domainScores,domainMax,failed,recordID);
-}
-
-function generateRecordID(){
-  const now=new Date();
-  return `AFP-${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}-${now.getHours()}${now.getMinutes()}`;
-}
-
-function renderResult(percent,level,total,max,domainScores,domainMax,failed,recordID){
-
-  const domainBreakdown = Object.keys(domainScores).map(d=>{
-    const pct = domainMax[d]===0?0:Math.round((domainScores[d]/domainMax[d])*100);
-    return `<li>${d} Exposure: ${pct}%</li>`;
-  }).join("");
-
-  const priority = failed.sort((a,b)=>b.weight-a.weight)
-    .map(f=>`<li>${f.text}</li>`).join("");
-
-  app.innerHTML=`
+  app.innerHTML = `
   <div class="card">
-    <h2>Institutional Exposure Determination</h2>
-    <p><strong>Record ID:</strong> ${recordID}</p>
-    <p><strong>Version:</strong> ${VERSION}</p>
-    <p><strong>Total Exposure:</strong> ${percent}%</p>
-    <h3>${level}</h3>
+    <div class="instrument-meta">
+      Version: ${VERSION} | Deterministic Classification Output
+    </div>
+    <h2>Institutional Determination</h2>
 
-    <h4>Domain Concentration</h4>
-    <ul>${domainBreakdown}</ul>
+    <div class="certificate-block">
+      <p><strong>Exposure Ratio:</strong> ${percent}%</p>
+      <h3>${level}</h3>
+      <p>This determination is derived from weighted domain severity modelling.</p>
+    </div>
 
-    <h4>Priority Ranking</h4>
-    <ul>${priority}</ul>
-
-    <h4>Action Framework</h4>
-    <p>Immediate: Address highest-weight failed controls.</p>
-    <p>Short-Term: Implement corrective plan.</p>
-    <p>Review: Reassess post-remediation.</p>
-
-    <button class="secondary" onclick="renderRegistration()">New Assessment</button>
+    <button class="secondary" onclick="renderAssessment()">Back</button>
     <button class="primary" onclick="window.print()">Generate Institutional Report</button>
   </div>`;
 }
