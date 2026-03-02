@@ -22,52 +22,51 @@
 
 <main class="app-main">
 
-    <section class="card">
+<section class="card">
 
-        <div class="version-block">
-            Version: v3.0 Global Institutional Baseline
+    <div class="version-block">
+        Version: v3.0 Global Institutional Baseline
+    </div>
+
+    <h2>Audit Registration</h2>
+
+    <form id="registration-form" autocomplete="off" novalidate>
+
+        <div class="form-group">
+            <label for="consultant">Consultant Name</label>
+            <input class="input-field" id="consultant" type="text" />
         </div>
 
-        <h2>Audit Registration</h2>
+        <div class="form-group">
+            <label for="organisation">Organisation</label>
+            <input class="input-field" id="organisation" type="text" />
+        </div>
 
-        <form id="registration-form" novalidate>
+        <div class="form-group">
+            <label for="client">Client / Site Name</label>
+            <input class="input-field" id="client" type="text" />
+        </div>
 
-            <div class="form-group">
-                <label for="consultant">Consultant Name</label>
-                <input class="input-field" id="consultant" type="text" placeholder="Consultant Name" />
-            </div>
+        <div class="form-group">
+            <label for="auditTitle">Audit Title</label>
+            <input class="input-field" id="auditTitle" type="text" />
+        </div>
 
-            <div class="form-group">
-                <label for="organisation">Organisation</label>
-                <input class="input-field" id="organisation" type="text" placeholder="Organisation" />
-            </div>
+        <div class="form-group">
+            <label for="assessmentDate">Assessment Date</label>
+            <input class="input-field" id="assessmentDate" type="date" />
+        </div>
 
-            <div class="form-group">
-                <label for="client">Client / Site Name</label>
-                <input class="input-field" id="client" type="text" placeholder="Client / Site Name" />
-            </div>
+        <button type="button" id="commenceBtn" class="primary-button">
+            Commence Assessment
+        </button>
 
-            <div class="form-group">
-                <label for="auditTitle">Audit Title</label>
-                <input class="input-field" id="auditTitle" type="text" placeholder="Audit Title" />
-            </div>
+    </form>
 
-            <div class="form-group">
-                <label for="assessmentDate">Assessment Date</label>
-                <input class="input-field" id="assessmentDate" type="date" />
-            </div>
-
-            <button type="button" class="primary-button">
-                Commence Assessment
-            </button>
-
-        </form>
-
-    </section>
+</section>
 
 </main>
 
 <script src="app.js"></script>
-
 </body>
 </html>
