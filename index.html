@@ -4,58 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro — Exposure Determination Instrument</title>
-
-<link rel="stylesheet" href="styles.css?v=2001">
+<link rel="stylesheet" href="styles.css?v=3001">
 <link rel="manifest" href="manifest.json">
-
 <meta name="theme-color" content="#1f2a33">
 </head>
-
 <body>
 
 <header class="app-header no-print">
-  <div class="brand-wrap">
-    <div class="brand-title">AuditFlow Pro</div>
-    <div class="brand-sub">Exposure Determination Instrument</div>
-  </div>
+  <div class="brand-title">AuditFlow Pro</div>
+  <div class="brand-sub">Professional Exposure Determination Instrument</div>
   <div class="gold-bar"></div>
 </header>
 
 <main class="container">
 
-<!-- REGISTRATION -->
 <section id="registration" class="panel">
   <h2>Audit Registration</h2>
 
-  <div class="field">
-    <label>Consultant Name</label>
-    <input id="consultantName" type="text">
-  </div>
+  <label>Consultant Name</label>
+  <input id="consultantName" type="text">
 
-  <div class="field">
-    <label>Consultancy / Organisation</label>
-    <input id="orgName" type="text">
-  </div>
+  <label>Organisation</label>
+  <input id="orgName" type="text">
 
-  <div class="field">
-    <label>Client / Site Name</label>
-    <input id="clientName" type="text">
-  </div>
+  <label>Client</label>
+  <input id="clientName" type="text">
 
-  <div class="field">
-    <label>Audit Title</label>
-    <input id="auditTitle" type="text">
-  </div>
+  <label>Audit Title</label>
+  <input id="auditTitle" type="text">
 
-  <div class="field">
-    <label>Assessment Date</label>
-    <input id="assessmentDate" type="date">
-  </div>
+  <label>Assessment Date</label>
+  <input id="assessmentDate" type="date">
 
   <button id="startAudit" class="btn-primary">Commence Assessment</button>
 </section>
 
-<!-- ASSESSMENT -->
 <section id="assessment" class="panel hidden">
   <h2>Structured Exposure Assessment</h2>
   <div id="questionsContainer"></div>
@@ -65,25 +48,23 @@
   </div>
 </section>
 
-<!-- DETERMINATION -->
 <section id="determination" class="panel hidden">
-  <h2>Formal Exposure Determination</h2>
-  <div id="determinationBlock"></div>
+  <h2>Exposure Analysis</h2>
+  <div id="analysisPreview"></div>
   <div class="nav-row">
     <button id="backToAssessment" class="btn-secondary">Back</button>
-    <button id="sealAudit" class="btn-primary">Seal Assessment</button>
+    <button id="sealAudit" class="btn-primary">Seal & Generate Report</button>
   </div>
 </section>
 
-<!-- RECORD -->
 <section id="record" class="panel hidden">
   <div id="recordContent"></div>
-  <button id="exportPDF" class="btn-primary no-print">Export PDF</button>
+  <button id="exportPDF" class="btn-primary no-print">Export Professional Report (PDF)</button>
 </section>
 
 </main>
 
-<script src="app.js?v=2001"></script>
+<script src="app.js?v=3001"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js');
