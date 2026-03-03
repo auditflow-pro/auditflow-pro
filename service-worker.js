@@ -1,17 +1,15 @@
-const CACHE_NAME = "auditflow-v2.0";
+const CACHE_NAME = "auditflow-v3.0";
 
 const CORE = [
   "./",
-  "./index.html?v=2.0",
-  "./styles.css?v=2.0",
-  "./app.js?v=2.0",
+  "./index.html?v=3.0",
+  "./styles.css?v=3.0",
+  "./app.js?v=3.0",
   "./manifest.json"
 ];
 
 self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(c => c.addAll(CORE))
-  );
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(CORE)));
   self.skipWaiting();
 });
 
