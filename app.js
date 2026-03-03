@@ -1,99 +1,82 @@
-const STORAGE_KEY = "afp-ledger";
+const ledgerEl = document.getElementById("ledger");
+const modal = document.getElementById("confirmModal");
+const confirmBtn = document.getElementById("confirmDelete");
+const cancelBtn = document.getElementById("cancelDelete");
 
-const saveBtn = document.getElementById("saveBtn");
-const resetBtn = document.getElementById("resetBtn");
-const ledgerDiv = document.getElementById("ledger");
-const toast = document.getElementById("toast");
+let deleteTargetId = null;
 
 function getLedger() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  return JSON.parse(localStorage.getItem("auditLedger")) || [];
 }
 
-function setLedger(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2000);
+function saveLedger(data) {
+  localStorage.setItem("auditLedger", JSON.stringify(data));
 }
 
 function renderLedger() {
   const ledger = getLedger();
-  ledgerDiv.innerHTML = "";
+  ledgerEl.innerHTML = "";
 
   if (ledger.length === 0) {
-    ledgerDiv.innerHTML = "<p>No saved audits.</p>";
+    ledgerEl.innerHTML = "<p>No saved audits.</p>";
     return;
   }
 
-  ledger.slice().reverse().forEach(item => {
+  ledger.forEach(item => {
     const div = document.createElement("div");
     div.className = "ledger-item";
-
     div.innerHTML = `
-      <h3>${item.title || "Untitled"}</h3>
-      <p>${item.client}</p>
-      <p>${item.date}</p>
-      <p>${item.id}</p>
-      <button class="delete-btn" data-id="${item.id}">Delete</button>
+      <strong>${item.title}</strong><br>
+      ${item.client}<br>
+      ${item.date}<br><br>
+      <button class="danger" data-id="${item.id}">Delete</button>
     `;
-
-    ledgerDiv.appendChild(div);
+    ledgerEl.appendChild(div);
   });
 
-  document.querySelectorAll(".delete-btn").forEach(btn => {
+  document.querySelectorAll(".danger").forEach(btn => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id");
-      if (confirm("Delete this audit permanently?")) {
-        deleteAudit(id);
-      }
+      deleteTargetId = btn.getAttribute("data-id");
+      modal.classList.remove("hidden");
     });
   });
 }
 
-function deleteAudit(id) {
+confirmBtn.addEventListener("click", () => {
   let ledger = getLedger();
-  ledger = ledger.filter(item => item.id !== id);
-  setLedger(ledger);
+  ledger = ledger.filter(item => item.id !== deleteTargetId);
+  saveLedger(ledger);
+  deleteTargetId = null;
+  modal.classList.add("hidden");
   renderLedger();
-  showToast("Audit deleted.");
-}
-
-saveBtn.addEventListener("click", () => {
-  const consultant = document.getElementById("consultant").value;
-  const organisation = document.getElementById("organisation").value;
-  const client = document.getElementById("client").value;
-  const title = document.getElementById("title").value;
-  const date = document.getElementById("date").value;
-
-  if (!date) {
-    alert("Please select a date.");
-    return;
-  }
-
-  const id = "AFP-" + Date.now();
-
-  const newEntry = {
-    id,
-    consultant,
-    organisation,
-    client,
-    title,
-    date
-  };
-
-  const ledger = getLedger();
-  ledger.push(newEntry);
-  setLedger(ledger);
-
-  renderLedger();
-  showToast("Audit saved to ledger.");
 });
 
-resetBtn.addEventListener("click", () => {
-  document.querySelectorAll("input").forEach(input => input.value = "");
+cancelBtn.addEventListener("click", () => {
+  deleteTargetId = null;
+  modal.classList.add("hidden");
+});
+
+document.getElementById("saveBtn").addEventListener("click", () => {
+  const ledger = getLedger();
+
+  const newAudit = {
+    id: Date.now().toString(),
+    consultant: document.getElementById("consultant").value,
+    organisation: document.getElementById("organisation").value,
+    client: document.getElementById("client").value,
+    title: document.getElementById("title").value,
+    date: document.getElementById("date").value
+  };
+
+  ledger.unshift(newAudit);
+  saveLedger(ledger);
+  renderLedger();
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.querySelectorAll("input").forEach(input => {
+    if (input.id !== "consultant") input.value = "";
+  });
 });
 
 renderLedger();
