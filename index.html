@@ -5,46 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AuditFlow Pro</title>
 
-  <!-- Atomic Version 3.9 -->
-  <link rel="manifest" href="manifest.json?v=3.9">
-  <link rel="stylesheet" href="styles.css?v=3.9">
-  <meta name="theme-color" content="#0f2138" />
+  <link rel="manifest" href="manifest.json?v=4.0">
+  <link rel="stylesheet" href="styles.css?v=4.0">
+  <meta name="theme-color" content="#0b1c2f" />
 </head>
 
 <body>
 
 <header class="hero">
-  <h1>AuditFlow Pro</h1>
-  <p>Institutional Exposure Determination Instrument</p>
+  <div class="hero-inner">
+    <h1>AuditFlow Pro</h1>
+    <p>Institutional Exposure Determination Instrument</p>
+  </div>
 </header>
 
-<main class="frame">
+<main class="container">
 
-  <section class="panel">
-    <div class="version">Version: v3.9 Production Stable</div>
+  <section class="card">
+    <div class="version">Version: v4.0 Production Stable</div>
 
     <h2>Audit Registration</h2>
 
     <label for="consultant">Consultant Name</label>
-    <input id="consultant" type="text" value="Dan Hadfield" autocomplete="off" />
+    <input id="consultant" type="text" value="Dan Hadfield" autocomplete="off">
 
     <label for="organisation">Organisation</label>
-    <input id="organisation" type="text" autocomplete="off" />
+    <input id="organisation" type="text" autocomplete="off">
 
     <label for="client">Client / Site Name</label>
-    <input id="client" type="text" autocomplete="off" />
+    <input id="client" type="text" autocomplete="off">
 
     <label for="title">Audit Title</label>
-    <input id="title" type="text" autocomplete="off" />
+    <input id="title" type="text" autocomplete="off">
 
     <label for="date">Assessment Date</label>
-    <input id="date" type="date" />
+    <input id="date" type="date">
 
     <button id="saveBtn" class="primary">Save & Continue</button>
     <button id="resetBtn" class="secondary">Start New Audit</button>
   </section>
 
-  <section class="panel">
+  <section class="card">
     <h2>Audit Ledger</h2>
     <div id="ledger"></div>
   </section>
@@ -52,22 +53,20 @@
 </main>
 
 <div id="confirmModal" class="modal hidden">
-  <div class="modal-content">
+  <div class="modal-box">
     <h3>Delete Audit</h3>
     <p>This audit will be permanently removed from this device.</p>
-    <div class="modal-actions">
-      <button id="cancelDelete" class="secondary">Cancel</button>
-      <button id="confirmDelete" class="danger">Delete Permanently</button>
-    </div>
+    <button id="confirmDelete" class="danger">Delete Permanently</button>
+    <button id="cancelDelete" class="secondary">Cancel</button>
   </div>
 </div>
 
-<script src="app.js?v=3.9"></script>
+<script src="app.js?v=4.0"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=3.9');
+    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=4.0');
   });
 }
 </script>
