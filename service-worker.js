@@ -1,4 +1,4 @@
-const CACHE_NAME = "afp-cache-v3-3";
+const CACHE_NAME = "afp-cache-v3-4";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
