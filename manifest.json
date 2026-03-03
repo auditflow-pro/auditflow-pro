@@ -1,9 +1,9 @@
 {
-  "name": "AuditFlow Pro — Institutional Exposure Determination Instrument",
+  "name": "AuditFlow Pro – Institutional Exposure Determination Instrument",
   "short_name": "AuditFlow Pro",
-  "description": "AuditFlow Pro is a structured institutional exposure determination instrument designed for professional consultants conducting compliance and risk assessments.",
-  "start_url": "/?v=3.6",
-  "scope": "/",
+  "description": "AuditFlow Pro is a structured offline institutional exposure determination instrument.",
+  "start_url": "/auditflow-pro/?v=3.6",
+  "scope": "/auditflow-pro/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#f2f4f7",
