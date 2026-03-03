@@ -1,4 +1,4 @@
-const CACHE_NAME = "auditflow-shell-v3.7";
+const CACHE_NAME = "auditflow-shell-v3.8";
 
 const SHELL_FILES = [
   "/auditflow-pro/",
@@ -10,17 +10,13 @@ const SHELL_FILES = [
   "/auditflow-pro/icon-512.png"
 ];
 
-// INSTALL — Pre-cache application shell
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(SHELL_FILES);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL_FILES))
   );
   self.skipWaiting();
 });
 
-// ACTIVATE — Clean old caches safely
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -34,29 +30,26 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-// FETCH — Deterministic navigation control
 self.addEventListener("fetch", event => {
 
-  const requestURL = new URL(event.request.url);
+  const url = new URL(event.request.url);
 
-  // Only control requests within our scope
-  if (requestURL.pathname.startsWith("/auditflow-pro/")) {
-
-    // Navigation requests (HTML loads, standalone launch, refresh, etc.)
-    if (event.request.mode === "navigate") {
-      event.respondWith(
-        caches.match("/auditflow-pro/index.html")
-          .then(response => response || fetch(event.request))
-      );
-      return;
-    }
-
-    // Static assets (CSS, JS, icons)
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => response || fetch(event.request))
-    );
-
+  // Only control our app scope
+  if (!url.pathname.startsWith("/auditflow-pro/")) {
+    return;
   }
+
+  // Navigation requests (HTML)
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      caches.match("/auditflow-pro/index.html")
+    );
+    return;
+  }
+
+  // Static assets
+  event.respondWith(
+    caches.match(event.request)
+  );
 
 });
