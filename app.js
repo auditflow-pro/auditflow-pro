@@ -1,6 +1,6 @@
-// AuditFlow Pro — v3.7 Atomic Shell
+// AuditFlow Pro — v3.8 Atomic Release
 
-const LEDGER_KEY = "auditflow-ledger-v1";
+const LEDGER_KEY = "auditflow-ledger-v3.8";
 
 const ledgerEl = document.getElementById("ledger");
 const modal = document.getElementById("confirmModal");
@@ -9,13 +9,14 @@ const cancelBtn = document.getElementById("cancelDelete");
 
 let deleteTargetId = null;
 
-/* -------------------------
-   LEDGER STORAGE HANDLING
---------------------------*/
+/* =============================
+   STORAGE
+============================= */
 
 function getLedger() {
   try {
-    return JSON.parse(localStorage.getItem(LEDGER_KEY)) || [];
+    const stored = localStorage.getItem(LEDGER_KEY);
+    return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
   }
@@ -25,9 +26,9 @@ function saveLedger(data) {
   localStorage.setItem(LEDGER_KEY, JSON.stringify(data));
 }
 
-/* -------------------------
-   RENDER LEDGER
---------------------------*/
+/* =============================
+   RENDER
+============================= */
 
 function renderLedger() {
   const ledger = getLedger();
@@ -39,25 +40,27 @@ function renderLedger() {
   }
 
   ledger.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "ledger-item";
+    const wrapper = document.createElement("div");
+    wrapper.className = "ledger-item";
 
-    div.innerHTML = `
-      <strong>${escapeHTML(item.title || "Untitled Audit")}</strong><br>
-      ${escapeHTML(item.client || "No Client")}<br>
-      ${item.date || "No Date"}<br><br>
-      <button class="danger delete-btn" data-id="${item.id}">Delete</button>
+    wrapper.innerHTML = `
+      <strong>${escapeHTML(item.title)}</strong><br>
+      ${escapeHTML(item.client || "")}<br>
+      ${item.date || ""}<br><br>
+      <button class="danger delete-btn" data-id="${item.id}">
+        Delete
+      </button>
     `;
 
-    ledgerEl.appendChild(div);
+    ledgerEl.appendChild(wrapper);
   });
 
   attachDeleteHandlers();
 }
 
-/* -------------------------
-   DELETE HANDLING
---------------------------*/
+/* =============================
+   DELETE
+============================= */
 
 function attachDeleteHandlers() {
   document.querySelectorAll(".delete-btn").forEach(btn => {
@@ -82,9 +85,9 @@ cancelBtn.addEventListener("click", () => {
   modal.classList.add("hidden");
 });
 
-/* -------------------------
-   SAVE NEW AUDIT
---------------------------*/
+/* =============================
+   SAVE
+============================= */
 
 document.getElementById("saveBtn").addEventListener("click", () => {
 
@@ -116,9 +119,9 @@ document.getElementById("saveBtn").addEventListener("click", () => {
   renderLedger();
 });
 
-/* -------------------------
-   RESET FORM
---------------------------*/
+/* =============================
+   RESET
+============================= */
 
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("organisation").value = "";
@@ -127,9 +130,9 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("date").value = "";
 });
 
-/* -------------------------
+/* =============================
    UTILITIES
---------------------------*/
+============================= */
 
 function escapeHTML(str) {
   return str.replace(/[&<>"']/g, m => ({
@@ -141,9 +144,9 @@ function escapeHTML(str) {
   }[m]));
 }
 
-/* -------------------------
-   INITIALISE
---------------------------*/
+/* =============================
+   INIT
+============================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   renderLedger();
