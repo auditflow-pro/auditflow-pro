@@ -1,6 +1,6 @@
-const CACHE_NAME = "auditflow-shell-v3.6";
+const CACHE_NAME = "auditflow-shell-v3.7";
 
-const CORE_ASSETS = [
+const SHELL_FILES = [
   "/auditflow-pro/",
   "/auditflow-pro/index.html",
   "/auditflow-pro/styles.css?v=3.6",
@@ -10,17 +10,17 @@ const CORE_ASSETS = [
   "/auditflow-pro/icon-512.png"
 ];
 
-// Install — precache shell
+// INSTALL — Pre-cache application shell
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(CORE_ASSETS);
+      return cache.addAll(SHELL_FILES);
     })
   );
   self.skipWaiting();
 });
 
-// Activate — clean old caches
+// ACTIVATE — Clean old caches safely
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -34,23 +34,29 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-// Fetch — offline-first navigation
+// FETCH — Deterministic navigation control
 self.addEventListener("fetch", event => {
 
-  // Handle navigation requests (HTML)
-  if (event.request.mode === "navigate") {
+  const requestURL = new URL(event.request.url);
+
+  // Only control requests within our scope
+  if (requestURL.pathname.startsWith("/auditflow-pro/")) {
+
+    // Navigation requests (HTML loads, standalone launch, refresh, etc.)
+    if (event.request.mode === "navigate") {
+      event.respondWith(
+        caches.match("/auditflow-pro/index.html")
+          .then(response => response || fetch(event.request))
+      );
+      return;
+    }
+
+    // Static assets (CSS, JS, icons)
     event.respondWith(
-      caches.match("/auditflow-pro/index.html").then(response => {
-        return response || fetch(event.request);
-      })
+      caches.match(event.request)
+        .then(response => response || fetch(event.request))
     );
-    return;
+
   }
 
-  // Handle other requests (CSS/JS/Assets)
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
 });
