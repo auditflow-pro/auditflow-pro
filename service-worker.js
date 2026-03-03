@@ -1,90 +1,56 @@
-/* =========================================================
-   AUDITFLOW PRO — v3.6 SERVICE WORKER
-   Offline-Only | No Ads | Cross Platform Stable
-   £149-Level Foundation
-   ========================================================= */
+const CACHE_NAME = "auditflow-shell-v3.6";
 
-const CACHE_VERSION = "v3.6";
-const CACHE_NAME = `auditflow-${CACHE_VERSION}`;
-
-/* Core assets required for full offline operation */
 const CORE_ASSETS = [
-  "/",
-  "/index.html?v=3.6",
-  "/styles.css?v=3.6",
-  "/app.js?v=3.6",
-  "/manifest.json?v=3.6",
-  "/icon-192.png",
-  "/icon-512.png"
+  "/auditflow-pro/",
+  "/auditflow-pro/index.html",
+  "/auditflow-pro/styles.css?v=3.6",
+  "/auditflow-pro/app.js?v=3.6",
+  "/auditflow-pro/manifest.json",
+  "/auditflow-pro/icon-192.png",
+  "/auditflow-pro/icon-512.png"
 ];
 
-/* ---------- INSTALL ---------- */
-/* Pre-cache everything needed for full offline capability */
-
+// Install — precache shell
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(CORE_ASSETS))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(CORE_ASSETS);
+    })
   );
-
-  /* Immediately activate new version without waiting */
   self.skipWaiting();
 });
 
-/* ---------- ACTIVATE ---------- */
-/* Remove only old AuditFlow caches — not everything */
-
+// Activate — clean old caches
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key.startsWith("auditflow-") && key !== CACHE_NAME)
+          .filter(key => key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
     )
   );
-
   self.clients.claim();
 });
 
-/* ---------- FETCH STRATEGY ---------- */
-/*
-   Strategy: Offline-First with Safe Update
-   - Serve from cache instantly
-   - Update cache silently in background
-   - Never require manual refresh
-*/
-
+// Fetch — offline-first navigation
 self.addEventListener("fetch", event => {
 
-  if (event.request.method !== "GET") return;
+  // Handle navigation requests (HTML)
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      caches.match("/auditflow-pro/index.html").then(response => {
+        return response || fetch(event.request);
+      })
+    );
+    return;
+  }
 
-  const url = new URL(event.request.url);
-
-  /* Only handle same-origin */
-  if (url.origin !== location.origin) return;
-
+  // Handle other requests (CSS/JS/Assets)
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-
-      const fetchPromise = fetch(event.request)
-        .then(networkResponse => {
-
-          /* Only cache successful responses */
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, responseClone);
-            });
-          }
-
-          return networkResponse;
-        })
-        .catch(() => cachedResponse);
-
-      /* If cached exists, return it immediately */
-      return cachedResponse || fetchPromise;
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
     })
   );
 });
