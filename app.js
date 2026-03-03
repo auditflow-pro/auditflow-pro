@@ -1,9 +1,13 @@
-const VERSION = "v2.0";
+/* AuditFlow Pro v3.0 Deterministic Engine */
+
+const VERSION = "v3.0";
+
+let audits = JSON.parse(localStorage.getItem("afp_audits")) || [];
+let sequence = parseInt(localStorage.getItem("afp_sequence")) || 0;
 
 let state = {
   view: "registration",
-  activeAudit: null,
-  audits: JSON.parse(localStorage.getItem("afp_audits")) || []
+  activeAudit: null
 };
 
 const multipliers = {
@@ -28,15 +32,16 @@ const controls = [
   { id: "training", label: "Training & Competency", category: "general" }
 ];
 
-function saveState() {
-  localStorage.setItem("afp_audits", JSON.stringify(state.audits));
+function saveLedger() {
+  localStorage.setItem("afp_audits", JSON.stringify(audits));
+  localStorage.setItem("afp_sequence", sequence.toString());
 }
 
 function generateAFP() {
-  const now = new Date();
-  const datePart = now.toISOString().slice(0,10).replace(/-/g,'');
-  const sequence = Math.floor(Math.random()*9000)+1000;
-  return `AFP-${datePart}-${sequence}`;
+  sequence += 1;
+  const datePart = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  saveLedger();
+  return `AFP-${datePart}-${sequence.toString().padStart(4,'0')}`;
 }
 
 function render() {
@@ -53,11 +58,6 @@ function renderRegistration(container) {
   container.innerHTML = `
     <div class="panel">
       <h2>Audit Registration</h2>
-      <div class="field"><label>Consultant</label><input id="consultant"></div>
-      <div class="field"><label>Organisation</label><input id="organisation"></div>
-      <div class="field"><label>Client / Site</label><input id="client"></div>
-      <div class="field"><label>Audit Title</label><input id="title"></div>
-      <div class="field"><label>Date</label><input id="date" type="date"></div>
       <div class="actions"><button onclick="startAudit()">Begin Audit</button></div>
       <div class="actions"><button class="secondary" onclick="goRecords()">Audit Records</button></div>
     </div>
@@ -65,24 +65,24 @@ function renderRegistration(container) {
 }
 
 function startAudit() {
-  const audit = {
+  state.activeAudit = {
     afp: generateAFP(),
-    createdAt: new Date().toISOString(),
     controls: {},
+    createdAt: new Date().toISOString(),
     status: "In Progress"
   };
-
-  state.activeAudit = audit;
   state.view = "workflow";
   render();
 }
 
 function renderWorkflow(container) {
   let html = `<div class="panel"><h2>Audit Controls</h2>`;
+
   controls.forEach(c => {
     html += `
       <div class="section-title">${c.label}</div>
-      <div class="field"><label>Severity</label>
+      <div class="field">
+        <label>Severity</label>
         <select onchange="updateControl('${c.id}','severity',this.value)">
           <option value="0">None</option>
           <option value="1">Minor</option>
@@ -92,7 +92,8 @@ function renderWorkflow(container) {
           <option value="5">Critical</option>
         </select>
       </div>
-      <div class="field"><label>Likelihood</label>
+      <div class="field">
+        <label>Likelihood</label>
         <select onchange="updateControl('${c.id}','likelihood',this.value)">
           <option value="1">Rare</option>
           <option value="2">Unlikely</option>
@@ -103,6 +104,7 @@ function renderWorkflow(container) {
       </div>
     `;
   });
+
   html += `<div class="actions"><button onclick="completeAudit()">Complete Audit</button></div></div>`;
   container.innerHTML = html;
 }
@@ -113,22 +115,43 @@ function updateControl(id, field, value) {
 }
 
 function calculateExposure() {
-  let total = 0;
-  let highest = 0;
+  let totalWeighted = 0;
+  let maxPossible = 0;
+  let highestWeighted = 0;
+  let lifeFireEscalation = false;
 
   controls.forEach(c => {
     const data = state.activeAudit.controls[c.id];
     if (!data) return;
-    const base = (data.severity || 0) * (data.likelihood || 1);
+
+    const severity = data.severity || 0;
+    const likelihood = data.likelihood || 1;
+
+    const base = severity * likelihood;
     const weighted = base * multipliers[c.category];
-    total += weighted;
-    if (weighted > highest) highest = weighted;
+
+    totalWeighted += weighted;
+    maxPossible += 25 * multipliers[c.category];
+
+    if (weighted > highestWeighted) highestWeighted = weighted;
+
+    if ((c.category === "life" || c.category === "fire") && severity >= 4) {
+      lifeFireEscalation = true;
+    }
   });
 
-  if (highest >= 20) return "Critical";
-  if (total >= 100) return "High";
-  if (total >= 50) return "Moderate";
-  return "Low";
+  const ratio = totalWeighted / maxPossible;
+
+  let aggregateBand;
+  if (ratio >= 0.7) aggregateBand = "Critical";
+  else if (ratio >= 0.5) aggregateBand = "High";
+  else if (ratio >= 0.25) aggregateBand = "Moderate";
+  else aggregateBand = "Low";
+
+  if (highestWeighted >= 20) aggregateBand = "High";
+  if (lifeFireEscalation) aggregateBand = "Critical";
+
+  return aggregateBand;
 }
 
 function completeAudit() {
@@ -137,8 +160,8 @@ function completeAudit() {
   state.activeAudit.completedAt = new Date().toISOString();
   state.activeAudit.status = "Completed";
 
-  state.audits.unshift(state.activeAudit);
-  saveState();
+  audits.unshift(state.activeAudit);
+  saveLedger();
 
   state.view = "outcome";
   render();
@@ -148,16 +171,17 @@ function renderOutcome(container) {
   container.innerHTML = `
     <div class="panel">
       <h2>Exposure Result</h2>
-      <div class="field"><strong>AFP Reference:</strong> ${state.activeAudit.afp}</div>
-      <div class="field"><strong>Exposure Band:</strong> ${state.activeAudit.exposure}</div>
-      <div class="actions"><button onclick="goRecords()">View Records</button></div>
+      <div class="field"><strong>AFP:</strong> ${state.activeAudit.afp}</div>
+      <div class="field"><strong>Exposure:</strong> ${state.activeAudit.exposure}</div>
+      <div class="actions"><button onclick="goRecords()">Audit Records</button></div>
     </div>
   `;
 }
 
 function renderRecords(container) {
   let html = `<div class="panel"><h2>Audit Records</h2>`;
-  state.audits.forEach(a => {
+
+  audits.forEach(a => {
     html += `
       <div class="section-title">${a.afp} — ${a.exposure}</div>
       <div class="actions">
@@ -165,13 +189,14 @@ function renderRecords(container) {
       </div>
     `;
   });
+
   html += `<div class="actions"><button onclick="goRegistration()">New Audit</button></div></div>`;
   container.innerHTML = html;
 }
 
 function deleteAudit(afp) {
-  state.audits = state.audits.filter(a => a.afp !== afp);
-  saveState();
+  audits = audits.filter(a => a.afp !== afp);
+  saveLedger();
   render();
 }
 
