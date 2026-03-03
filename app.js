@@ -1,16 +1,14 @@
-const STORAGE_KEY = "auditflow-ledger-v4.3";
+const STORAGE_KEY = "auditflow-ledger-v5.0";
 
-/* Logic unchanged but version synchronised */
 const ledgerEl = document.getElementById("ledger");
 const modal = document.getElementById("confirmModal");
 const confirmBtn = document.getElementById("confirmDelete");
 const cancelBtn = document.getElementById("cancelDelete");
 
-let deleteId = null;
+let deleteTargetId = null;
 
 function getLedger() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
 function saveLedger(data) {
@@ -21,7 +19,7 @@ function renderLedger() {
   const ledger = getLedger();
   ledgerEl.innerHTML = "";
 
-  if (!ledger.length) {
+  if (ledger.length === 0) {
     ledgerEl.innerHTML = "<p>No saved audits.</p>";
     return;
   }
@@ -29,65 +27,58 @@ function renderLedger() {
   ledger.forEach(item => {
     const div = document.createElement("div");
     div.className = "ledger-item";
-
     div.innerHTML = `
       <strong>${item.title}</strong><br>
       ${item.client}<br>
       ${item.date}<br><br>
-      <button class="danger" onclick="triggerDelete('${item.id}')">Delete</button>
+      <button class="danger" data-id="${item.id}">Delete</button>
     `;
-
     ledgerEl.appendChild(div);
   });
-}
 
-function triggerDelete(id) {
-  deleteId = id;
-  modal.classList.remove("hidden");
+  document.querySelectorAll(".danger").forEach(btn => {
+    btn.addEventListener("click", () => {
+      deleteTargetId = btn.getAttribute("data-id");
+      modal.classList.remove("hidden");
+    });
+  });
 }
 
 confirmBtn.addEventListener("click", () => {
   let ledger = getLedger();
-  ledger = ledger.filter(item => item.id !== deleteId);
+  ledger = ledger.filter(item => item.id !== deleteTargetId);
   saveLedger(ledger);
+  deleteTargetId = null;
   modal.classList.add("hidden");
   renderLedger();
 });
 
 cancelBtn.addEventListener("click", () => {
+  deleteTargetId = null;
   modal.classList.add("hidden");
 });
 
 document.getElementById("saveBtn").addEventListener("click", () => {
-  const consultant = document.getElementById("consultant").value.trim();
-  const client = document.getElementById("client").value.trim();
-  const title = document.getElementById("title").value.trim();
-  const date = document.getElementById("date").value;
-
-  if (!consultant || !title) {
-    alert("Consultant name and audit title are required.");
-    return;
-  }
-
   const ledger = getLedger();
 
-  ledger.unshift({
-    id: crypto.randomUUID(),
-    consultant,
-    client,
-    title,
-    date
-  });
+  const newAudit = {
+    id: Date.now().toString(),
+    consultant: document.getElementById("consultant").value,
+    organisation: document.getElementById("organisation").value,
+    client: document.getElementById("client").value,
+    title: document.getElementById("title").value,
+    date: document.getElementById("date").value
+  };
 
+  ledger.unshift(newAudit);
   saveLedger(ledger);
   renderLedger();
 });
 
 document.getElementById("resetBtn").addEventListener("click", () => {
-  document.getElementById("organisation").value = "";
-  document.getElementById("client").value = "";
-  document.getElementById("title").value = "";
-  document.getElementById("date").value = "";
+  document.querySelectorAll("input").forEach(input => {
+    if (input.id !== "consultant") input.value = "";
+  });
 });
 
-document.addEventListener("DOMContentLoaded", renderLedger);
+renderLedger();
