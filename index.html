@@ -69,21 +69,20 @@
 <!-- APPLICATION SCRIPT -->
 <script src="app.js?v=3.6"></script>
 
-<!-- SERVICE WORKER REGISTRATION -->
+<!-- SERVICE WORKER REGISTRATION (PROJECT-SITE SAFE) -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
 
-    navigator.serviceWorker.register('/service-worker.js?v=3.6')
-      .then(registration => {
-
-        // Silent update check
-        registration.update();
-
-      })
-      .catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
+    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=3.6', {
+      scope: '/auditflow-pro/'
+    })
+    .then(registration => {
+      registration.update();
+    })
+    .catch(error => {
+      console.error('Service Worker registration failed:', error);
+    });
 
   });
 }
