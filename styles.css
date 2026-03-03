@@ -66,6 +66,28 @@ button {
   color: #0f2747;
 }
 
+.ledger-item {
+  background: #e6e8ec;
+  padding: 1rem;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+}
+
+.ledger-item h3 {
+  margin: 0 0 0.3rem 0;
+}
+
+.delete-btn {
+  margin-top: 0.8rem;
+  background: #b00020;
+  color: white;
+  padding: 0.6rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
 .toast {
   position: fixed;
   bottom: 40px;
