@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AuditFlow Pro</title>
 
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json?v=3.5">
+  <link rel="stylesheet" href="styles.css?v=3.5">
 
-  <meta name="theme-color" content="#0f2747" />
+  <meta name="theme-color" content="#1f3558" />
 </head>
 <body>
 
-<header class="app-header">
+<header class="hero">
   <h1>AuditFlow Pro</h1>
   <p>Institutional Exposure Determination Instrument</p>
 </header>
@@ -20,11 +20,12 @@
 <main class="container">
 
   <section class="card">
-    <p class="version">Version: v3.4 Production Stable</p>
+    <div class="version">Version: v3.5 Production Stable</div>
+
     <h2>Audit Registration</h2>
 
     <label>Consultant Name</label>
-    <input id="consultant" type="text" />
+    <input id="consultant" type="text" value="Dan Hadfield" />
 
     <label>Organisation</label>
     <input id="organisation" type="text" />
@@ -49,15 +50,19 @@
 
 </main>
 
-<div id="toast" class="toast"></div>
+<!-- Professional Internal Confirmation Modal -->
+<div id="confirmModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Delete Audit</h3>
+    <p>This audit will be permanently removed from this device.</p>
+    <div class="modal-actions">
+      <button id="cancelDelete" class="secondary">Cancel</button>
+      <button id="confirmDelete" class="danger">Delete Permanently</button>
+    </div>
+  </div>
+</div>
 
-<script src="app.js"></script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
+<script src="app.js?v=3.5"></script>
 
 </body>
 </html>
