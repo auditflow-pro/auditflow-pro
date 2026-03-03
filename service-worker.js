@@ -1,39 +1,35 @@
-const CACHE_NAME = "auditflow-shell-v6.0";
+const CACHE_NAME = "auditflow-v1.0";
 
-const CORE = [
-  "/auditflow-pro/",
-  "/auditflow-pro/index.html?v=6.0",
-  "/auditflow-pro/styles.css?v=6.0",
-  "/auditflow-pro/app.js?v=6.0",
-  "/auditflow-pro/manifest.json?v=6.0"
+const CORE_ASSETS = [
+  "./",
+  "./index.html?v=1.0",
+  "./styles.css?v=1.0",
+  "./app.js?v=1.0",
+  "./manifest.json"
 ];
 
-self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(CORE))
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS))
   );
   self.skipWaiting();
 });
 
-self.addEventListener("activate", e => {
-  e.waitUntil(
+self.addEventListener("activate", event => {
+  event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
     )
   );
   self.clients.claim();
 });
 
-self.addEventListener("fetch", e => {
-  if (e.request.mode === "navigate") {
-    e.respondWith(
-      caches.match("/auditflow-pro/index.html?v=6.0")
-        .then(res => res || fetch(e.request))
-    );
-  } else {
-    e.respondWith(
-      caches.match(e.request)
-        .then(res => res || fetch(e.request))
-    );
-  }
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => response || fetch(event.request))
+  );
 });
