@@ -5,23 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AuditFlow Pro</title>
 
-  <!-- Version 3.7 Atomic -->
-  <link rel="manifest" href="manifest.json?v=3.7">
-  <link rel="stylesheet" href="styles.css?v=3.7">
-  <meta name="theme-color" content="#1f3558" />
+  <!-- Atomic Version 3.8 -->
+  <link rel="manifest" href="manifest.json?v=3.8">
+  <link rel="stylesheet" href="styles.css?v=3.8">
+  <meta name="theme-color" content="#0f2138" />
 </head>
 
 <body>
 
 <header class="hero">
-  <h1>AuditFlow Pro</h1>
-  <p>Institutional Exposure Determination Instrument</p>
+  <div class="hero-inner">
+    <h1>AuditFlow Pro</h1>
+    <p>Institutional Exposure Determination Instrument</p>
+  </div>
 </header>
 
-<main class="container">
+<main class="frame">
 
-  <section class="card">
-    <div class="version">Version: v3.7 Production Stable</div>
+  <section class="panel">
+    <div class="version">Version: v3.8 Production Stable</div>
 
     <h2>Audit Registration</h2>
 
@@ -44,7 +46,7 @@
     <button id="resetBtn" class="secondary">Start New Audit</button>
   </section>
 
-  <section class="card">
+  <section class="panel">
     <h2>Audit Ledger</h2>
     <div id="ledger"></div>
   </section>
@@ -62,12 +64,12 @@
   </div>
 </div>
 
-<script src="app.js?v=3.7"></script>
+<script src="app.js?v=3.8"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=3.7');
+    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=3.8');
   });
 }
 </script>
