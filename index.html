@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AuditFlow Pro</title>
 
-  <link rel="manifest" href="manifest.json?v=4.1">
-  <link rel="stylesheet" href="styles.css?v=4.1">
-  <meta name="theme-color" content="#0b1c2f" />
+  <link rel="manifest" href="manifest.json?v=4.2">
+  <link rel="stylesheet" href="styles.css?v=4.2">
+  <meta name="theme-color" content="#081826" />
 </head>
 
 <body>
@@ -19,10 +19,10 @@
   </div>
 </header>
 
-<main class="container">
+<main class="frame">
 
-  <section class="card">
-    <div class="version">Version: v4.1 Production Stable</div>
+  <section class="panel">
+    <div class="version">Version: v4.2 Production Stable</div>
 
     <h2>Audit Registration</h2>
 
@@ -45,7 +45,7 @@
     <button id="resetBtn" class="secondary">Start New Audit</button>
   </section>
 
-  <section class="card">
+  <section class="panel">
     <h2>Audit Ledger</h2>
     <div id="ledger"></div>
   </section>
@@ -61,12 +61,12 @@
   </div>
 </div>
 
-<script src="app.js?v=4.1"></script>
+<script src="app.js?v=4.2"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=4.1');
+    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=4.2');
   });
 }
 </script>
