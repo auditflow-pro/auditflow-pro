@@ -1,11 +1,11 @@
-const CACHE_NAME = "auditflow-shell-v4.1";
+const CACHE_NAME = "auditflow-shell-v4.2";
 
 const CORE = [
   "/auditflow-pro/",
   "/auditflow-pro/index.html",
-  "/auditflow-pro/styles.css?v=4.1",
-  "/auditflow-pro/app.js?v=4.1",
-  "/auditflow-pro/manifest.json?v=4.1"
+  "/auditflow-pro/styles.css?v=4.2",
+  "/auditflow-pro/app.js?v=4.2",
+  "/auditflow-pro/manifest.json?v=4.2"
 ];
 
 self.addEventListener("install", e => {
