@@ -20,7 +20,7 @@
 <main class="container">
 
   <section class="card">
-    <p class="version">Version: v3.3 Production Stable</p>
+    <p class="version">Version: v3.4 Production Stable</p>
     <h2>Audit Registration</h2>
 
     <label>Consultant Name</label>
@@ -55,17 +55,7 @@
 
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(reg => {
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'activated') {
-            window.location.reload();
-          }
-        });
-      });
-    });
+  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
