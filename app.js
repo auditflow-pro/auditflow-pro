@@ -1,69 +1,39 @@
-/* =========================================================
-   AUDITFLOW PRO — v3.6 ENGINE LOCK
-   £149-Level Ledger & Registration Engine
-   ========================================================= */
+// AuditFlow Pro — v3.7 Atomic Shell
+
+const LEDGER_KEY = "auditflow-ledger-v1";
 
 const ledgerEl = document.getElementById("ledger");
 const modal = document.getElementById("confirmModal");
 const confirmBtn = document.getElementById("confirmDelete");
 const cancelBtn = document.getElementById("cancelDelete");
 
-const consultantInput = document.getElementById("consultant");
-const organisationInput = document.getElementById("organisation");
-const clientInput = document.getElementById("client");
-const titleInput = document.getElementById("title");
-const dateInput = document.getElementById("date");
-
 let deleteTargetId = null;
 
-/* ---------- SAFE STORAGE LAYER ---------- */
+/* -------------------------
+   LEDGER STORAGE HANDLING
+--------------------------*/
 
 function getLedger() {
   try {
-    const data = localStorage.getItem("auditLedger");
-    if (!data) return [];
-    const parsed = JSON.parse(data);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (e) {
-    console.warn("Ledger corrupted. Resetting.");
-    localStorage.removeItem("auditLedger");
+    return JSON.parse(localStorage.getItem(LEDGER_KEY)) || [];
+  } catch {
     return [];
   }
 }
 
 function saveLedger(data) {
-  localStorage.setItem("auditLedger", JSON.stringify(data));
+  localStorage.setItem(LEDGER_KEY, JSON.stringify(data));
 }
 
-/* ---------- AUDIT REFERENCE GENERATOR ---------- */
-
-function generateAuditReference() {
-  const timestamp = new Date();
-  const year = timestamp.getFullYear();
-  const month = String(timestamp.getMonth() + 1).padStart(2, "0");
-  const day = String(timestamp.getDate()).padStart(2, "0");
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, "0");
-  return `AFP-${year}${month}${day}-${random}`;
-}
-
-/* ---------- VALIDATION ---------- */
-
-function validateInputs() {
-  if (!consultantInput.value.trim()) return false;
-  if (!organisationInput.value.trim()) return false;
-  if (!clientInput.value.trim()) return false;
-  if (!titleInput.value.trim()) return false;
-  if (!dateInput.value) return false;
-  return true;
-}
-
-/* ---------- LEDGER RENDER ---------- */
+/* -------------------------
+   RENDER LEDGER
+--------------------------*/
 
 function renderLedger() {
   const ledger = getLedger();
   ledgerEl.innerHTML = "";
 
-  if (ledger.length === 0) {
+  if (!ledger.length) {
     ledgerEl.innerHTML = "<p>No saved audits.</p>";
     return;
   }
@@ -71,33 +41,37 @@ function renderLedger() {
   ledger.forEach(item => {
     const div = document.createElement("div");
     div.className = "ledger-item";
+
     div.innerHTML = `
-      <strong>${item.reference}</strong><br>
-      ${item.title}<br>
-      ${item.client}<br>
-      ${item.date}<br><br>
-      <button class="danger" data-id="${item.id}">Delete</button>
+      <strong>${escapeHTML(item.title || "Untitled Audit")}</strong><br>
+      ${escapeHTML(item.client || "No Client")}<br>
+      ${item.date || "No Date"}<br><br>
+      <button class="danger delete-btn" data-id="${item.id}">Delete</button>
     `;
+
     ledgerEl.appendChild(div);
   });
 
-  document.querySelectorAll(".ledger-item .danger").forEach(btn => {
+  attachDeleteHandlers();
+}
+
+/* -------------------------
+   DELETE HANDLING
+--------------------------*/
+
+function attachDeleteHandlers() {
+  document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      deleteTargetId = btn.getAttribute("data-id");
+      deleteTargetId = btn.dataset.id;
       modal.classList.remove("hidden");
     });
   });
 }
 
-/* ---------- DELETE FLOW ---------- */
-
 confirmBtn.addEventListener("click", () => {
-  if (!deleteTargetId) return;
-
   let ledger = getLedger();
   ledger = ledger.filter(item => item.id !== deleteTargetId);
   saveLedger(ledger);
-
   deleteTargetId = null;
   modal.classList.add("hidden");
   renderLedger();
@@ -108,44 +82,69 @@ cancelBtn.addEventListener("click", () => {
   modal.classList.add("hidden");
 });
 
-/* ---------- SAVE FLOW ---------- */
+/* -------------------------
+   SAVE NEW AUDIT
+--------------------------*/
 
 document.getElementById("saveBtn").addEventListener("click", () => {
 
-  if (!validateInputs()) {
-    alert("All fields must be completed before saving.");
+  const consultant = document.getElementById("consultant").value.trim();
+  const organisation = document.getElementById("organisation").value.trim();
+  const client = document.getElementById("client").value.trim();
+  const title = document.getElementById("title").value.trim();
+  const date = document.getElementById("date").value;
+
+  if (!consultant || !title) {
+    alert("Consultant name and audit title are required.");
     return;
   }
 
-  const ledger = getLedger();
-
   const newAudit = {
     id: crypto.randomUUID(),
-    reference: generateAuditReference(),
-    consultant: consultantInput.value.trim(),
-    organisation: organisationInput.value.trim(),
-    client: clientInput.value.trim(),
-    title: titleInput.value.trim(),
-    date: dateInput.value
+    consultant,
+    organisation,
+    client,
+    title,
+    date,
+    created: new Date().toISOString()
   };
 
+  const ledger = getLedger();
   ledger.unshift(newAudit);
   saveLedger(ledger);
 
   renderLedger();
 });
 
-/* ---------- RESET FLOW ---------- */
+/* -------------------------
+   RESET FORM
+--------------------------*/
 
 document.getElementById("resetBtn").addEventListener("click", () => {
-
-  organisationInput.value = "";
-  clientInput.value = "";
-  titleInput.value = "";
-  dateInput.value = "";
-
+  document.getElementById("organisation").value = "";
+  document.getElementById("client").value = "";
+  document.getElementById("title").value = "";
+  document.getElementById("date").value = "";
 });
 
-/* ---------- INITIAL LOAD ---------- */
+/* -------------------------
+   UTILITIES
+--------------------------*/
 
-renderLedger();
+function escapeHTML(str) {
+  return str.replace(/[&<>"']/g, m => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[m]));
+}
+
+/* -------------------------
+   INITIALISE
+--------------------------*/
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderLedger();
+});
