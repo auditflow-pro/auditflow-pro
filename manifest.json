@@ -1,9 +1,25 @@
 {
-  "name": "AuditFlow Pro",
-  "short_name": "AuditFlow",
-  "start_url": "/?v=3.5",
+  "name": "AuditFlow Pro — Institutional Exposure Determination Instrument",
+  "short_name": "AuditFlow Pro",
+  "description": "AuditFlow Pro is a structured institutional exposure determination instrument designed for professional consultants conducting compliance and risk assessments.",
+  "start_url": "/?v=3.6",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#f2f4f7",
   "theme_color": "#1f3558",
-  "icons": []
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
