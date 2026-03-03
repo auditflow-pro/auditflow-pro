@@ -1,7 +1,7 @@
 {
   "name": "AuditFlow Pro – Institutional Exposure Determination Instrument",
   "short_name": "AuditFlow Pro",
-  "start_url": "/auditflow-pro/?v=5.0",
+  "start_url": "/auditflow-pro/?v=6.0",
   "scope": "/auditflow-pro/",
   "display": "standalone",
   "background_color": "#0c1a28",
