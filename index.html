@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AuditFlow Pro</title>
 
-  <!-- Version synchronisation -->
-  <link rel="manifest" href="manifest.json?v=3.6">
-  <link rel="stylesheet" href="styles.css?v=3.6">
-
+  <!-- Version 3.7 Atomic -->
+  <link rel="manifest" href="manifest.json?v=3.7">
+  <link rel="stylesheet" href="styles.css?v=3.7">
   <meta name="theme-color" content="#1f3558" />
 </head>
 
@@ -21,9 +20,8 @@
 
 <main class="container">
 
-  <!-- REGISTRATION CARD -->
   <section class="card">
-    <div class="version">Version: v3.6 Production Stable</div>
+    <div class="version">Version: v3.7 Production Stable</div>
 
     <h2>Audit Registration</h2>
 
@@ -46,7 +44,6 @@
     <button id="resetBtn" class="secondary">Start New Audit</button>
   </section>
 
-  <!-- LEDGER CARD -->
   <section class="card">
     <h2>Audit Ledger</h2>
     <div id="ledger"></div>
@@ -54,7 +51,6 @@
 
 </main>
 
-<!-- CONFIRMATION MODAL -->
 <div id="confirmModal" class="modal hidden">
   <div class="modal-content">
     <h3>Delete Audit</h3>
@@ -66,24 +62,12 @@
   </div>
 </div>
 
-<!-- APPLICATION SCRIPT -->
-<script src="app.js?v=3.6"></script>
+<script src="app.js?v=3.7"></script>
 
-<!-- SERVICE WORKER REGISTRATION (PROJECT-SITE SAFE) -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-
-    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=3.6', {
-      scope: '/auditflow-pro/'
-    })
-    .then(registration => {
-      registration.update();
-    })
-    .catch(error => {
-      console.error('Service Worker registration failed:', error);
-    });
-
+    navigator.serviceWorker.register('/auditflow-pro/service-worker.js?v=3.7');
   });
 }
 </script>
