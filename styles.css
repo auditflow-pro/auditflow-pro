@@ -1,8 +1,8 @@
+/* v3.0 */
+
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
-}
+*::after { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -11,37 +11,18 @@ html, body {
   color: #1b1f24;
 }
 
-/* Header */
-
-.app-header {
-  background: #162235;
-  color: #ffffff;
-}
+.app-header { background: #162235; color: #ffffff; }
 
 .header-inner {
   max-width: 900px;
   margin: 0 auto;
-  padding: 24px 20px 16px;
+  padding: 22px 20px 14px;
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-}
+.app-header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+.app-header p { margin: 4px 0 0; font-size: 13px; opacity: 0.85; }
 
-.app-header p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  opacity: 0.85;
-}
-
-.gold-band {
-  height: 3px;
-  background: linear-gradient(to right, #b89b5e, #d4b26a);
-}
-
-/* Frame */
+.gold-band { height: 3px; background: linear-gradient(to right, #b89b5e, #d4b26a); }
 
 .instrument-frame {
   max-width: 900px;
@@ -55,16 +36,9 @@ html, body {
   padding: 30px;
 }
 
-h2 {
-  margin: 0 0 20px;
-  font-size: 18px;
-}
+h2 { margin: 0 0 20px; font-size: 18px; }
 
-/* Fields */
-
-.field {
-  margin-bottom: 20px;
-}
+.field { margin-bottom: 18px; }
 
 label {
   display: block;
@@ -73,9 +47,9 @@ label {
   margin-bottom: 6px;
 }
 
-input, textarea, select {
+input, select {
   width: 100%;
-  height: 44px;
+  height: 42px;
   padding: 0 12px;
   border: 1px solid #cbd5e1;
   background: #ffffff;
@@ -84,19 +58,11 @@ input, textarea, select {
   appearance: none;
 }
 
-textarea {
-  height: 80px;
-  padding-top: 10px;
-  resize: vertical;
-}
-
-.actions {
-  margin-top: 25px;
-}
+.actions { margin-top: 22px; }
 
 button {
   width: 100%;
-  height: 46px;
+  height: 44px;
   border: none;
   background: #162235;
   color: #ffffff;
@@ -104,24 +70,17 @@ button {
   cursor: pointer;
 }
 
-button.secondary {
-  background: #6b7280;
-}
-
-button.danger {
-  background: #b91c1c;
-}
+button.secondary { background: #6b7280; }
+button.danger { background: #b91c1c; }
 
 .section-title {
-  margin-top: 30px;
-  margin-bottom: 10px;
-  font-size: 16px;
+  margin-top: 28px;
+  margin-bottom: 8px;
+  font-size: 15px;
   font-weight: 600;
-  border-bottom: 1px solid #d8dee4;
-  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 4px;
 }
-
-/* Footer */
 
 .app-footer {
   border-top: 1px solid #d8dee4;
