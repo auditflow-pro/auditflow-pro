@@ -1,4 +1,4 @@
-const STORAGE_KEY = "auditflow-ledger-v4";
+const STORAGE_KEY = "auditflow-ledger-v4.1";
 
 const ledgerEl = document.getElementById("ledger");
 const modal = document.getElementById("confirmModal");
