@@ -1,5 +1,6 @@
-const STORAGE_KEY = "auditflow-ledger-v4.1";
+const STORAGE_KEY = "auditflow-ledger-v4.2";
 
+/* Logic unchanged but version synchronised */
 const ledgerEl = document.getElementById("ledger");
 const modal = document.getElementById("confirmModal");
 const confirmBtn = document.getElementById("confirmDelete");
