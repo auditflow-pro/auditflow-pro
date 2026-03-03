@@ -2,67 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Proper mobile viewport discipline -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
   <title>AuditFlow Pro</title>
 
-  <link rel="manifest" href="manifest.json?v=3.5">
-  <link rel="stylesheet" href="styles.css?v=3.5">
+  <!-- Manifest & Styles (synchronised versioning) -->
+  <link rel="manifest" href="manifest.json?v=3.6">
+  <link rel="stylesheet" href="styles.css?v=3.6">
 
   <meta name="theme-color" content="#1f3558" />
 </head>
+
 <body>
 
-<header class="hero">
-  <h1>AuditFlow Pro</h1>
-  <p>Institutional Exposure Determination Instrument</p>
-</header>
+  <!-- HERO HEADER -->
+  <header class="hero">
+    <h1>AuditFlow Pro</h1>
+    <p>Institutional Exposure Determination Instrument</p>
+  </header>
 
-<main class="container">
+  <!-- MAIN CONTAINER -->
+  <main class="container">
 
-  <section class="card">
-    <div class="version">Version: v3.5 Production Stable</div>
+    <!-- REGISTRATION CARD -->
+    <section class="card">
+      <div class="version">Version: v3.6 Production Stable</div>
 
-    <h2>Audit Registration</h2>
+      <h2>Audit Registration</h2>
 
-    <label>Consultant Name</label>
-    <input id="consultant" type="text" value="Dan Hadfield" />
+      <label for="consultant">Consultant Name</label>
+      <input id="consultant" type="text" value="Dan Hadfield" autocomplete="off" />
 
-    <label>Organisation</label>
-    <input id="organisation" type="text" />
+      <label for="organisation">Organisation</label>
+      <input id="organisation" type="text" autocomplete="off" />
 
-    <label>Client / Site Name</label>
-    <input id="client" type="text" />
+      <label for="client">Client / Site Name</label>
+      <input id="client" type="text" autocomplete="off" />
 
-    <label>Audit Title</label>
-    <input id="title" type="text" />
+      <label for="title">Audit Title</label>
+      <input id="title" type="text" autocomplete="off" />
 
-    <label>Assessment Date</label>
-    <input id="date" type="date" />
+      <label for="date">Assessment Date</label>
+      <input id="date" type="date" />
 
-    <button id="saveBtn" class="primary">Save & Continue</button>
-    <button id="resetBtn" class="secondary">Start New Audit</button>
-  </section>
+      <button id="saveBtn" class="primary" type="button">Save & Continue</button>
+      <button id="resetBtn" class="secondary" type="button">Start New Audit</button>
+    </section>
 
-  <section class="card">
-    <h2>Audit Ledger</h2>
-    <div id="ledger"></div>
-  </section>
+    <!-- LEDGER CARD -->
+    <section class="card">
+      <h2>Audit Ledger</h2>
+      <div id="ledger"></div>
+    </section>
 
-</main>
+  </main>
 
-<!-- Professional Internal Confirmation Modal -->
-<div id="confirmModal" class="modal hidden">
-  <div class="modal-content">
-    <h3>Delete Audit</h3>
-    <p>This audit will be permanently removed from this device.</p>
-    <div class="modal-actions">
-      <button id="cancelDelete" class="secondary">Cancel</button>
-      <button id="confirmDelete" class="danger">Delete Permanently</button>
+  <!-- CONFIRMATION MODAL -->
+  <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h3>Delete Audit</h3>
+      <p>This audit will be permanently removed from this device.</p>
+      <div class="modal-actions">
+        <button id="cancelDelete" class="secondary" type="button">Cancel</button>
+        <button id="confirmDelete" class="danger" type="button">Delete Permanently</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="app.js?v=3.5"></script>
+  <!-- Script (synchronised version bump) -->
+  <script src="app.js?v=3.6"></script>
 
 </body>
 </html>
