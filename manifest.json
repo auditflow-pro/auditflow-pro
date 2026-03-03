@@ -1,25 +1,10 @@
 {
   "name": "AuditFlow Pro – Institutional Exposure Determination Instrument",
   "short_name": "AuditFlow Pro",
-  "description": "AuditFlow Pro is a structured offline institutional exposure determination instrument.",
-  "start_url": "/auditflow-pro/?v=3.9",
+  "start_url": "/auditflow-pro/?v=4.0",
   "scope": "/auditflow-pro/",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#f4f6f9",
-  "theme_color": "#0f2138",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+  "background_color": "#eef2f6",
+  "theme_color": "#0b1c2f",
+  "icons": []
 }
