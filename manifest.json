@@ -1,10 +1,9 @@
 {
   "name": "AuditFlow Pro",
   "short_name": "AuditFlow",
-  "start_url": ".",
+  "start_url": "/?v=3.5",
   "display": "standalone",
-  "background_color": "#0f2747",
-  "theme_color": "#0f2747",
-  "version": "3.4",
+  "background_color": "#f2f4f7",
+  "theme_color": "#1f3558",
   "icons": []
 }
