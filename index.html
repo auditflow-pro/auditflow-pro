@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
-  <!-- Proper mobile viewport discipline -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AuditFlow Pro</title>
 
-  <!-- Manifest & Styles (synchronised versioning) -->
+  <!-- Version synchronisation -->
   <link rel="manifest" href="manifest.json?v=3.6">
   <link rel="stylesheet" href="styles.css?v=3.6">
 
@@ -17,62 +14,80 @@
 
 <body>
 
-  <!-- HERO HEADER -->
-  <header class="hero">
-    <h1>AuditFlow Pro</h1>
-    <p>Institutional Exposure Determination Instrument</p>
-  </header>
+<header class="hero">
+  <h1>AuditFlow Pro</h1>
+  <p>Institutional Exposure Determination Instrument</p>
+</header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="container">
+<main class="container">
 
-    <!-- REGISTRATION CARD -->
-    <section class="card">
-      <div class="version">Version: v3.6 Production Stable</div>
+  <!-- REGISTRATION CARD -->
+  <section class="card">
+    <div class="version">Version: v3.6 Production Stable</div>
 
-      <h2>Audit Registration</h2>
+    <h2>Audit Registration</h2>
 
-      <label for="consultant">Consultant Name</label>
-      <input id="consultant" type="text" value="Dan Hadfield" autocomplete="off" />
+    <label for="consultant">Consultant Name</label>
+    <input id="consultant" type="text" value="Dan Hadfield" autocomplete="off" />
 
-      <label for="organisation">Organisation</label>
-      <input id="organisation" type="text" autocomplete="off" />
+    <label for="organisation">Organisation</label>
+    <input id="organisation" type="text" autocomplete="off" />
 
-      <label for="client">Client / Site Name</label>
-      <input id="client" type="text" autocomplete="off" />
+    <label for="client">Client / Site Name</label>
+    <input id="client" type="text" autocomplete="off" />
 
-      <label for="title">Audit Title</label>
-      <input id="title" type="text" autocomplete="off" />
+    <label for="title">Audit Title</label>
+    <input id="title" type="text" autocomplete="off" />
 
-      <label for="date">Assessment Date</label>
-      <input id="date" type="date" />
+    <label for="date">Assessment Date</label>
+    <input id="date" type="date" />
 
-      <button id="saveBtn" class="primary" type="button">Save & Continue</button>
-      <button id="resetBtn" class="secondary" type="button">Start New Audit</button>
-    </section>
+    <button id="saveBtn" class="primary">Save & Continue</button>
+    <button id="resetBtn" class="secondary">Start New Audit</button>
+  </section>
 
-    <!-- LEDGER CARD -->
-    <section class="card">
-      <h2>Audit Ledger</h2>
-      <div id="ledger"></div>
-    </section>
+  <!-- LEDGER CARD -->
+  <section class="card">
+    <h2>Audit Ledger</h2>
+    <div id="ledger"></div>
+  </section>
 
-  </main>
+</main>
 
-  <!-- CONFIRMATION MODAL -->
-  <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-content">
-      <h3>Delete Audit</h3>
-      <p>This audit will be permanently removed from this device.</p>
-      <div class="modal-actions">
-        <button id="cancelDelete" class="secondary" type="button">Cancel</button>
-        <button id="confirmDelete" class="danger" type="button">Delete Permanently</button>
-      </div>
+<!-- CONFIRMATION MODAL -->
+<div id="confirmModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Delete Audit</h3>
+    <p>This audit will be permanently removed from this device.</p>
+    <div class="modal-actions">
+      <button id="cancelDelete" class="secondary">Cancel</button>
+      <button id="confirmDelete" class="danger">Delete Permanently</button>
     </div>
   </div>
+</div>
 
-  <!-- Script (synchronised version bump) -->
-  <script src="app.js?v=3.6"></script>
+<!-- APPLICATION SCRIPT -->
+<script src="app.js?v=3.6"></script>
+
+<!-- SERVICE WORKER REGISTRATION -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+
+    navigator.serviceWorker.register('/service-worker.js?v=3.6')
+      .then(registration => {
+
+        // Silent update check
+        registration.update();
+
+      })
+      .catch(error => {
+        console.error('Service Worker registration failed:', error);
+      });
+
+  });
+}
+</script>
 
 </body>
 </html>
