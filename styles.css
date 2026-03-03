@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -84,6 +82,4 @@ button {
   transition: opacity 0.3s ease;
 }
 
-.toast.show {
-  opacity: 1;
-}
+.toast.show { opacity: 1; }
