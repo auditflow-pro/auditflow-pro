@@ -9,10 +9,10 @@ body {
 
 .hero {
   background: #0f2138;
-  padding: 60px 20px 70px;
-  position: relative;
+  padding: 64px 20px 72px;
   text-align: center;
   color: white;
+  position: relative;
 }
 
 .hero::after {
@@ -21,7 +21,7 @@ body {
   bottom: 0;
   width: 100%;
   height: 2px;
-  background: #b08a3c; /* muted brass */
+  background: #0f2138; /* removed decorative gold */
 }
 
 .hero h1 {
@@ -32,39 +32,28 @@ body {
 }
 
 .hero p {
-  margin-top: 10px;
+  margin-top: 8px;
   opacity: 0.8;
   font-size: 14px;
 }
 
-/* FRAME CONTAINMENT */
+/* FRAME */
 
 .frame {
   max-width: 620px;
-  margin: -40px auto 60px;
+  margin: -42px auto 60px;
   padding: 0 18px;
 }
 
-/* PANELS */
+/* PANEL */
 
 .panel {
   background: white;
-  padding: 24px;
-  border-radius: 8px;
+  padding: 22px;
+  border-radius: 6px;
   margin-bottom: 28px;
-  border: 1px solid rgba(15,23,42,0.08);
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-  position: relative;
-}
-
-.panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #b08a3c;
+  border: 1px solid rgba(15,23,42,0.12);
+  box-shadow: 0 4px 12px rgba(15,23,42,0.05);
 }
 
 .version {
@@ -76,32 +65,42 @@ body {
 h2 {
   margin: 0 0 18px;
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
-/* FORM */
+/* STRICT FORM NORMALISATION */
+
+input {
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+
+  border-radius: 6px;
+  border: 1.5px solid #475569;
+
+  font-size: 16px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  line-height: 1;
+}
+
+input[type="date"] {
+  display: block;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0f2138;
+}
 
 label {
   display: block;
   margin-top: 16px;
   font-weight: 600;
   font-size: 14px;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  border-radius: 6px;
-  border: 1.5px solid #94a3b8;
-  font-size: 16px;
-  box-sizing: border-box;
-  background: #ffffff;
-}
-
-input:focus {
-  outline: none;
-  border-color: #b08a3c;
 }
 
 /* BUTTONS */
@@ -136,7 +135,7 @@ button {
 
 .ledger-item {
   padding: 18px;
-  border: 1px solid rgba(15,23,42,0.08);
+  border: 1px solid rgba(15,23,42,0.12);
   border-radius: 6px;
   margin-bottom: 16px;
 }
@@ -158,8 +157,8 @@ button {
 
 .modal-content {
   background: white;
-  padding: 26px;
-  border-radius: 8px;
+  padding: 24px;
+  border-radius: 6px;
   width: 92%;
   max-width: 420px;
 }
