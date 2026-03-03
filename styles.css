@@ -1,22 +1,19 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #0c1a28; /* Executive shell */
+  background: #0c1a28;
   color: #0e1a24;
 }
 
-/* HERO — Compressed & Authoritative */
+/* HERO */
 
 .hero {
-  background: #0c1a28;
-  padding: 28px 16px 24px;
+  padding: 26px 16px 20px;
   text-align: center;
   color: #ffffff;
-  border-bottom: 1px solid #7a6636; /* structural bronze seam */
+  border-bottom: 1px solid #7a6636;
 }
 
 .hero h1 {
@@ -29,33 +26,43 @@ body {
 .hero p {
   margin-top: 4px;
   font-size: 12px;
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 /* FRAME */
 
 .frame {
   max-width: 640px;
-  margin: 24px auto 60px;
+  margin: 22px auto 50px;
   padding: 0 18px;
 }
 
-/* PANEL — Instrument Slab */
+/* PANEL */
 
 .panel {
-  background: #f6f4ef; /* Warm ivory */
+  background: #f6f4ef;
   border: 1px solid #c9d1d9;
   border-radius: 6px;
   padding: 20px;
-  margin-bottom: 28px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+  margin-bottom: 26px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
 }
 
 .version {
-  font-size: 12px;
+  font-size: 11px;
   color: #5b6570;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
+
+.afp {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  color: #0c1a28;
+}
+
+.hidden { display: none; }
 
 h2 {
   margin: 0 0 16px;
@@ -127,6 +134,20 @@ button {
   background: #ffffff;
 }
 
+.ledger-item strong {
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+
+/* FOOTER */
+
+.institution {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  padding: 30px 16px 40px;
+}
+
 /* MODAL */
 
 .modal {
@@ -136,10 +157,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.hidden {
-  display: none;
 }
 
 .modal-box {
