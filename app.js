@@ -1,15 +1,17 @@
-const ledgerKey = "afp_ledger_v3_2";
-const legacyKeys = ["afp_ledger_v3_1", "afp_ledger_v3"];
+const STORAGE_KEY = "afp-ledger";
 
-const consultant = document.getElementById("consultant");
-const organisation = document.getElementById("organisation");
-const client = document.getElementById("client");
-const title = document.getElementById("title");
-const date = document.getElementById("date");
 const saveBtn = document.getElementById("saveBtn");
 const resetBtn = document.getElementById("resetBtn");
 const ledgerDiv = document.getElementById("ledger");
 const toast = document.getElementById("toast");
+
+function getLedger() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function setLedger(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
 
 function showToast(message) {
   toast.textContent = message;
@@ -17,78 +19,8 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove("show"), 2000);
 }
 
-function generateID() {
-  return "AFP-" + Date.now();
-}
-
-/* ---------- DATE NORMALISATION ---------- */
-
-function toISO(dateString) {
-
-  if (!dateString) return "";
-
-  // Already ISO
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-    return dateString;
-  }
-
-  // DD/MM/YYYY
-  const slashMatch = dateString.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (slashMatch) {
-    const [ , d, m, y ] = slashMatch;
-    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
-  }
-
-  // D MMM YYYY
-  const monthMap = {
-    Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-    May: "05", Jun: "06", Jul: "07", Aug: "08",
-    Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-  };
-
-  const textMatch = dateString.match(/^(\d{1,2})\s([A-Za-z]{3})\s(\d{4})$/);
-  if (textMatch) {
-    const [ , d, mText, y ] = textMatch;
-    return `${y}-${monthMap[mText]}-${d.padStart(2,'0')}`;
-  }
-
-  return dateString;
-}
-
-/* ---------- MIGRATION ---------- */
-
-function migrateLedger() {
-
-  let combined = [];
-
-  legacyKeys.forEach(key => {
-    const old = JSON.parse(localStorage.getItem(key));
-    if (old && Array.isArray(old)) {
-      combined = combined.concat(old);
-    }
-  });
-
-  const current = JSON.parse(localStorage.getItem(ledgerKey));
-  if (current && Array.isArray(current)) {
-    combined = combined.concat(current);
-  }
-
-  if (combined.length === 0) return;
-
-  const migrated = combined.map(entry => ({
-    ...entry,
-    date: toISO(entry.date)
-  }));
-
-  localStorage.setItem(ledgerKey, JSON.stringify(migrated));
-
-  legacyKeys.forEach(key => localStorage.removeItem(key));
-}
-
-/* ---------- LEDGER ---------- */
-
-function loadLedger() {
-  const ledger = JSON.parse(localStorage.getItem(ledgerKey)) || [];
+function renderLedger() {
+  const ledger = getLedger();
   ledgerDiv.innerHTML = "";
 
   if (ledger.length === 0) {
@@ -96,57 +28,72 @@ function loadLedger() {
     return;
   }
 
-  ledger.forEach(entry => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <strong>${entry.title}</strong><br>
-      ${entry.client}<br>
-      ${entry.date}<br>
-      ${entry.id}
+  ledger.slice().reverse().forEach(item => {
+    const div = document.createElement("div");
+    div.className = "ledger-item";
+
+    div.innerHTML = `
+      <h3>${item.title || "Untitled"}</h3>
+      <p>${item.client}</p>
+      <p>${item.date}</p>
+      <p>${item.id}</p>
+      <button class="delete-btn" data-id="${item.id}">Delete</button>
     `;
-    ledgerDiv.appendChild(card);
+
+    ledgerDiv.appendChild(div);
+  });
+
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
+      if (confirm("Delete this audit permanently?")) {
+        deleteAudit(id);
+      }
+    });
   });
 }
 
-/* ---------- SAVE ---------- */
+function deleteAudit(id) {
+  let ledger = getLedger();
+  ledger = ledger.filter(item => item.id !== id);
+  setLedger(ledger);
+  renderLedger();
+  showToast("Audit deleted.");
+}
 
 saveBtn.addEventListener("click", () => {
+  const consultant = document.getElementById("consultant").value;
+  const organisation = document.getElementById("organisation").value;
+  const client = document.getElementById("client").value;
+  const title = document.getElementById("title").value;
+  const date = document.getElementById("date").value;
 
-  if (!date.value) {
-    showToast("Assessment date required.");
+  if (!date) {
+    alert("Please select a date.");
     return;
   }
 
-  const ledger = JSON.parse(localStorage.getItem(ledgerKey)) || [];
+  const id = "AFP-" + Date.now();
 
   const newEntry = {
-    id: generateID(),
-    consultant: consultant.value,
-    organisation: organisation.value,
-    client: client.value,
-    title: title.value,
-    date: toISO(date.value)
+    id,
+    consultant,
+    organisation,
+    client,
+    title,
+    date
   };
 
-  ledger.unshift(newEntry);
-  localStorage.setItem(ledgerKey, JSON.stringify(ledger));
+  const ledger = getLedger();
+  ledger.push(newEntry);
+  setLedger(ledger);
 
+  renderLedger();
   showToast("Audit saved to ledger.");
-  loadLedger();
 });
-
-/* ---------- RESET ---------- */
 
 resetBtn.addEventListener("click", () => {
-  consultant.value = "";
-  organisation.value = "";
-  client.value = "";
-  title.value = "";
-  date.value = "";
+  document.querySelectorAll("input").forEach(input => input.value = "");
 });
 
-/* ---------- INIT ---------- */
-
-migrateLedger();
-loadLedger();
+renderLedger();
