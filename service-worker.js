@@ -1,11 +1,11 @@
-const CACHE_NAME = "auditflow-shell-v3.7";
+const CACHE_NAME = "auditflow-shell-v3.8";
 
 const CORE_ASSETS = [
   "/auditflow-pro/",
   "/auditflow-pro/index.html",
-  "/auditflow-pro/styles.css?v=3.7",
-  "/auditflow-pro/app.js?v=3.7",
-  "/auditflow-pro/manifest.json?v=3.7",
+  "/auditflow-pro/styles.css?v=3.8",
+  "/auditflow-pro/app.js?v=3.8",
+  "/auditflow-pro/manifest.json?v=3.8",
   "/auditflow-pro/icon-192.png",
   "/auditflow-pro/icon-512.png"
 ];
