@@ -1,85 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>AuditFlow Pro — Institutional Exposure Determination Instrument</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuditFlow Pro</title>
 
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#0f1c2e" />
-<link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <meta name="theme-color" content="#0f2747" />
 </head>
-
 <body>
 
 <header class="app-header">
-    <h1>AuditFlow Pro</h1>
-    <p>Institutional Exposure Determination Instrument</p>
+  <h1>AuditFlow Pro</h1>
+  <p>Institutional Exposure Determination Instrument</p>
 </header>
 
-<main class="app-main">
+<main class="container">
 
-<section class="card">
-
-    <div class="version-block">
-        Version: v3.1 Global Institutional Baseline
-    </div>
-
+  <section class="card">
+    <p class="version">Version: v3.1 Global ISO Baseline</p>
     <h2>Audit Registration</h2>
 
-    <form autocomplete="off" novalidate>
+    <label>Consultant Name</label>
+    <input id="consultant" type="text" />
 
-        <div class="form-group">
-            <label>Consultant Name</label>
-            <input class="input-field" id="consultant" type="text" />
-        </div>
+    <label>Organisation</label>
+    <input id="organisation" type="text" />
 
-        <div class="form-group">
-            <label>Organisation</label>
-            <input class="input-field" id="organisation" type="text" />
-        </div>
+    <label>Client / Site Name</label>
+    <input id="client" type="text" />
 
-        <div class="form-group">
-            <label>Client / Site Name</label>
-            <input class="input-field" id="client" type="text" />
-        </div>
+    <label>Audit Title</label>
+    <input id="title" type="text" />
 
-        <div class="form-group">
-            <label>Audit Title</label>
-            <input class="input-field" id="auditTitle" type="text" />
-        </div>
+    <label>Assessment Date</label>
+    <input id="date" type="date" />
 
-        <div class="form-group">
-            <label>Assessment Date</label>
-            <input class="input-field" id="assessmentDate" type="text" placeholder="DD MMM YYYY" />
-        </div>
+    <button id="saveBtn" class="primary">Save & Continue</button>
+    <button id="resetBtn" class="secondary">Start New Audit</button>
+  </section>
 
-        <button type="button" id="saveAuditBtn" class="primary-button">
-            Save & Continue
-        </button>
-
-        <button type="button" id="newAuditBtn" class="secondary-button">
-            Start New Audit
-        </button>
-
-    </form>
-
-</section>
-
-<section class="card">
-
-    <h3>Audit Ledger</h3>
-    <div id="ledgerList"></div>
-
-</section>
+  <section class="card">
+    <h2>Audit Ledger</h2>
+    <div id="ledger"></div>
+  </section>
 
 </main>
+
+<div id="toast" class="toast"></div>
 
 <script src="app.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
+  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
+
 </body>
 </html>
