@@ -5,35 +5,25 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #edf1f5;
-  color: #0b1622;
+  background: #0c1a28; /* Executive shell */
+  color: #0e1a24;
 }
 
-/* HERO — Now structural, not dominant */
+/* HERO — Compressed & Authoritative */
 
 .hero {
-  background: #071521;
-  padding: 34px 16px 28px;
+  background: #0c1a28;
+  padding: 28px 16px 24px;
   text-align: center;
-  color: white;
-  position: relative;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #756235; /* colder brass */
+  color: #ffffff;
+  border-bottom: 1px solid #7a6636; /* structural bronze seam */
 }
 
 .hero h1 {
   margin: 0;
-  font-size: 20px;
-  font-weight: 650;
-  letter-spacing: 0.3px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
 }
 
 .hero p {
@@ -45,42 +35,31 @@ body {
 /* FRAME */
 
 .frame {
-  max-width: 620px;
-  margin: -18px auto 60px;
-  padding: 0 16px;
+  max-width: 640px;
+  margin: 24px auto 60px;
+  padding: 0 18px;
 }
 
-/* PANEL */
+/* PANEL — Instrument Slab */
 
 .panel {
-  background: #ffffff;
-  border: 1px solid #cfd6de;
-  border-radius: 3px;
+  background: #f6f4ef; /* Warm ivory */
+  border: 1px solid #c9d1d9;
+  border-radius: 6px;
   padding: 20px;
-  margin-bottom: 24px;
-  position: relative;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-}
-
-.panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #756235;
+  margin-bottom: 28px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.18);
 }
 
 .version {
   font-size: 12px;
-  color: #6b7280;
-  margin-bottom: 12px;
+  color: #5b6570;
+  margin-bottom: 14px;
 }
 
 h2 {
   margin: 0 0 16px;
-  font-weight: 650;
+  font-weight: 700;
   font-size: 18px;
 }
 
@@ -96,25 +75,18 @@ label {
 input {
   appearance: none;
   -webkit-appearance: none;
-
   width: 100%;
   height: 44px;
   padding: 0 12px;
-
-  border: 1.4px solid #5a6673;
-  border-radius: 3px;
-
+  border: 1.6px solid #5f6b77;
+  border-radius: 6px;
   font-size: 15px;
   background: #ffffff;
 }
 
-input[type="date"] {
-  display: block;
-}
-
 input:focus {
   outline: none;
-  border-color: #071521;
+  border-color: #0c1a28;
 }
 
 /* BUTTONS */
@@ -123,35 +95,36 @@ button {
   width: 100%;
   height: 46px;
   margin-top: 16px;
-  border-radius: 3px;
+  border-radius: 6px;
   border: none;
-  font-weight: 650;
+  font-weight: 700;
   font-size: 15px;
   cursor: pointer;
 }
 
 .primary {
-  background: #071521;
-  color: white;
+  background: #0c1a28;
+  color: #ffffff;
 }
 
 .secondary {
-  background: #dbe1e8;
-  color: #0b1622;
+  background: #d8dde4;
+  color: #0e1a24;
 }
 
 .danger {
   background: #8f1d1d;
-  color: white;
+  color: #ffffff;
 }
 
 /* LEDGER */
 
 .ledger-item {
-  border: 1px solid #cfd6de;
-  border-radius: 3px;
+  border: 1px solid #c9d1d9;
+  border-radius: 6px;
   padding: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  background: #ffffff;
 }
 
 /* MODAL */
@@ -159,7 +132,7 @@ button {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(7, 21, 33, 0.45);
+  background: rgba(12, 26, 40, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,9 +143,9 @@ button {
 }
 
 .modal-box {
-  background: white;
+  background: #f6f4ef;
   padding: 20px;
-  border-radius: 3px;
+  border-radius: 6px;
   width: 90%;
   max-width: 400px;
 }
