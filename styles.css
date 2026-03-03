@@ -1,16 +1,18 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f6f8fb;
+  background: #f4f6f9;
   color: #0f172a;
 }
 
+/* HERO */
+
 .hero {
-  background: linear-gradient(165deg, #14273f, #1f3558 70%);
-  color: white;
-  padding: 48px 20px 60px;
-  text-align: center;
+  background: #0f2138;
+  padding: 60px 20px 70px;
   position: relative;
+  text-align: center;
+  color: white;
 }
 
 .hero::after {
@@ -18,96 +20,128 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg,#c5a04d,#e6c26f,#c5a04d);
+  height: 2px;
+  background: #b08a3c; /* muted brass */
 }
 
-.container {
+.hero h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: 0.4px;
+}
+
+.hero p {
+  margin-top: 10px;
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+/* FRAME CONTAINMENT */
+
+.frame {
   max-width: 620px;
-  margin: -36px auto 60px;
+  margin: -40px auto 60px;
   padding: 0 18px;
 }
 
-.card {
+/* PANELS */
+
+.panel {
   background: white;
-  padding: 26px;
-  border-radius: 14px;
+  padding: 24px;
+  border-radius: 8px;
   margin-bottom: 28px;
-  box-shadow: 0 10px 24px rgba(15,23,42,0.08);
-  border: 1px solid rgba(15,23,42,0.05);
+  border: 1px solid rgba(15,23,42,0.08);
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
   position: relative;
 }
 
-.card::before {
+.panel::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg,#c5a04d,#e6c26f,#c5a04d);
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
+  height: 2px;
+  background: #b08a3c;
 }
 
 .version {
-  color: #64748b;
   font-size: 13px;
+  color: #64748b;
   margin-bottom: 14px;
 }
 
 h2 {
   margin: 0 0 18px;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
+
+/* FORM */
 
 label {
   display: block;
-  margin-top: 18px;
+  margin-top: 16px;
   font-weight: 600;
   font-size: 14px;
 }
 
 input {
   width: 100%;
-  padding: 14px;
-  margin-top: 8px;
-  border-radius: 10px;
-  border: 1.5px solid #cbd5e1;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1.5px solid #94a3b8;
   font-size: 16px;
   box-sizing: border-box;
+  background: #ffffff;
 }
 
 input:focus {
   outline: none;
-  border-color: #c5a04d;
+  border-color: #b08a3c;
 }
+
+/* BUTTONS */
 
 button {
   width: 100%;
-  padding: 16px;
-  margin-top: 20px;
-  border-radius: 12px;
-  font-size: 16px;
+  padding: 14px;
+  margin-top: 18px;
+  border-radius: 6px;
+  font-size: 15px;
   font-weight: 600;
   border: none;
   cursor: pointer;
 }
 
 .primary {
-  background: linear-gradient(165deg,#14273f,#1f3558 80%);
+  background: #0f2138;
   color: white;
 }
 
 .secondary {
   background: #e2e8f0;
-  color: #1e293b;
+  color: #0f172a;
 }
 
 .danger {
-  background: #b91c1c;
+  background: #991b1b;
   color: white;
 }
+
+/* LEDGER */
+
+.ledger-item {
+  padding: 18px;
+  border: 1px solid rgba(15,23,42,0.08);
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+/* MODAL */
 
 .modal {
   position: fixed;
@@ -124,8 +158,8 @@ button {
 
 .modal-content {
   background: white;
-  padding: 28px;
-  border-radius: 14px;
+  padding: 26px;
+  border-radius: 8px;
   width: 92%;
   max-width: 420px;
 }
