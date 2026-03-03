@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AuditFlow Pro</title>
 
-<link rel="manifest" href="manifest.json?v=2.0">
-<link rel="stylesheet" href="styles.css?v=2.0">
+<link rel="manifest" href="manifest.json?v=3.0">
+<link rel="stylesheet" href="styles.css?v=3.0">
 <meta name="theme-color" content="#162235">
 
 </head>
@@ -21,25 +21,23 @@
 </header>
 
 <main class="instrument-frame">
-
   <div id="app"></div>
-
 </main>
 
 <footer class="app-footer">
   <div class="footer-inner">
     <span>© AuditFlow Pro</span>
     <span>All Rights Reserved</span>
-    <span id="footer-version">v2.0</span>
+    <span>v3.0</span>
   </div>
 </footer>
 
-<script src="app.js?v=2.0"></script>
+<script src="app.js?v=3.0"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js?v=2.0');
+    navigator.serviceWorker.register('service-worker.js?v=3.0');
   });
 }
 </script>
