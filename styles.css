@@ -30,6 +30,11 @@ font-size:13px;
 opacity:.7;
 }
 
+.version{
+font-size:14px;
+opacity:.8;
+}
+
 .gold-bar{
 height:4px;
 background:#c6a35b;
@@ -50,10 +55,6 @@ margin-bottom:20px;
 box-shadow:0 6px 18px rgba(0,0,0,.04);
 }
 
-.hidden{
-display:none;
-}
-
 label{
 display:block;
 margin-top:16px;
@@ -61,15 +62,32 @@ margin-bottom:6px;
 font-weight:600;
 }
 
-input,select{
+/* UNIVERSAL INPUT ALIGNMENT */
+
+input{
 width:100%;
 height:48px;
-padding:0 12px;
+padding:0 14px;
 border:1px solid #d1d5db;
 border-radius:6px;
 font-size:16px;
 background:white;
 box-sizing:border-box;
+}
+
+/* DATE FIELD NORMALISATION */
+
+input[type="date"]{
+appearance:none;
+-webkit-appearance:none;
+line-height:48px;
+}
+
+/* INTERNAL DATE TEXT ALIGNMENT */
+
+input::-webkit-date-and-time-value{
+text-align:left;
+line-height:48px;
 }
 
 button{
