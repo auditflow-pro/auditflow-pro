@@ -8,8 +8,8 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=6.0">
-<link rel="manifest" href="manifest.json?v=6.0">
+<link rel="stylesheet" href="styles.css?v=6.2">
+<link rel="manifest" href="manifest.json?v=6.2">
 
 <meta name="theme-color" content="#0f172a">
 
@@ -27,7 +27,7 @@ AuditFlow Pro
 </div>
 
 <div class="version">
-Instrument Version v6.0
+Instrument Version v6.2
 </div>
 
 </div>
@@ -43,16 +43,16 @@ Instrument Version v6.0
 <h1>Audit Registration</h1>
 
 <label>Consultant</label>
-<input id="consultant">
+<input id="consultant" type="text">
 
 <label>Organisation</label>
-<input id="organisation">
+<input id="organisation" type="text">
 
 <label>Client / Site</label>
-<input id="clientSite">
+<input id="clientSite" type="text">
 
 <label>Audit Title</label>
-<input id="auditTitle">
+<input id="auditTitle" type="text">
 
 <label for="assessmentDate">Assessment Date</label>
 
@@ -60,7 +60,6 @@ Instrument Version v6.0
 type="date"
 id="assessmentDate"
 name="assessmentDate"
-class="date-input"
 required
 >
 
@@ -82,14 +81,14 @@ Audit Records
 
 </footer>
 
-<script src="app.js?v=6.0"></script>
+<script src="app.js?v=6.2"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
 
 window.addEventListener('load', () => {
 
-navigator.serviceWorker.register('./service-worker.js?v=6.0', {scope: './'})
+navigator.serviceWorker.register('./service-worker.js?v=6.2', {scope: './'})
 
 })
 
