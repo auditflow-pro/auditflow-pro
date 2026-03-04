@@ -8,8 +8,8 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=7.4">
-<link rel="manifest" href="manifest.json?v=7.4">
+<link rel="stylesheet" href="styles.css?v=7.6">
+<link rel="manifest" href="manifest.json?v=7.6">
 
 <meta name="theme-color" content="#0f172a">
 
@@ -27,7 +27,7 @@ AuditFlow Pro
 </div>
 
 <div class="version">
-Instrument Version v7.4
+Instrument Version v7.6
 </div>
 
 </div>
@@ -73,11 +73,13 @@ Audit Records
 © AuditFlow Pro — Professional Audit Instrument System
 </footer>
 
-<script src="app.js?v=7.4"></script>
+<script src="app.js?v=7.6"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
-navigator.serviceWorker.register('./service-worker.js?v=7.4')
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('./service-worker.js?v=7.6');
+});
 }
 </script>
 
