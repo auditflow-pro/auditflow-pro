@@ -62,7 +62,7 @@ margin-bottom:6px;
 font-weight:600;
 }
 
-/* UNIVERSAL INPUT ALIGNMENT */
+/* MASTER INPUT CONTROL */
 
 input{
 width:100%;
@@ -75,18 +75,18 @@ background:white;
 box-sizing:border-box;
 }
 
-/* DATE FIELD NORMALISATION */
+/* FIX DATE CONTROL HEIGHT */
 
 input[type="date"]{
 appearance:none;
 -webkit-appearance:none;
-line-height:48px;
+height:48px;
 }
 
-/* INTERNAL DATE TEXT ALIGNMENT */
+/* FIX CHROME DATE TEXT ALIGNMENT */
 
 input::-webkit-date-and-time-value{
-text-align:left;
+height:48px;
 line-height:48px;
 }
 
