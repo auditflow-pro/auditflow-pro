@@ -1,73 +1,131 @@
-/*
-AuditFlow Pro
-Runtime Engine
-Version 7.6
-*/
+const APP_VERSION="9.0";
 
-const APP_VERSION="7.6";
+const domains=[
 
-document.addEventListener("DOMContentLoaded",function(){
+"Site & Environment",
+"Life Safety Risk",
+"Fire & Egress",
+"Structural Integrity",
+"Electrical / Mechanical",
+"Hazardous Substances",
+"Operational Controls",
+"Documentation & Records",
+"Governance & Oversight",
+"Training & Competency"
 
-const registerButton=document.getElementById("registerAudit");
-const recordsButton=document.getElementById("auditRecords");
+];
 
-if(registerButton){
+const scores=[0,6,12,18,24,30,36];
 
-registerButton.addEventListener("click",function(){
+document.addEventListener("DOMContentLoaded",()=>{
 
-const consultant=document.getElementById("consultant").value;
-const organisation=document.getElementById("organisation").value;
-const site=document.getElementById("clientSite").value;
-const title=document.getElementById("auditTitle").value;
-const date=document.getElementById("assessmentDate").value;
+const register=document.getElementById("registerAudit");
 
-const auditRecord={
+if(register){
 
-version:APP_VERSION,
-consultant:consultant,
-organisation:organisation,
-site:site,
-title:title,
-date:date,
-timestamp:new Date().toISOString()
+register.onclick=()=>{
+
+const audit={
+
+consultant:document.getElementById("consultant").value,
+organisation:document.getElementById("organisation").value,
+site:document.getElementById("clientSite").value,
+title:document.getElementById("auditTitle").value,
+date:document.getElementById("assessmentDate").value
 
 };
 
-localStorage.setItem("auditflow_active_audit",JSON.stringify(auditRecord));
+localStorage.setItem("audit",JSON.stringify(audit));
 
-alert("Audit Registered");
+window.location="assessment.html";
 
-});
+};
 
 }
 
-if(recordsButton){
+const domainContainer=document.getElementById("domains");
 
-recordsButton.addEventListener("click",function(){
+if(domainContainer){
 
-const record=localStorage.getItem("auditflow_active_audit");
+domains.forEach((d,i)=>{
 
-if(record){
+const block=document.createElement("div");
 
-const data=JSON.parse(record);
+block.className="domain";
+
+const title=document.createElement("div");
+title.className="domain-title";
+title.innerText=d;
+
+const row=document.createElement("div");
+row.className="score-row";
+
+scores.forEach(score=>{
+
+const btn=document.createElement("div");
+
+btn.className="score";
+
+btn.innerText=score;
+
+btn.onclick=()=>{
+
+localStorage.setItem("domain_"+i,score);
+
+};
+
+row.appendChild(btn);
+
+});
+
+block.appendChild(title);
+block.appendChild(row);
+
+domainContainer.appendChild(block);
+
+});
+
+document.getElementById("determineExposure").onclick=determineExposure;
+
+}
+
+});
+
+function determineExposure(){
+
+let total=0;
+let highest=0;
+let highestDomain="";
+
+domains.forEach((d,i)=>{
+
+const s=parseInt(localStorage.getItem("domain_"+i)||0);
+
+total+=s;
+
+if(s>highest){
+
+highest=s;
+highestDomain=d;
+
+}
+
+});
+
+const ratio=(total/200).toFixed(2);
+
+let classification="Stable";
+
+if(ratio>1.6) classification="Critical";
+else if(ratio>1.25) classification="Severe";
+else if(ratio>1.0) classification="Elevated";
 
 alert(
-"Active Audit\n\n"+
-"Consultant: "+data.consultant+"\n"+
-"Organisation: "+data.organisation+"\n"+
-"Site: "+data.site+"\n"+
-"Title: "+data.title+"\n"+
-"Date: "+data.date
+
+"Exposure Classification: "+classification+
+"\nHighest Domain: "+highestDomain+
+"\nAggregate Ratio: "+ratio
+
 );
 
-}else{
-
-alert("No audit records stored.");
-
 }
-
-});
-
-}
-
-});
