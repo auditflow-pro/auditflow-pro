@@ -1,118 +1,57 @@
-const domains=[
-"Site & Environment",
-"Life Safety Risk",
-"Fire & Egress",
-"Structural Integrity",
-"Electrical / Mechanical",
-"Hazardous Substances",
-"Operational Controls",
-"Documentation & Records",
-"Governance & Oversight",
-"Training & Competency"
-]
-
-const scores=[0,6,12,18,24,30,36]
-
 document.addEventListener("DOMContentLoaded",()=>{
 
-const register=document.getElementById("registerAudit")
+const startAudit=document.getElementById("startAudit");
 
-if(register){
+if(startAudit){
 
-register.onclick=()=>{
+startAudit.onclick=()=>{
 
-const audit={
-consultant:consultant.value,
-organisation:organisation.value,
-site:clientSite.value,
-title:auditTitle.value,
-date:assessmentDate.value
-}
+window.location="assessment.html";
 
-localStorage.setItem("audit",JSON.stringify(audit))
-
-location.href="assessment.html"
+};
 
 }
 
-}
+const determine=document.getElementById("determineExposure");
 
-const domainContainer=document.getElementById("domains")
+if(determine){
 
-if(domainContainer){
+determine.onclick=()=>{
 
-domains.forEach((d,i)=>{
+localStorage.setItem("classification","Stable");
 
-const block=document.createElement("div")
-block.className="domain"
+localStorage.setItem("domain","Operational Controls");
 
-const title=document.createElement("div")
-title.className="domain-title"
-title.innerText=d
+localStorage.setItem("ratio","0.93");
 
-const row=document.createElement("div")
-row.className="score-row"
+window.location="determination.html";
 
-scores.forEach(s=>{
-
-const btn=document.createElement("div")
-btn.className="score"
-btn.innerText=s
-
-btn.onclick=()=>{
-
-localStorage.setItem("domain_"+i,s)
+};
 
 }
 
-row.appendChild(btn)
+const classification=document.getElementById("classification");
 
-})
+if(classification){
 
-block.appendChild(title)
-block.appendChild(row)
+classification.innerText=localStorage.getItem("classification");
 
-domainContainer.appendChild(block)
+document.getElementById("domain").innerText=localStorage.getItem("domain");
 
-})
-
-document.getElementById("determineExposure").onclick=determine
+document.getElementById("ratio").innerText=localStorage.getItem("ratio");
 
 }
 
-})
+const reportButton=document.getElementById("reportButton");
 
-function determine(){
+if(reportButton){
 
-let total=0
-let highest=0
-let highestDomain=""
+reportButton.onclick=()=>{
 
-domains.forEach((d,i)=>{
+window.location="report.html";
 
-let s=parseInt(localStorage.getItem("domain_"+i)||0)
-
-total+=s
-
-if(s>highest){
-highest=s
-highestDomain=d
-}
-
-})
-
-let ratio=(total/200).toFixed(2)
-
-let classification="Stable"
-
-if(ratio>1.6)classification="Critical"
-else if(ratio>1.25)classification="Severe"
-else if(ratio>1.0)classification="Elevated"
-
-alert(
-"Exposure Classification: "+classification+
-"\nHighest Domain: "+highestDomain+
-"\nAggregate Ratio: "+ratio
-)
+};
 
 }
+
+});
