@@ -1,70 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Executive Report</title>
-
-<link rel="stylesheet" href="styles.css?v=11.0">
-
+<link rel="stylesheet" href="styles.css?v=12.0">
 </head>
 
 <body>
 
-<header class="topbar">
-
-<div class="topbar-inner">
-
+<header class="header">
+<div class="header-inner">
 <div class="brand">
 AuditFlow Pro
 <span>Exposure Determination Instrument</span>
 </div>
-
-<div class="version">
-v11.0
+<div class="version">v12.0</div>
 </div>
-
-</div>
-
+<div class="gold"></div>
 </header>
 
 <main class="workspace">
+<div class="panel">
 
-<div class="instrument">
+<h1>Executive Report</h1>
 
-<div class="instrument-header">
+<div id="report"></div>
 
-<h1>Executive Summary</h1>
-
-<div class="steps">
-
-<span class="step">Registration</span>
-<span class="step">Assessment</span>
-<span class="step">Determination</span>
-<span class="step active">Report</span>
+<button onclick="window.print()" class="primary">Print Report</button>
 
 </div>
-
-</div>
-
-<div class="instrument-body">
-
-<div id="reportContent"></div>
-
-<button onclick="window.location='index.html'" class="primary">
-Start New Audit
-</button>
-
-</div>
-
-</div>
-
 </main>
 
-<script src="app.js?v=11.0"></script>
+<script src="app.js?v=12.0"></script>
 
 </body>
 </html>
