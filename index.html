@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>AuditFlow Pro</title>
 
@@ -34,11 +34,26 @@ v11.0
 
 </header>
 
-<main class="instrument">
+<main class="workspace">
 
-<section class="card">
+<div class="instrument">
+
+<div class="instrument-header">
 
 <h1>Audit Registration</h1>
+
+<div class="steps">
+
+<span class="step active">Registration</span>
+<span class="step">Assessment</span>
+<span class="step">Determination</span>
+<span class="step">Report</span>
+
+</div>
+
+</div>
+
+<div class="instrument-body">
 
 <label>Consultant</label>
 <input id="consultant">
@@ -59,7 +74,9 @@ v11.0
 Initiate Audit
 </button>
 
-</section>
+</div>
+
+</div>
 
 </main>
 
@@ -74,9 +91,7 @@ Initiate Audit
 <script>
 
 if('serviceWorker' in navigator){
-
 navigator.serviceWorker.register('./service-worker.js?v=11.0')
-
 }
 
 </script>
