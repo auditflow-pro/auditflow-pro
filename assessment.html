@@ -1,100 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Exposure Assessment</title>
-
-<link rel="stylesheet" href="styles.css?v=11.0-stable">
-
+<title>Assessment</title>
+<link rel="stylesheet" href="styles.css?v=12.0">
 </head>
 
 <body>
 
-<header class="topbar">
-<div class="topbar-inner">
-
+<header class="header">
+<div class="header-inner">
 <div class="brand">
 AuditFlow Pro
 <span>Exposure Determination Instrument</span>
 </div>
-
-<div class="version">v11.0</div>
-
+<div class="version">v12.0</div>
 </div>
+<div class="gold"></div>
 </header>
 
+<div class="stage-bar">
+<span class="stage">Registration</span>
+<span class="stage active">Assessment</span>
+<span class="stage">Determination</span>
+<span class="stage">Issuance</span>
+</div>
+
 <main class="workspace">
+<div class="panel">
 
-<div class="instrument">
+<h1>Site & Environment</h1>
 
-<div class="instrument-header">
-
-<h1>Exposure Assessment</h1>
-
-<div class="steps">
-
-<span class="step">Registration</span>
-<span class="step active">Assessment</span>
-<span class="step">Determination</span>
-<span class="step">Report</span>
-
-</div>
-
-</div>
-
-<div class="instrument-body">
-
-<div class="question">
+<div class="question" data-q="fire">
 <p>Fire detection system operational?</p>
-<div class="button-row">
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-</div>
+<div class="record"></div>
 </div>
 
-<div class="question">
+<div class="question" data-q="exits">
 <p>Emergency exits unobstructed?</p>
-<div class="button-row">
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-</div>
+<div class="record"></div>
 </div>
 
-<div class="question">
+<div class="question" data-q="electrical">
 <p>Electrical systems maintained?</p>
-<div class="button-row">
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-</div>
+<div class="record"></div>
 </div>
 
-<div class="question">
+<div class="question" data-q="housekeeping">
 <p>Housekeeping standards acceptable?</p>
-<div class="button-row">
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-</div>
-</div>
-
-<button id="determineExposure" class="primary">
-Proceed to Determination
-</button>
-
+<div class="record"></div>
 </div>
 
-</div>
+<button id="determine" class="primary">Proceed to Determination</button>
 
+</div>
 </main>
 
-<script src="app.js?v=11.0-stable"></script>
+<script src="app.js?v=12.0"></script>
 
 </body>
 </html>
