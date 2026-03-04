@@ -1,7 +1,7 @@
-{{
+{
 "name":"AuditFlow Pro",
 "short_name":"AuditFlow",
-"start_url":"./index.html?v=10.0",
+"start_url":"./index.html",
 "display":"standalone",
 "background_color":"#f3f4f6",
 "theme_color":"#0f172a",
@@ -17,11 +17,4 @@
 "type":"image/png"
 }
 ]
-}
-"name":"AuditFlow Pro",
-"short_name":"AuditFlow",
-"start_url":"./index.html?v=9.0",
-"display":"standalone",
-"background_color":"#f3f4f6",
-"theme_color":"#0f172a"
 }
