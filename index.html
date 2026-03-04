@@ -8,8 +8,8 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=7.0">
-<link rel="manifest" href="manifest.json?v=7.0">
+<link rel="stylesheet" href="styles.css?v=7.2">
+<link rel="manifest" href="manifest.json?v=7.2">
 
 <meta name="theme-color" content="#0f172a">
 
@@ -27,7 +27,7 @@ AuditFlow Pro
 </div>
 
 <div class="version">
-Instrument Version v7.0
+Instrument Version v7.2
 </div>
 
 </div>
@@ -43,18 +43,18 @@ Instrument Version v7.0
 <h1>Audit Registration</h1>
 
 <label>Consultant</label>
-<input id="consultant">
+<input id="consultant" type="text">
 
 <label>Organisation</label>
-<input id="organisation">
+<input id="organisation" type="text">
 
 <label>Client / Site</label>
-<input id="clientSite">
+<input id="clientSite" type="text">
 
 <label>Audit Title</label>
-<input id="auditTitle">
+<input id="auditTitle" type="text">
 
-<label>Assessment Date</label>
+<label for="assessmentDate">Assessment Date</label>
 <input type="date" id="assessmentDate">
 
 <button id="registerAudit" class="primary">
@@ -67,71 +67,18 @@ Audit Records
 
 </section>
 
-
-<section class="panel hidden" id="findingsPanel">
-
-<h2>Evidence Findings</h2>
-
-<label>Finding</label>
-<input id="findingText">
-
-<label>Location</label>
-<input id="findingLocation">
-
-<label>Severity</label>
-
-<select id="findingSeverity">
-
-<option>Critical</option>
-<option>High</option>
-<option>Moderate</option>
-<option>Low</option>
-
-</select>
-
-<button id="addFinding" class="primary">
-Add Finding
-</button>
-
-<div id="findingList"></div>
-
-<button id="generateActions" class="secondary">
-Generate Corrective Actions
-</button>
-
-</section>
-
-
-<section class="panel hidden" id="actionsPanel">
-
-<h2>Corrective Actions</h2>
-
-<div id="actionList"></div>
-
-<button id="exportJSON" class="primary">
-Export Automation JSON
-</button>
-
-</section>
-
 </main>
 
 <footer>
-
 © AuditFlow Pro — Professional Audit Instrument System
-
 </footer>
 
-<script src="app.js?v=7.0"></script>
+<script src="app.js?v=7.2"></script>
 
 <script>
-
 if ('serviceWorker' in navigator) {
-
-navigator.serviceWorker.register('./service-worker.js?v=7.0')
-
+navigator.serviceWorker.register('./service-worker.js?v=7.2')
 }
-
 </script>
 
 </body>
