@@ -1,17 +1,17 @@
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-background:#eef1f4;
+background:#dfe3e6;
 color:#111827;
 }
 
-.topbar{
-background:#0f172a;
+.header{
+background:#142b3a;
 color:white;
 padding:18px;
 }
 
-.topbar-inner{
+.header-inner{
 max-width:1100px;
 margin:auto;
 display:flex;
@@ -27,98 +27,82 @@ font-weight:600;
 .brand span{
 display:block;
 font-size:12px;
-opacity:.7;
+opacity:.8;
 }
 
-.workspace{
-padding:30px 20px;
+.gold{
+height:4px;
+background:#c7a64a;
+}
+
+.stage-bar{
+background:#1f2a33;
+padding:10px;
 display:flex;
+gap:20px;
 justify-content:center;
 }
 
-.instrument{
-width:100%;
-max-width:850px;
-background:white;
-border-radius:12px;
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
-overflow:hidden;
+.stage{
+color:#9aa7b2;
 }
 
-.instrument-header{
-padding:28px 32px 10px 32px;
-}
-
-.instrument-body{
-padding:20px 32px 32px 32px;
-}
-
-.steps{
-margin-top:10px;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.step{
-background:#e5e7eb;
-padding:4px 10px;
-border-radius:6px;
-font-size:12px;
-}
-
-.step.active{
-background:#0f172a;
+.stage.active{
 color:white;
+border-bottom:2px solid #c7a64a;
+}
+
+.workspace{
+display:flex;
+justify-content:center;
+padding:30px;
+}
+
+.panel{
+background:#eef1f3;
+padding:30px;
+max-width:700px;
+width:100%;
+border:1px solid #d1d5db;
+border-radius:6px;
 }
 
 label{
 display:block;
-margin-top:18px;
-font-weight:600;
+margin-top:16px;
 }
 
 input{
 width:100%;
-padding:14px;
-border:1px solid #d1d5db;
-border-radius:6px;
-font-size:16px;
+padding:12px;
 margin-top:6px;
 }
 
 .question{
-margin-top:22px;
-}
-
-.button-row{
-display:flex;
-gap:12px;
-margin-top:8px;
+margin-top:20px;
 }
 
 button{
+margin-top:10px;
+padding:10px 14px;
 border:none;
-border-radius:8px;
-padding:12px 16px;
-font-size:15px;
+border-radius:6px;
 cursor:pointer;
 }
 
 .primary{
-background:#0f172a;
+background:#142b3a;
 color:white;
 width:100%;
-margin-top:28px;
+margin-top:20px;
 }
 
 .yes{background:#2e7d32;color:white;}
 .no{background:#c62828;color:white;}
 .na{background:#6b7280;color:white;}
 
-footer{
-text-align:center;
-padding:30px;
+.record{
 font-size:13px;
-color:#6b7280;
+margin-top:6px;
+color:#555;
 }
