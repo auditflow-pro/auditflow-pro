@@ -4,44 +4,62 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Exposure Assessment</title>
+<title>Assessment</title>
 
-<link rel="stylesheet" href="styles.css?v=10.0">
+<link rel="stylesheet" href="styles.css?v=11.0">
 
 </head>
 
 <body>
 
-<header class="header">
+<header class="topbar">
+
+<div class="topbar-inner">
 
 <div class="brand">
-
 AuditFlow Pro
+<span>Exposure Determination Instrument</span>
+</div>
 
-<span>Exposure Assessment</span>
+<div class="version">
+v11.0
+</div>
 
 </div>
 
 </header>
 
-<main class="container">
+<main class="workspace">
 
-<section class="panel">
+<div class="instrument">
 
-<h1>Structured Exposure Assessment</h1>
+<div class="instrument-header">
+
+<h1>Exposure Assessment</h1>
+
+<div class="steps">
+
+<span class="step">Registration</span>
+<span class="step active">Assessment</span>
+<span class="step">Determination</span>
+<span class="step">Report</span>
+
+</div>
+
+</div>
+
+<div class="instrument-body">
 
 <div class="question">
 
 <p>Fire detection system operational?</p>
 
 <div class="button-row">
-
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-
 </div>
 
 </div>
@@ -51,11 +69,9 @@ AuditFlow Pro
 <p>Emergency exits unobstructed?</p>
 
 <div class="button-row">
-
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-
 </div>
 
 </div>
@@ -65,11 +81,9 @@ AuditFlow Pro
 <p>Electrical systems maintained?</p>
 
 <div class="button-row">
-
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-
 </div>
 
 </div>
@@ -79,27 +93,24 @@ AuditFlow Pro
 <p>Housekeeping standards acceptable?</p>
 
 <div class="button-row">
-
 <button class="yes">YES</button>
 <button class="no">NO</button>
 <button class="na">N/A</button>
-
 </div>
 
 </div>
 
 <button id="determineExposure" class="primary">
-
 Proceed to Determination
-
 </button>
 
-</section>
+</div>
+
+</div>
 
 </main>
 
-<script src="app.js?v=10.0"></script>
+<script src="app.js?v=11.0"></script>
 
 </body>
-
 </html>
