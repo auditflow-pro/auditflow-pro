@@ -1,7 +1,4 @@
-const APP_VERSION="9.0";
-
 const domains=[
-
 "Site & Environment",
 "Life Safety Risk",
 "Fire & Egress",
@@ -12,120 +9,110 @@ const domains=[
 "Documentation & Records",
 "Governance & Oversight",
 "Training & Competency"
+]
 
-];
-
-const scores=[0,6,12,18,24,30,36];
+const scores=[0,6,12,18,24,30,36]
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-const register=document.getElementById("registerAudit");
+const register=document.getElementById("registerAudit")
 
 if(register){
 
 register.onclick=()=>{
 
 const audit={
+consultant:consultant.value,
+organisation:organisation.value,
+site:clientSite.value,
+title:auditTitle.value,
+date:assessmentDate.value
+}
 
-consultant:document.getElementById("consultant").value,
-organisation:document.getElementById("organisation").value,
-site:document.getElementById("clientSite").value,
-title:document.getElementById("auditTitle").value,
-date:document.getElementById("assessmentDate").value
+localStorage.setItem("audit",JSON.stringify(audit))
 
-};
-
-localStorage.setItem("audit",JSON.stringify(audit));
-
-window.location="assessment.html";
-
-};
+location.href="assessment.html"
 
 }
 
-const domainContainer=document.getElementById("domains");
+}
+
+const domainContainer=document.getElementById("domains")
 
 if(domainContainer){
 
 domains.forEach((d,i)=>{
 
-const block=document.createElement("div");
+const block=document.createElement("div")
+block.className="domain"
 
-block.className="domain";
+const title=document.createElement("div")
+title.className="domain-title"
+title.innerText=d
 
-const title=document.createElement("div");
-title.className="domain-title";
-title.innerText=d;
+const row=document.createElement("div")
+row.className="score-row"
 
-const row=document.createElement("div");
-row.className="score-row";
+scores.forEach(s=>{
 
-scores.forEach(score=>{
-
-const btn=document.createElement("div");
-
-btn.className="score";
-
-btn.innerText=score;
+const btn=document.createElement("div")
+btn.className="score"
+btn.innerText=s
 
 btn.onclick=()=>{
 
-localStorage.setItem("domain_"+i,score);
-
-};
-
-row.appendChild(btn);
-
-});
-
-block.appendChild(title);
-block.appendChild(row);
-
-domainContainer.appendChild(block);
-
-});
-
-document.getElementById("determineExposure").onclick=determineExposure;
+localStorage.setItem("domain_"+i,s)
 
 }
 
-});
+row.appendChild(btn)
 
-function determineExposure(){
+})
 
-let total=0;
-let highest=0;
-let highestDomain="";
+block.appendChild(title)
+block.appendChild(row)
+
+domainContainer.appendChild(block)
+
+})
+
+document.getElementById("determineExposure").onclick=determine
+
+}
+
+})
+
+function determine(){
+
+let total=0
+let highest=0
+let highestDomain=""
 
 domains.forEach((d,i)=>{
 
-const s=parseInt(localStorage.getItem("domain_"+i)||0);
+let s=parseInt(localStorage.getItem("domain_"+i)||0)
 
-total+=s;
+total+=s
 
 if(s>highest){
-
-highest=s;
-highestDomain=d;
-
+highest=s
+highestDomain=d
 }
 
-});
+})
 
-const ratio=(total/200).toFixed(2);
+let ratio=(total/200).toFixed(2)
 
-let classification="Stable";
+let classification="Stable"
 
-if(ratio>1.6) classification="Critical";
-else if(ratio>1.25) classification="Severe";
-else if(ratio>1.0) classification="Elevated";
+if(ratio>1.6)classification="Critical"
+else if(ratio>1.25)classification="Severe"
+else if(ratio>1.0)classification="Elevated"
 
 alert(
-
 "Exposure Classification: "+classification+
 "\nHighest Domain: "+highestDomain+
 "\nAggregate Ratio: "+ratio
-
-);
+)
 
 }
