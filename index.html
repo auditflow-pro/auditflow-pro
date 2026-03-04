@@ -8,8 +8,8 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=7.6">
-<link rel="manifest" href="manifest.json?v=7.6">
+<link rel="stylesheet" href="styles.css?v=9.0">
+<link rel="manifest" href="manifest.json?v=9.0">
 
 <meta name="theme-color" content="#0f172a">
 
@@ -27,7 +27,7 @@ AuditFlow Pro
 </div>
 
 <div class="version">
-Instrument Version v7.6
+Instrument Version v9.0
 </div>
 
 </div>
@@ -43,26 +43,22 @@ Instrument Version v7.6
 <h1>Audit Registration</h1>
 
 <label>Consultant</label>
-<input id="consultant" type="text">
+<input id="consultant">
 
 <label>Organisation</label>
-<input id="organisation" type="text">
+<input id="organisation">
 
 <label>Client / Site</label>
-<input id="clientSite" type="text">
+<input id="clientSite">
 
 <label>Audit Title</label>
-<input id="auditTitle" type="text">
+<input id="auditTitle">
 
-<label for="assessmentDate">Assessment Date</label>
+<label>Assessment Date</label>
 <input type="date" id="assessmentDate">
 
 <button id="registerAudit" class="primary">
 Register Audit
-</button>
-
-<button id="auditRecords" class="secondary">
-Audit Records
 </button>
 
 </section>
@@ -73,13 +69,11 @@ Audit Records
 © AuditFlow Pro — Professional Audit Instrument System
 </footer>
 
-<script src="app.js?v=7.6"></script>
+<script src="app.js?v=9.0"></script>
 
 <script>
 if ('serviceWorker' in navigator) {
-window.addEventListener('load', () => {
-navigator.serviceWorker.register('./service-worker.js?v=7.6');
-});
+navigator.serviceWorker.register('./service-worker.js?v=9.0')
 }
 </script>
 
