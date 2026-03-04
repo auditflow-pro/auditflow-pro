@@ -1,10 +1,10 @@
-const CACHE_NAME = "auditflow-v3.0";
+const CACHE_NAME = "auditflow-v3.2";
 
 const CORE = [
   "./",
-  "./index.html?v=3.0",
-  "./styles.css?v=3.0",
-  "./app.js?v=3.0",
+  "./index.html?v=3.2",
+  "./styles.css?v=3.2",
+  "./app.js?v=3.2",
   "./manifest.json"
 ];
 
