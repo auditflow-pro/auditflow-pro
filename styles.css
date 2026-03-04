@@ -24,17 +24,6 @@ font-size:20px;
 font-weight:600;
 }
 
-.subtitle{
-display:block;
-font-size:13px;
-opacity:.7;
-}
-
-.version{
-font-size:14px;
-opacity:.8;
-}
-
 .gold-bar{
 height:4px;
 background:#c6a35b;
@@ -51,8 +40,6 @@ background:white;
 padding:28px;
 border-radius:8px;
 border:1px solid #e5e7eb;
-margin-bottom:20px;
-box-shadow:0 6px 18px rgba(0,0,0,.04);
 }
 
 label{
@@ -69,18 +56,12 @@ padding:0 14px;
 border:1px solid #d1d5db;
 border-radius:6px;
 font-size:16px;
-background:white;
-box-sizing:border-box;
 }
 
 input[type="date"]{
 appearance:none;
 -webkit-appearance:none;
 height:48px;
-}
-
-input::-webkit-date-and-time-value{
-line-height:48px;
 }
 
 button{
@@ -98,15 +79,24 @@ background:#0f172a;
 color:white;
 }
 
-.secondary{
-background:#6b7280;
-color:white;
+.domain{
+margin-top:20px;
 }
 
-footer{
-margin-top:40px;
-padding:20px;
-text-align:center;
-font-size:13px;
-color:#6b7280;
+.domain-title{
+font-weight:600;
+margin-bottom:10px;
+}
+
+.score-row{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.score{
+border:1px solid #d1d5db;
+padding:10px 14px;
+border-radius:6px;
+cursor:pointer;
 }
