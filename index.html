@@ -8,8 +8,8 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=6.3">
-<link rel="manifest" href="manifest.json?v=6.3">
+<link rel="stylesheet" href="styles.css?v=7.0">
+<link rel="manifest" href="manifest.json?v=7.0">
 
 <meta name="theme-color" content="#0f172a">
 
@@ -27,7 +27,7 @@ AuditFlow Pro
 </div>
 
 <div class="version">
-Instrument Version v6.3
+Instrument Version v7.0
 </div>
 
 </div>
@@ -43,25 +43,19 @@ Instrument Version v6.3
 <h1>Audit Registration</h1>
 
 <label>Consultant</label>
-<input id="consultant" type="text">
+<input id="consultant">
 
 <label>Organisation</label>
-<input id="organisation" type="text">
+<input id="organisation">
 
 <label>Client / Site</label>
-<input id="clientSite" type="text">
+<input id="clientSite">
 
 <label>Audit Title</label>
-<input id="auditTitle" type="text">
+<input id="auditTitle">
 
-<label for="assessmentDate">Assessment Date</label>
-
-<input
-type="date"
-id="assessmentDate"
-name="assessmentDate"
-required
->
+<label>Assessment Date</label>
+<input type="date" id="assessmentDate">
 
 <button id="registerAudit" class="primary">
 Register Instrument
@@ -73,24 +67,71 @@ Audit Records
 
 </section>
 
+
+<section class="panel hidden" id="findingsPanel">
+
+<h2>Evidence Findings</h2>
+
+<label>Finding</label>
+<input id="findingText">
+
+<label>Location</label>
+<input id="findingLocation">
+
+<label>Severity</label>
+
+<select id="findingSeverity">
+
+<option>Critical</option>
+<option>High</option>
+<option>Moderate</option>
+<option>Low</option>
+
+</select>
+
+<button id="addFinding" class="primary">
+Add Finding
+</button>
+
+<div id="findingList"></div>
+
+<button id="generateActions" class="secondary">
+Generate Corrective Actions
+</button>
+
+</section>
+
+
+<section class="panel hidden" id="actionsPanel">
+
+<h2>Corrective Actions</h2>
+
+<div id="actionList"></div>
+
+<button id="exportJSON" class="primary">
+Export Automation JSON
+</button>
+
+</section>
+
 </main>
 
 <footer>
+
 © AuditFlow Pro — Professional Audit Instrument System
+
 </footer>
 
-<script src="app.js?v=6.3"></script>
+<script src="app.js?v=7.0"></script>
 
 <script>
+
 if ('serviceWorker' in navigator) {
 
-window.addEventListener('load', () => {
-
-navigator.serviceWorker.register('./service-worker.js?v=6.3',{scope:'./'})
-
-})
+navigator.serviceWorker.register('./service-worker.js?v=7.0')
 
 }
+
 </script>
 
 </body>
