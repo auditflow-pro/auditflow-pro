@@ -1,276 +1,116 @@
-/* AuditFlow Pro — Domain Loader Engine
-Version: v7.0
-Purpose: Dynamic domain loading and audit navigation
-*/
-const APP_VERSION = "6.3";
-let domainLibrary = [];
-let currentDomainIndex = 0;
-let auditResponses = {};
-let auditMeta = {};
+const APP_VERSION="7.0"
 
-/* ---------- INITIALISE APPLICATION ---------- */
+let findings=[]
+let actions=[]
 
-document.addEventListener("DOMContentLoaded", async () => {
+const registerBtn=document.getElementById("registerAudit")
 
-    initialiseDate();
-    await loadDomainLibrary();
+registerBtn.onclick=()=>{
 
-});
-
-/* ---------- DATE INITIALISATION ---------- */
-
-function initialiseDate() {
-
-    const dateField = document.getElementById("assessmentDate");
-
-    if (!dateField) return;
-
-    const today = new Date();
-    const formatted = today.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-    });
-
-    dateField.value = formatted;
-}
-
-/* ---------- LOAD DOMAIN REGISTRY ---------- */
-
-async function loadDomainLibrary() {
-
-    try {
-
-        const response = await fetch("domains/domain-library.json");
-        const data = await response.json();
-
-        domainLibrary = data.domains;
-
-        console.log("Domain library loaded:", domainLibrary.length);
-
-    } catch (error) {
-
-        console.error("Domain library failed to load", error);
-
-    }
+document.getElementById("findingsPanel").classList.remove("hidden")
 
 }
 
-/* ---------- REGISTER AUDIT ---------- */
+document.getElementById("addFinding").onclick=()=>{
 
-function registerAudit() {
+const text=document.getElementById("findingText").value
+const location=document.getElementById("findingLocation").value
+const severity=document.getElementById("findingSeverity").value
 
-    const consultant = document.getElementById("consultant").value;
-    const organisation = document.getElementById("organisation").value;
-    const client = document.getElementById("clientSite").value;
-    const title = document.getElementById("auditTitle").value;
-    const date = document.getElementById("assessmentDate").value;
+const finding={
+text,
+location,
+severity
+}
 
-    if (!client || !title) {
+findings.push(finding)
 
-        alert("Client / Site and Audit Title are required.");
-        return;
-
-    }
-
-    auditMeta = {
-        consultant,
-        organisation,
-        client,
-        title,
-        date,
-        reference: generateAFPReference()
-    };
-
-    startAudit();
+renderFindings()
 
 }
 
-/* ---------- AFP REFERENCE ---------- */
+function renderFindings(){
 
-function generateAFPReference() {
+const list=document.getElementById("findingList")
 
-    const now = new Date();
-    const datePart =
-        now.getFullYear().toString() +
-        String(now.getMonth() + 1).padStart(2, "0") +
-        String(now.getDate()).padStart(2, "0");
+list.innerHTML=""
 
-    const sequence = Math.floor(Math.random() * 9000 + 1000);
+findings.forEach(f=>{
 
-    return `AFP-${datePart}-${sequence}`;
+const div=document.createElement("div")
 
-}
+div.innerHTML=`${f.severity} — ${f.text} (${f.location})`
 
-/* ---------- START AUDIT ---------- */
+list.appendChild(div)
 
-async function startAudit() {
-
-    currentDomainIndex = 0;
-
-    await loadDomain(currentDomainIndex);
+})
 
 }
 
-/* ---------- LOAD DOMAIN ---------- */
+document.getElementById("generateActions").onclick=()=>{
 
-async function loadDomain(index) {
+actions=findings.map(f=>{
 
-    const domain = domainLibrary[index];
+return{
 
-    const response = await fetch(domain.file);
-    const data = await response.json();
-
-    renderDomain(domain.name, data.controls);
-
-}
-
-/* ---------- RENDER DOMAIN ---------- */
-
-function renderDomain(domainName, controls) {
-
-    const container = document.getElementById("auditContainer");
-
-    container.innerHTML = "";
-
-    const title = document.createElement("h2");
-    title.textContent = domainName;
-
-    container.appendChild(title);
-
-    controls.forEach(control => {
-
-        const block = document.createElement("div");
-        block.className = "control-block";
-
-        const question = document.createElement("p");
-        question.textContent = control.question;
-
-        block.appendChild(question);
-
-        block.appendChild(createAnswerButton(control.id, "YES"));
-        block.appendChild(createAnswerButton(control.id, "NO"));
-        block.appendChild(createAnswerButton(control.id, "NA"));
-
-        container.appendChild(block);
-
-    });
-
-    const nextButton = document.createElement("button");
-
-    nextButton.textContent = "Next Domain";
-    nextButton.className = "nav-button";
-
-    nextButton.onclick = nextDomain;
-
-    container.appendChild(nextButton);
+action:`Resolve: ${f.text}`,
+location:f.location,
+priority:f.severity
 
 }
 
-/* ---------- ANSWER BUTTON ---------- */
+})
 
-function createAnswerButton(controlId, answer) {
+renderActions()
 
-    const button = document.createElement("button");
-
-    button.textContent = answer;
-
-    button.onclick = () => recordAnswer(controlId, answer);
-
-    return button;
+document.getElementById("actionsPanel").classList.remove("hidden")
 
 }
 
-/* ---------- RECORD ANSWER ---------- */
+function renderActions(){
 
-function recordAnswer(controlId, answer) {
+const list=document.getElementById("actionList")
 
-    auditResponses[controlId] = answer;
+list.innerHTML=""
 
-}
+actions.forEach(a=>{
 
-/* ---------- NEXT DOMAIN ---------- */
+const div=document.createElement("div")
 
-async function nextDomain() {
+div.innerHTML=`${a.priority} — ${a.action} (${a.location})`
 
-    currentDomainIndex++;
+list.appendChild(div)
 
-    if (currentDomainIndex >= domainLibrary.length) {
-
-        finishAudit();
-        return;
-
-    }
-
-    await loadDomain(currentDomainIndex);
+})
 
 }
 
-/* ---------- FINISH AUDIT ---------- */
+document.getElementById("exportJSON").onclick=()=>{
 
-function finishAudit() {
+const audit={
 
-    console.log("Audit complete");
-
-    const result = calculateExposure();
-
-    displayResult(result);
-
-}
-
-/* ---------- EXPOSURE ENGINE ---------- */
-
-function calculateExposure() {
-
-    let failures = 0;
-    let total = 0;
-
-    Object.values(auditResponses).forEach(answer => {
-
-        total++;
-
-        if (answer === "NO") failures++;
-
-    });
-
-    const ratio = failures / total;
-
-    let classification = "Acceptable";
-
-    if (ratio > 0.6) classification = "Critical";
-    else if (ratio > 0.4) classification = "Serious";
-    else if (ratio > 0.2) classification = "Moderate";
-
-    return {
-        ratio,
-        classification
-    };
+version:APP_VERSION,
+consultant:document.getElementById("consultant").value,
+organisation:document.getElementById("organisation").value,
+site:document.getElementById("clientSite").value,
+title:document.getElementById("auditTitle").value,
+date:document.getElementById("assessmentDate").value,
+findings,
+actions
 
 }
 
-/* ---------- DISPLAY RESULT ---------- */
+const dataStr=JSON.stringify(audit,null,2)
 
-function displayResult(result) {
+const blob=new Blob([dataStr],{type:"application/json"})
 
-    const container = document.getElementById("auditContainer");
+const url=URL.createObjectURL(blob)
 
-    container.innerHTML = "";
+const a=document.createElement("a")
 
-    const header = document.createElement("h2");
-    header.textContent = "Exposure Determination";
+a.href=url
+a.download="auditflow-export.json"
 
-    const ref = document.createElement("p");
-    ref.textContent = "AFP Reference: " + auditMeta.reference;
-
-    const classification = document.createElement("p");
-    classification.textContent = "Exposure Classification: " + result.classification;
-
-    const ratio = document.createElement("p");
-    ratio.textContent = "Aggregate Ratio: " + result.ratio.toFixed(3);
-
-    container.appendChild(header);
-    container.appendChild(ref);
-    container.appendChild(classification);
-    container.appendChild(ratio);
+a.click()
 
 }
