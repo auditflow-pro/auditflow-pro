@@ -1,59 +1,23 @@
-const CACHE_NAME="auditflow-v11.0-stable"
+const CACHE="auditflow-v12.0"
 
-const CORE_ASSETS=[
-
+const assets=[
 "./",
 "./index.html",
 "./assessment.html",
 "./determination.html",
 "./report.html",
-"./styles.css?v=11.0-stable",
-"./app.js?v=11.0-stable",
-"./manifest.json"
-
+"./styles.css?v=12.0",
+"./app.js?v=12.0"
 ]
 
-self.addEventListener("install",event=>{
-
-self.skipWaiting()
-
-event.waitUntil(
-
-caches.open(CACHE_NAME)
-.then(cache=>cache.addAll(CORE_ASSETS))
-
+self.addEventListener("install",e=>{
+e.waitUntil(
+caches.open(CACHE).then(c=>c.addAll(assets))
 )
-
 })
 
-self.addEventListener("activate",event=>{
-
-event.waitUntil(
-
-caches.keys().then(keys=>{
-
-return Promise.all(
-
-keys.filter(key=>key!==CACHE_NAME)
-.map(key=>caches.delete(key))
-
+self.addEventListener("fetch",e=>{
+e.respondWith(
+caches.match(e.request).then(r=>r||fetch(e.request))
 )
-
-})
-
-)
-
-self.clients.claim()
-
-})
-
-self.addEventListener("fetch",event=>{
-
-event.respondWith(
-
-caches.match(event.request)
-.then(response=>response||fetch(event.request))
-
-)
-
 })
