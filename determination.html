@@ -4,74 +4,71 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Exposure Determination</title>
+<title>Determination</title>
 
-<link rel="stylesheet" href="styles.css?v=10.0">
+<link rel="stylesheet" href="styles.css?v=11.0">
 
 </head>
 
 <body>
 
-<header class="header">
+<header class="topbar">
+
+<div class="topbar-inner">
 
 <div class="brand">
-
 AuditFlow Pro
+<span>Exposure Determination Instrument</span>
+</div>
 
-<span>Exposure Determination</span>
+<div class="version">
+v11.0
+</div>
 
 </div>
 
 </header>
 
-<main class="container">
+<main class="workspace">
 
-<section class="panel">
+<div class="instrument">
+
+<div class="instrument-header">
 
 <h1>Exposure Determination</h1>
 
-<div class="result">
+<div class="steps">
 
-<p>
-
-<strong>Classification:</strong>
-
-<span id="classification"></span>
-
-</p>
-
-<p>
-
-<strong>Primary Domain:</strong>
-
-<span id="domain"></span>
-
-</p>
-
-<p>
-
-<strong>Aggregate Ratio:</strong>
-
-<span id="ratio"></span>
-
-</p>
+<span class="step">Registration</span>
+<span class="step">Assessment</span>
+<span class="step active">Determination</span>
+<span class="step">Report</span>
 
 </div>
 
-<button id="reportButton" class="primary">
+</div>
 
+<div class="instrument-body">
+
+<p><strong>Classification:</strong> <span id="classification"></span></p>
+
+<p><strong>Primary Domain:</strong> <span id="domain"></span></p>
+
+<p><strong>Aggregate Ratio:</strong> <span id="ratio"></span></p>
+
+<button id="viewReport" class="primary">
 View Executive Report
-
 </button>
 
-</section>
+</div>
+
+</div>
 
 </main>
 
-<script src="app.js?v=10.0"></script>
+<script src="app.js?v=11.0"></script>
 
 </body>
-
 </html>
