@@ -1,6 +1,6 @@
-/* AuditFlow Pro v3.0 Deterministic Engine */
+/* AuditFlow Pro v3.2 Executive Outcome Layer */
 
-const VERSION = "v3.0";
+const VERSION = "v3.2";
 
 let audits = JSON.parse(localStorage.getItem("afp_audits")) || [];
 let sequence = parseInt(localStorage.getItem("afp_sequence")) || 0;
@@ -54,29 +54,78 @@ function render() {
   if (state.view === "records") renderRecords(app);
 }
 
+/* REGISTRATION */
+
 function renderRegistration(container) {
   container.innerHTML = `
     <div class="panel">
       <h2>Audit Registration</h2>
-      <div class="actions"><button onclick="startAudit()">Begin Audit</button></div>
-      <div class="actions"><button class="secondary" onclick="goRecords()">Audit Records</button></div>
+
+      <div class="field"><label>Consultant Name *</label><input id="consultant"></div>
+      <div class="field"><label>Organisation *</label><input id="organisation"></div>
+      <div class="field"><label>Client / Site *</label><input id="site"></div>
+      <div class="field"><label>Audit Title *</label><input id="title"></div>
+      <div class="field">
+        <label>Assessment Date *</label>
+        <input type="date" id="date" value="${new Date().toISOString().slice(0,10)}">
+      </div>
+
+      <div class="actions">
+        <button onclick="registerInstrument()">Register Instrument</button>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" onclick="goRecords()">Audit Records</button>
+      </div>
     </div>
   `;
 }
 
-function startAudit() {
+function registerInstrument() {
+  const consultant = document.getElementById("consultant").value.trim();
+  const organisation = document.getElementById("organisation").value.trim();
+  const site = document.getElementById("site").value.trim();
+  const title = document.getElementById("title").value.trim();
+  const date = document.getElementById("date").value;
+
+  if (!consultant || !organisation || !site || !title || !date) {
+    alert("All fields are mandatory.");
+    return;
+  }
+
+  const afp = generateAFP();
+
   state.activeAudit = {
-    afp: generateAFP(),
+    afp,
+    consultant,
+    organisation,
+    site,
+    title,
+    date,
     controls: {},
-    createdAt: new Date().toISOString(),
-    status: "In Progress"
+    status: "In Progress",
+    version: VERSION,
+    createdAt: new Date().toISOString()
   };
+
+  audits.unshift(state.activeAudit);
+  saveLedger();
+
   state.view = "workflow";
   render();
 }
 
+/* WORKFLOW */
+
 function renderWorkflow(container) {
-  let html = `<div class="panel"><h2>Audit Controls</h2>`;
+  let html = `
+    <div class="panel">
+      <h2>Audit Controls</h2>
+      <div class="meta-block">
+        <strong>${state.activeAudit.afp}</strong><br>
+        ${state.activeAudit.site} — ${state.activeAudit.date}
+      </div>
+  `;
 
   controls.forEach(c => {
     html += `
@@ -112,7 +161,10 @@ function renderWorkflow(container) {
 function updateControl(id, field, value) {
   if (!state.activeAudit.controls[id]) state.activeAudit.controls[id] = {};
   state.activeAudit.controls[id][field] = parseInt(value);
+  saveLedger();
 }
+
+/* ENGINE */
 
 function calculateExposure() {
   let totalWeighted = 0;
@@ -142,48 +194,113 @@ function calculateExposure() {
 
   const ratio = totalWeighted / maxPossible;
 
-  let aggregateBand;
-  if (ratio >= 0.7) aggregateBand = "Critical";
-  else if (ratio >= 0.5) aggregateBand = "High";
-  else if (ratio >= 0.25) aggregateBand = "Moderate";
-  else aggregateBand = "Low";
+  let band;
+  if (ratio >= 0.7) band = "Critical";
+  else if (ratio >= 0.5) band = "High";
+  else if (ratio >= 0.25) band = "Moderate";
+  else band = "Low";
 
-  if (highestWeighted >= 20) aggregateBand = "High";
-  if (lifeFireEscalation) aggregateBand = "Critical";
+  if (highestWeighted >= 20) band = "High";
+  if (lifeFireEscalation) band = "Critical";
 
-  return aggregateBand;
+  return { band, ratio, highestWeighted, lifeFireEscalation };
 }
 
-function completeAudit() {
-  const band = calculateExposure();
-  state.activeAudit.exposure = band;
-  state.activeAudit.completedAt = new Date().toISOString();
-  state.activeAudit.status = "Completed";
+/* COMPLETION */
 
-  audits.unshift(state.activeAudit);
+function completeAudit() {
+  const result = calculateExposure();
+  const audit = state.activeAudit;
+
+  audit.exposure = result.band;
+  audit.ratio = result.ratio;
+  audit.highestWeighted = result.highestWeighted;
+  audit.lifeFireEscalation = result.lifeFireEscalation;
+  audit.status = "Completed";
+  audit.completedAt = new Date().toISOString();
+
   saveLedger();
 
   state.view = "outcome";
   render();
 }
 
+/* OUTCOME */
+
 function renderOutcome(container) {
+  const a = state.activeAudit;
+
+  const percent = (a.ratio * 100).toFixed(1);
+
+  let basis = [];
+  if (a.lifeFireEscalation)
+    basis.push("Life or Fire severity threshold triggered automatic Critical escalation.");
+  if (a.highestWeighted >= 20)
+    basis.push("Highest weighted control exceeded high-risk threshold (≥20).");
+  if (a.ratio >= 0.7)
+    basis.push("Aggregate weighted ratio exceeded 0.70 Critical threshold.");
+  else if (a.ratio >= 0.5)
+    basis.push("Aggregate weighted ratio exceeded 0.50 High threshold.");
+
   container.innerHTML = `
     <div class="panel">
-      <h2>Exposure Result</h2>
-      <div class="field"><strong>AFP:</strong> ${state.activeAudit.afp}</div>
-      <div class="field"><strong>Exposure:</strong> ${state.activeAudit.exposure}</div>
-      <div class="actions"><button onclick="goRecords()">Audit Records</button></div>
+      <h2>Exposure Determination</h2>
+
+      <div class="meta-block">
+        <strong>${a.afp}</strong><br>
+        ${a.consultant}<br>
+        ${a.organisation}<br>
+        ${a.site}<br>
+        ${a.date}
+      </div>
+
+      <div class="meta-block">
+        <strong>Exposure Classification:</strong> ${a.exposure}
+      </div>
+
+      <div class="meta-block">
+        <strong>Aggregate Weighted Ratio:</strong> ${a.ratio.toFixed(3)} (${percent}%)
+      </div>
+
+      <div class="meta-block">
+        <strong>Highest Weighted Control:</strong> ${a.highestWeighted}
+      </div>
+
+      <div class="meta-block">
+        <strong>Escalation Trigger Applied:</strong> ${a.lifeFireEscalation ? "Yes" : "No"}
+      </div>
+
+      <div class="meta-block">
+        <strong>Determination Basis:</strong>
+        <ul>
+          ${basis.map(b => `<li>${b}</li>`).join("")}
+        </ul>
+      </div>
+
+      <div class="meta-block">
+        <strong>Engine Version:</strong> ${a.version}
+      </div>
+
+      <div class="actions">
+        <button onclick="goRecords()">Audit Records</button>
+      </div>
     </div>
   `;
 }
+
+/* RECORDS */
 
 function renderRecords(container) {
   let html = `<div class="panel"><h2>Audit Records</h2>`;
 
   audits.forEach(a => {
     html += `
-      <div class="section-title">${a.afp} — ${a.exposure}</div>
+      <div class="section-title">${a.afp} — ${a.exposure || a.status}</div>
+      <div class="meta-block">
+        ${a.site} — ${a.date}<br>
+        Completed: ${a.completedAt ? a.completedAt.slice(0,10) : "In Progress"}<br>
+        Engine: ${a.version}
+      </div>
       <div class="actions">
         <button class="danger" onclick="deleteAudit('${a.afp}')">Delete</button>
       </div>
