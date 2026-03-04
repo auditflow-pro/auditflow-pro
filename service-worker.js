@@ -1,46 +1,41 @@
-const CACHE_NAME="auditflow-v7.6";
+const CACHE_NAME="auditflow-v9.0";
 
-const urlsToCache=[
+const urls=[
 
 "./",
-"./index.html?v=7.6",
-"./styles.css?v=7.6",
-"./app.js?v=7.6",
-"./manifest.json?v=7.6"
+"./index.html?v=9.0",
+"./assessment.html?v=9.0",
+"./styles.css?v=9.0",
+"./app.js?v=9.0",
+"./manifest.json?v=9.0"
 
 ];
 
-self.addEventListener("install",event=>{
+self.addEventListener("install",e=>{
 
 self.skipWaiting();
 
-event.waitUntil(
-
-caches.open(CACHE_NAME).then(cache=>cache.addAll(urlsToCache))
-
-);
+e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(urls)));
 
 });
 
-self.addEventListener("activate",event=>{
+self.addEventListener("activate",e=>{
 
-event.waitUntil(
+e.waitUntil(
 
-caches.keys().then(cacheNames=>{
+caches.keys().then(keys=>
 
-return Promise.all(
+Promise.all(
 
-cacheNames.map(cache=>{
+keys.map(k=>{
 
-if(cache!==CACHE_NAME){
-return caches.delete(cache);
-}
+if(k!==CACHE_NAME) return caches.delete(k);
 
 })
 
-);
+)
 
-})
+)
 
 );
 
@@ -48,15 +43,11 @@ self.clients.claim();
 
 });
 
-self.addEventListener("fetch",event=>{
+self.addEventListener("fetch",e=>{
 
-event.respondWith(
+e.respondWith(
 
-caches.match(event.request).then(response=>{
-
-return response||fetch(event.request);
-
-})
+caches.match(e.request).then(r=>r||fetch(e.request))
 
 );
 
