@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AuditFlow Pro</title>
 
-<link rel="manifest" href="manifest.json?v=3.2">
-<link rel="stylesheet" href="styles.css?v=3.2">
-<meta name="theme-color" content="#162235">
+<link rel="manifest" href="manifest.json?v=4.0">
+<link rel="stylesheet" href="styles.css?v=4.0">
+
+<meta name="theme-color" content="#1a2333">
+
 </head>
 
 <body>
 
-<header class="app-header">
+<header class="header">
   <div class="header-inner">
     <h1>AuditFlow Pro</h1>
     <p>Institutional Exposure Determination Instrument</p>
@@ -20,25 +24,31 @@
   <div class="gold-band"></div>
 </header>
 
-<main class="instrument-frame">
+<main class="container">
+
   <div id="app"></div>
+
 </main>
 
-<footer class="app-footer">
-  <div class="footer-inner">
-    <span>© AuditFlow Pro</span>
-    <span>All Rights Reserved</span>
-    <span>v3.2</span>
-  </div>
+<footer class="footer">
+
+<div>
+© AuditFlow Pro
+</div>
+
+<div>
+Instrument v4.0
+</div>
+
 </footer>
 
-<script src="app.js?v=3.2"></script>
+<script src="app.js?v=4.0"></script>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js?v=3.2');
-  });
+if ("serviceWorker" in navigator) {
+window.addEventListener("load", () => {
+navigator.serviceWorker.register("service-worker.js?v=4.0");
+});
 }
 </script>
 
