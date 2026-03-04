@@ -1,18 +1,19 @@
-const version="11.0"
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener("DOMContentLoaded",()=>{
-
-const start=document.getElementById("startAudit")
+const start = document.getElementById("startAudit")
 
 if(start){
-start.onclick=()=>{
 
-const auditData={
+start.onclick = () => {
+
+const auditData = {
+
 consultant:document.getElementById("consultant").value,
 organisation:document.getElementById("organisation").value,
 client:document.getElementById("clientSite").value,
 title:document.getElementById("auditTitle").value,
 date:document.getElementById("assessmentDate").value
+
 }
 
 localStorage.setItem("auditData",JSON.stringify(auditData))
@@ -20,6 +21,7 @@ localStorage.setItem("auditData",JSON.stringify(auditData))
 window.location="assessment.html"
 
 }
+
 }
 
 const determine=document.getElementById("determineExposure")
