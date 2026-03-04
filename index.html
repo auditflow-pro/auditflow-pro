@@ -1,59 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>AuditFlow Pro</title>
-
-<link rel="stylesheet" href="styles.css?v=11.0-stable">
-<link rel="manifest" href="manifest.json?v=11.0-stable">
-
-<meta name="theme-color" content="#0f172a">
-
+<link rel="stylesheet" href="styles.css?v=12.0">
+<link rel="manifest" href="manifest.json?v=12.0">
+<meta name="theme-color" content="#142b3a">
 </head>
 
 <body>
 
-<header class="topbar">
-
-<div class="topbar-inner">
-
+<header class="header">
+<div class="header-inner">
 <div class="brand">
 AuditFlow Pro
 <span>Exposure Determination Instrument</span>
 </div>
-
-<div class="version">
-v11.0
+<div class="version">v12.0</div>
 </div>
-
-</div>
-
+<div class="gold"></div>
 </header>
 
+<div class="stage-bar">
+<span class="stage active">Registration</span>
+<span class="stage">Assessment</span>
+<span class="stage">Determination</span>
+<span class="stage">Issuance</span>
+</div>
+
 <main class="workspace">
-
-<div class="instrument">
-
-<div class="instrument-header">
+<div class="panel">
 
 <h1>Audit Registration</h1>
-
-<div class="steps">
-
-<span class="step active">Registration</span>
-<span class="step">Assessment</span>
-<span class="step">Determination</span>
-<span class="step">Report</span>
-
-</div>
-
-</div>
-
-<div class="instrument-body">
 
 <label>Consultant</label>
 <input id="consultant">
@@ -70,30 +49,17 @@ v11.0
 <label>Assessment Date</label>
 <input id="assessmentDate" type="date">
 
-<button id="startAudit" class="primary">
-Initiate Audit
-</button>
+<button id="startAudit" class="primary">Initiate Audit</button>
 
 </div>
-
-</div>
-
 </main>
 
-<footer>
-
-© AuditFlow Pro
-
-</footer>
-
-<script src="app.js?v=11.0-stable"></script>
+<script src="app.js?v=12.0"></script>
 
 <script>
-
 if('serviceWorker' in navigator){
-navigator.serviceWorker.register('./service-worker.js?v=11.0-stable')
+navigator.serviceWorker.register('./service-worker.js?v=12.0')
 }
-
 </script>
 
 </body>
