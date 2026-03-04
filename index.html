@@ -8,10 +8,11 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="manifest" href="manifest.json?v=5.0">
-<link rel="stylesheet" href="styles.css?v=5.0">
+<link rel="stylesheet" href="styles.css?v=5.1">
 
-<meta name="theme-color" content="#1a2333">
+<link rel="manifest" href="manifest.json?v=5.1">
+
+<meta name="theme-color" content="#0f172a">
 
 </head>
 
@@ -21,40 +22,73 @@
 
 <div class="header-inner">
 
-<h1>AuditFlow Pro</h1>
-<p>Institutional Exposure Determination Instrument</p>
+<div class="brand">
+AuditFlow Pro
+<span class="subtitle">Exposure Determination Instrument</span>
+</div>
+
+<div class="version">
+Instrument Version v5.1
+</div>
 
 </div>
 
-<div class="gold-band"></div>
+<div class="gold-bar"></div>
 
 </header>
 
 <main class="container">
 
-<div id="app"></div>
+<section class="panel">
+
+<h1>Register Audit</h1>
+
+<label>Consultant</label>
+<input id="consultant">
+
+<label>Organisation</label>
+<input id="organisation">
+
+<label>Client / Site</label>
+<input id="clientSite">
+
+<label>Audit Title</label>
+<input id="auditTitle">
+
+<label for="assessmentDate">Assessment Date</label>
+
+<input
+type="date"
+id="assessmentDate"
+name="assessmentDate"
+required
+class="date-input"
+>
+
+<button id="registerAudit" class="primary">
+Register Instrument
+</button>
+
+<button id="auditRecords" class="secondary">
+Audit Records
+</button>
+
+</section>
 
 </main>
 
-<footer class="footer">
+<footer>
 
-<div>© AuditFlow Pro</div>
-<div>Instrument v5.0</div>
+© AuditFlow Pro — Professional Instrument System
 
 </footer>
 
-<script src="app.js?v=5.0"></script>
+<script src="app.js?v=5.1"></script>
 
 <script>
 
-if("serviceWorker" in navigator){
-
-window.addEventListener("load",()=>{
-
-navigator.serviceWorker.register("service-worker.js?v=5.0")
-
-})
-
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('./service-worker.js?v=5.1')
 }
 
 </script>
