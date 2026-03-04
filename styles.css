@@ -1,4 +1,4 @@
-/* v3.0 */
+/* AuditFlow Pro v3.2 */
 
 *,
 *::before,
@@ -55,7 +55,6 @@ input, select {
   background: #ffffff;
   font-size: 14px;
   border-radius: 0;
-  appearance: none;
 }
 
 .actions { margin-top: 22px; }
@@ -95,4 +94,9 @@ button.danger { background: #b91c1c; }
   justify-content: space-between;
   font-size: 12px;
   color: #6b7280;
+}
+
+.meta-block {
+  margin-bottom: 14px;
+  font-size: 14px;
 }
