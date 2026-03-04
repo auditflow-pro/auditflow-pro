@@ -1,16 +1,18 @@
-const CACHE_NAME = "auditflow-v6.2";
+const CACHE_NAME = "auditflow-v6.3";
 
 const urlsToCache = [
 
 "./",
-"./index.html?v=6.2",
-"./styles.css?v=6.2",
-"./app.js?v=6.2",
-"./manifest.json?v=6.2"
+"./index.html?v=6.3",
+"./styles.css?v=6.3",
+"./app.js?v=6.3",
+"./manifest.json?v=6.3"
 
 ];
 
 self.addEventListener("install", event => {
+
+self.skipWaiting();
 
 event.waitUntil(
 
@@ -43,6 +45,10 @@ return caches.delete(cache);
 })
 
 );
+
+}).then(() => {
+
+return self.clients.claim();
 
 })
 
