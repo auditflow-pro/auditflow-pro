@@ -1,116 +1,73 @@
-const APP_VERSION="7.0"
+/*
+AuditFlow Pro
+Instrument Runtime
+Version 7.4
+*/
 
-let findings=[]
-let actions=[]
+const APP_VERSION = "7.4";
 
-const registerBtn=document.getElementById("registerAudit")
+document.addEventListener("DOMContentLoaded", function(){
 
-registerBtn.onclick=()=>{
+const registerButton = document.getElementById("registerAudit");
+const recordsButton = document.getElementById("auditRecords");
 
-document.getElementById("findingsPanel").classList.remove("hidden")
+if(registerButton){
 
-}
+registerButton.addEventListener("click", function(){
 
-document.getElementById("addFinding").onclick=()=>{
+const consultant = document.getElementById("consultant").value;
+const organisation = document.getElementById("organisation").value;
+const site = document.getElementById("clientSite").value;
+const title = document.getElementById("auditTitle").value;
+const date = document.getElementById("assessmentDate").value;
 
-const text=document.getElementById("findingText").value
-const location=document.getElementById("findingLocation").value
-const severity=document.getElementById("findingSeverity").value
+const auditRecord = {
 
-const finding={
-text,
-location,
-severity
-}
+version: APP_VERSION,
+consultant: consultant,
+organisation: organisation,
+site: site,
+title: title,
+date: date,
+timestamp: new Date().toISOString()
 
-findings.push(finding)
+};
 
-renderFindings()
+localStorage.setItem("auditflow_last_record", JSON.stringify(auditRecord));
 
-}
+alert("Audit Registered");
 
-function renderFindings(){
-
-const list=document.getElementById("findingList")
-
-list.innerHTML=""
-
-findings.forEach(f=>{
-
-const div=document.createElement("div")
-
-div.innerHTML=`${f.severity} — ${f.text} (${f.location})`
-
-list.appendChild(div)
-
-})
+});
 
 }
 
-document.getElementById("generateActions").onclick=()=>{
+if(recordsButton){
 
-actions=findings.map(f=>{
+recordsButton.addEventListener("click", function(){
 
-return{
+const record = localStorage.getItem("auditflow_last_record");
 
-action:`Resolve: ${f.text}`,
-location:f.location,
-priority:f.severity
+if(record){
 
-}
+const data = JSON.parse(record);
 
-})
+alert(
+"Last Audit:\n\n" +
+"Consultant: " + data.consultant + "\n" +
+"Organisation: " + data.organisation + "\n" +
+"Site: " + data.site + "\n" +
+"Title: " + data.title + "\n" +
+"Date: " + data.date
+);
 
-renderActions()
+}else{
 
-document.getElementById("actionsPanel").classList.remove("hidden")
-
-}
-
-function renderActions(){
-
-const list=document.getElementById("actionList")
-
-list.innerHTML=""
-
-actions.forEach(a=>{
-
-const div=document.createElement("div")
-
-div.innerHTML=`${a.priority} — ${a.action} (${a.location})`
-
-list.appendChild(div)
-
-})
+alert("No audit records stored.");
 
 }
 
-document.getElementById("exportJSON").onclick=()=>{
-
-const audit={
-
-version:APP_VERSION,
-consultant:document.getElementById("consultant").value,
-organisation:document.getElementById("organisation").value,
-site:document.getElementById("clientSite").value,
-title:document.getElementById("auditTitle").value,
-date:document.getElementById("assessmentDate").value,
-findings,
-actions
+});
 
 }
 
-const dataStr=JSON.stringify(audit,null,2)
-
-const blob=new Blob([dataStr],{type:"application/json"})
-
-const url=URL.createObjectURL(blob)
-
-const a=document.createElement("a")
-
-a.href=url
-a.download="auditflow-export.json"
-
-a.click()
-
-}
+});
