@@ -8,8 +8,8 @@
 
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=10.0">
-<link rel="manifest" href="manifest.json?v=10.0">
+<link rel="stylesheet" href="styles.css?v=11.0">
+<link rel="manifest" href="manifest.json?v=11.0">
 
 <meta name="theme-color" content="#0f172a">
 
@@ -17,27 +17,26 @@
 
 <body>
 
-<header class="header">
+<header class="topbar">
 
-<div class="header-inner">
+<div class="topbar-inner">
 
 <div class="brand">
-
 AuditFlow Pro
+<span>Exposure Determination Instrument</span>
+</div>
 
-<span class="subtitle">
-Exposure Determination Instrument
-</span>
-
+<div class="version">
+v11.0
 </div>
 
 </div>
 
 </header>
 
-<main class="container">
+<main class="instrument">
 
-<section class="panel">
+<section class="card">
 
 <h1>Audit Registration</h1>
 
@@ -57,9 +56,7 @@ Exposure Determination Instrument
 <input id="assessmentDate" type="date">
 
 <button id="startAudit" class="primary">
-
 Initiate Audit
-
 </button>
 
 </section>
@@ -72,18 +69,17 @@ Initiate Audit
 
 </footer>
 
-<script src="app.js?v=10.0"></script>
+<script src="app.js?v=11.0"></script>
 
 <script>
 
-if ('serviceWorker' in navigator) {
+if('serviceWorker' in navigator){
 
-navigator.serviceWorker.register('./service-worker.js?v=10.0');
+navigator.serviceWorker.register('./service-worker.js?v=11.0')
 
 }
 
 </script>
 
 </body>
-
 </html>
