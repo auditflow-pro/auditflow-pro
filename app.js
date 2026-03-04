@@ -2,7 +2,7 @@
 Version: v7.0
 Purpose: Dynamic domain loading and audit navigation
 */
-
+const APP_VERSION = "6.3";
 let domainLibrary = [];
 let currentDomainIndex = 0;
 let auditResponses = {};
