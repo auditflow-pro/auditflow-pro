@@ -1,12 +1,12 @@
-const CACHE_NAME="auditflow-v7.0"
+const CACHE_NAME="auditflow-v7.3"
 
 const urls=[
 
 "./",
-"./index.html?v=7.0",
-"./styles.css?v=7.0",
-"./app.js?v=7.0",
-"./manifest.json?v=7.0"
+"./index.html?v=7.3",
+"./styles.css?v=7.3",
+"./app.js?v=7.3",
+"./manifest.json?v=7.3"
 
 ]
 
