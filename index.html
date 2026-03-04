@@ -22,17 +22,16 @@
 <div class="header-inner">
 
 <div class="brand">
+
 AuditFlow Pro
-<span class="subtitle">Institutional Exposure Determination Instrument</span>
-</div>
 
-<div class="version">
-Instrument Version v10.0
-</div>
+<span class="subtitle">
+Exposure Determination Instrument
+</span>
 
 </div>
 
-<div class="gold-bar"></div>
+</div>
 
 </header>
 
@@ -55,10 +54,12 @@ Instrument Version v10.0
 <input id="auditTitle">
 
 <label>Assessment Date</label>
-<input type="date" id="assessmentDate">
+<input id="assessmentDate" type="date">
 
-<button id="registerAudit" class="primary">
+<button id="startAudit" class="primary">
+
 Initiate Audit
+
 </button>
 
 </section>
@@ -66,16 +67,23 @@ Initiate Audit
 </main>
 
 <footer>
+
 © AuditFlow Pro
+
 </footer>
 
 <script src="app.js?v=10.0"></script>
 
 <script>
-if("serviceWorker" in navigator){
-navigator.serviceWorker.register("./service-worker.js?v=10.0")
+
+if ('serviceWorker' in navigator) {
+
+navigator.serviceWorker.register('./service-worker.js?v=10.0');
+
 }
+
 </script>
 
 </body>
+
 </html>
