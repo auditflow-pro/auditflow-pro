@@ -1,102 +1,187 @@
-/* AuditFlow Pro v3.2 */
-
-*,
-*::before,
-*::after { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f4f6f8;
-  color: #1b1f24;
+* {
+box-sizing: border-box;
 }
 
-.app-header { background: #162235; color: #ffffff; }
+body {
 
-.header-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 22px 20px 14px;
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+
+background:#f4f6f9;
+color:#1a1f2b;
+
 }
 
-.app-header h1 { margin: 0; font-size: 20px; font-weight: 600; }
-.app-header p { margin: 4px 0 0; font-size: 13px; opacity: 0.85; }
+.header {
 
-.gold-band { height: 3px; background: linear-gradient(to right, #b89b5e, #d4b26a); }
+background:#1a2333;
+color:white;
 
-.instrument-frame {
-  max-width: 900px;
-  margin: 40px auto 60px;
-  padding: 0 20px;
 }
 
-.panel {
-  background: #ffffff;
-  border: 1px solid #d8dee4;
-  padding: 30px;
+.header-inner{
+
+max-width:900px;
+margin:auto;
+padding:22px 20px 14px;
+
 }
 
-h2 { margin: 0 0 20px; font-size: 18px; }
+.header h1{
 
-.field { margin-bottom: 18px; }
+margin:0;
+font-size:20px;
+font-weight:600;
 
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
 }
 
-input, select {
-  width: 100%;
-  height: 42px;
-  padding: 0 12px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  font-size: 14px;
-  border-radius: 0;
+.header p{
+
+margin:4px 0 0;
+font-size:13px;
+opacity:.85;
+
 }
 
-.actions { margin-top: 22px; }
+.gold-band{
 
-button {
-  width: 100%;
-  height: 44px;
-  border: none;
-  background: #162235;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
+height:3px;
+background:linear-gradient(to right,#b89b5e,#d4b26a);
+
 }
 
-button.secondary { background: #6b7280; }
-button.danger { background: #b91c1c; }
+.container{
 
-.section-title {
-  margin-top: 28px;
-  margin-bottom: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 4px;
+max-width:900px;
+margin:40px auto;
+padding:0 20px;
+
 }
 
-.app-footer {
-  border-top: 1px solid #d8dee4;
-  background: #ffffff;
+.panel{
+
+background:white;
+border:1px solid #d8dee4;
+padding:26px;
+
 }
 
-.footer-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #6b7280;
+.section{
+
+margin-top:20px;
+
 }
 
-.meta-block {
-  margin-bottom: 14px;
-  font-size: 14px;
+label{
+
+display:block;
+margin-bottom:6px;
+font-size:13px;
+font-weight:600;
+
+}
+
+input,select{
+
+width:100%;
+height:42px;
+padding:0 12px;
+border:1px solid #cbd5e1;
+font-size:14px;
+
+}
+
+button{
+
+width:100%;
+height:44px;
+margin-top:16px;
+
+background:#1a2333;
+color:white;
+
+border:none;
+
+font-weight:600;
+cursor:pointer;
+
+}
+
+.secondary{
+
+background:#6b7280;
+
+}
+
+.domain-title{
+
+margin-top:16px;
+font-size:16px;
+font-weight:600;
+
+}
+
+.question{
+
+margin-top:14px;
+
+}
+
+.answers{
+
+display:flex;
+gap:8px;
+margin-top:6px;
+
+}
+
+.answer{
+
+flex:1;
+height:40px;
+
+background:#e5e7eb;
+border:none;
+
+}
+
+.answer.yes{
+
+background:#2e7d32;
+color:white;
+
+}
+
+.answer.no{
+
+background:#b91c1c;
+color:white;
+
+}
+
+.answer.na{
+
+background:#9ca3af;
+color:white;
+
+}
+
+.result-block{
+
+margin-top:16px;
+
+}
+
+.footer{
+
+max-width:900px;
+margin:auto;
+padding:16px 20px;
+
+display:flex;
+justify-content:space-between;
+
+font-size:12px;
+color:#6b7280;
+
 }
