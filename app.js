@@ -1,57 +1,62 @@
+const version="11.0"
+
 document.addEventListener("DOMContentLoaded",()=>{
 
-const startAudit=document.getElementById("startAudit");
+const start=document.getElementById("startAudit")
 
-if(startAudit){
+if(start){
+start.onclick=()=>{
 
-startAudit.onclick=()=>{
-
-window.location="assessment.html";
-
-};
-
+const auditData={
+consultant:document.getElementById("consultant").value,
+organisation:document.getElementById("organisation").value,
+client:document.getElementById("clientSite").value,
+title:document.getElementById("auditTitle").value,
+date:document.getElementById("assessmentDate").value
 }
 
-const determine=document.getElementById("determineExposure");
+localStorage.setItem("auditData",JSON.stringify(auditData))
+
+window.location="assessment.html"
+
+}
+}
+
+const determine=document.getElementById("determineExposure")
 
 if(determine){
 
 determine.onclick=()=>{
 
-localStorage.setItem("classification","Stable");
+localStorage.setItem("classification","Stable")
+localStorage.setItem("domain","Operational Controls")
+localStorage.setItem("ratio","0.93")
 
-localStorage.setItem("domain","Operational Controls");
-
-localStorage.setItem("ratio","0.93");
-
-window.location="determination.html";
-
-};
+window.location="determination.html"
 
 }
 
-const classification=document.getElementById("classification");
+}
+
+const classification=document.getElementById("classification")
 
 if(classification){
 
-classification.innerText=localStorage.getItem("classification");
+document.getElementById("classification").innerText=
+localStorage.getItem("classification")
 
-document.getElementById("domain").innerText=localStorage.getItem("domain");
+document.getElementById("domain").innerText=
+localStorage.getItem("domain")
 
-document.getElementById("ratio").innerText=localStorage.getItem("ratio");
-
-}
-
-const reportButton=document.getElementById("reportButton");
-
-if(reportButton){
-
-reportButton.onclick=()=>{
-
-window.location="report.html";
-
-};
+document.getElementById("ratio").innerText=
+localStorage.getItem("ratio")
 
 }
 
-});
+const reportBtn=document.getElementById("viewReport")
+
+if(reportBtn){
+reportBtn.onclick=()=>window.location="report.html"
+}
+
+})
