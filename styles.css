@@ -1,153 +1,135 @@
-body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+body {
+
 margin:0;
-background:#f2f3f5;
+font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;
+background:#f4f6f8;
 color:#111;
+
 }
 
-/* HEADER */
+.app-header{
 
-.header{
-background:#0c1628;
+background:#0b1f33;
 color:white;
-padding:24px;
+padding:40px 20px;
+text-align:center;
+
 }
 
-.header-row{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
+.header-inner h1{
+
+margin:0;
+font-size:32px;
+
 }
 
-.header-title{
-font-size:28px;
-font-weight:700;
+.subtitle{
+
+margin-top:8px;
+font-size:16px;
+opacity:0.85;
+
 }
 
-.header-sub{
-font-size:15px;
-opacity:.9;
+.edition{
+
 margin-top:4px;
+font-size:13px;
+opacity:0.7;
+
 }
 
-.header-version{
-text-align:right;
-font-size:14px;
-opacity:.85;
+.header-divider{
+
+height:4px;
+background:#c6a45a;
+margin-top:20px;
+
 }
 
-.header-accent{
-height:3px;
-background:#c6a64b;
-margin-top:12px;
-}
+.workflow-nav{
 
-/* NAVIGATION */
-
-.nav{
-background:#1a2437;
 display:flex;
-gap:28px;
-padding:14px 24px;
-color:#bfc5cf;
-font-size:15px;
+justify-content:center;
+gap:20px;
+background:white;
+padding:14px 10px;
+border-bottom:1px solid #e0e0e0;
+
 }
 
-.nav span{
-cursor:pointer;
+.workflow-nav a{
+
+font-size:14px;
+color:#555;
+
 }
 
-.nav .active{
-color:white;
-border-bottom:2px solid #c6a64b;
-padding-bottom:6px;
-}
+.workflow-nav .active{
 
-/* PAGE CONTAINER */
+color:#000;
+font-weight:600;
+border-bottom:2px solid #c6a45a;
+
+}
 
 .container{
-max-width:720px;
-margin:40px auto;
-padding:0 20px;
-}
 
-/* CARD */
+max-width:700px;
+margin:40px auto;
+padding:0 16px;
+
+}
 
 .card{
+
 background:white;
-border-radius:6px;
-padding:32px;
-box-shadow:0 1px 2px rgba(0,0,0,0.08);
+border-radius:12px;
+padding:24px;
+margin-bottom:30px;
+box-shadow:0 3px 8px rgba(0,0,0,0.05);
+
 }
-
-/* TITLES */
-
-h1{
-margin-top:0;
-font-size:34px;
-}
-
-/* INPUTS */
 
 label{
+
 display:block;
-margin-top:20px;
+margin-top:16px;
 font-weight:600;
+
 }
 
 input{
+
 width:100%;
-padding:14px;
+padding:12px;
 margin-top:6px;
-border:2px solid #3b3f45;
-border-radius:4px;
+border-radius:8px;
+border:1px solid #ccc;
 font-size:16px;
 box-sizing:border-box;
-background:white;
-}
 
-/* BUTTON */
+}
 
 button{
+
+margin-top:20px;
 width:100%;
-padding:16px;
-margin-top:24px;
-border:none;
-border-radius:6px;
+padding:14px;
 font-size:16px;
+border:none;
+border-radius:8px;
+background:#0b1f33;
+color:white;
 cursor:pointer;
+
 }
 
-.primary{
-background:#0c1628;
-color:white;
-}
+.app-footer{
 
-.secondary{
-background:#8a8f99;
-color:white;
-}
+text-align:center;
+font-size:12px;
+color:#666;
+margin:40px 0;
 
-/* AUDIT ANSWER BUTTONS */
-
-.audit-buttons{
-display:flex;
-flex-direction:column;
-gap:10px;
-margin-top:10px;
-}
-
-.btn-yes{
-background:#2e7d32;
-color:white;
-}
-
-.btn-no{
-background:#c62828;
-color:white;
-}
-
-.btn-na{
-background:#7a7f88;
-color:white;
 }
