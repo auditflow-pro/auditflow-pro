@@ -70,9 +70,9 @@ if(a==="YES") score+=1
 
 let classification="Stable"
 
-if(score>15) classification="Critical"
-else if(score>10) classification="High"
-else if(score>5) classification="Elevated"
+if(score>=15) classification="Critical Exposure"
+else if(score>=10) classification="High Exposure"
+else if(score>=5) classification="Moderate Exposure"
 
 const result={
 classification,
@@ -112,9 +112,9 @@ const result=JSON.parse(localStorage.getItem("result")||"{}")
 report.innerHTML=`
 <p><strong>Consultant:</strong> ${audit.consultant}</p>
 <p><strong>Organisation:</strong> ${audit.organisation}</p>
-<p><strong>Client:</strong> ${audit.client}</p>
+<p><strong>Client / Site:</strong> ${audit.client}</p>
 <p><strong>Audit Title:</strong> ${audit.title}</p>
-<p><strong>Date:</strong> ${audit.date}</p>
+<p><strong>Assessment Date:</strong> ${audit.date}</p>
 
 <hr>
 
