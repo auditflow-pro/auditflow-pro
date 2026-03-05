@@ -1,28 +1,52 @@
-document.addEventListener("DOMContentLoaded", () => {
+const ledgerContainer = document.getElementById("ledger");
 
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("service-worker.js?v=7");
-}
+function loadLedger(){
+
+let ledger = JSON.parse(localStorage.getItem("auditLedger")) || [];
+
+ledgerContainer.innerHTML="";
+
+ledger.forEach(audit=>{
+
+let item=document.createElement("div");
+
+item.className="ledger-item";
+
+item.innerHTML=`
+
+<strong>${audit.title}</strong><br>
+${audit.client}<br>
+${audit.date}
+
+`;
+
+ledgerContainer.appendChild(item);
 
 });
 
-function startAudit() {
+}
 
-const audit = {
-consultant: document.getElementById("consultant").value,
-organisation: document.getElementById("organisation").value,
-client: document.getElementById("client").value,
-title: document.getElementById("auditTitle").value,
-date: document.getElementById("assessmentDate").value,
-timestamp: Date.now()
+document.getElementById("beginAudit").addEventListener("click",()=>{
+
+let ledger = JSON.parse(localStorage.getItem("auditLedger")) || [];
+
+let audit = {
+
+consultant:document.getElementById("consultant").value,
+organisation:document.getElementById("organisation").value,
+client:document.getElementById("client").value,
+title:document.getElementById("title").value,
+date:document.getElementById("date").value,
+timestamp:new Date().toISOString()
+
 };
 
-localStorage.setItem("audit_active", JSON.stringify(audit));
+ledger.unshift(audit);
 
-window.location.href = "assessment.html";
+localStorage.setItem("auditLedger",JSON.stringify(ledger));
 
-}
+loadLedger();
 
-function viewRecords() {
-window.location.href = "report.html";
-}
+});
+
+loadLedger();
