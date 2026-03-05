@@ -1,57 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AuditFlow Pro</title>
 
-<link rel="manifest" href="manifest.json?v=7">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="manifest" href="manifest.json?v=7.0">
+<link rel="stylesheet" href="styles.css?v=7.0">
 
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b1f33">
 
 </head>
+
 
 <body>
 
 <header class="app-header">
+
+<div class="header-inner">
+
 <h1>AuditFlow Pro</h1>
-<p>Institutional Exposure Determination Instrument</p>
+
+<p class="subtitle">
+Structured Audit & Compliance Instrument
+</p>
+
+<p class="edition">
+Professional Edition · Global Model
+</p>
+
+</div>
+
+<div class="header-divider"></div>
+
 </header>
+
+
+<nav class="workflow-nav">
+
+<a class="active">Registration</a>
+<a>Audit</a>
+<a>Outcome</a>
+<a>Summary</a>
+<a>Report / Export</a>
+
+</nav>
+
 
 <main class="container">
 
-<form id="audit-registration">
+<section class="card">
+
+<h2>Audit Registration</h2>
 
 <label>Consultant</label>
-<input type="text" id="consultant">
+<input id="consultant" type="text" placeholder="Consultant name">
 
 <label>Organisation</label>
-<input type="text" id="organisation">
+<input id="organisation" type="text" placeholder="Organisation">
 
 <label>Client / Site</label>
-<input type="text" id="client">
+<input id="client" type="text" placeholder="Client or site name">
 
 <label>Audit Title</label>
-<input type="text" id="auditTitle">
+<input id="title" type="text" placeholder="Audit title">
 
 <label>Assessment Date</label>
-<input type="date" id="assessmentDate">
+<input id="date" type="date">
 
-<button type="button" onclick="startAudit()">
-Register Instrument
-</button>
+<button id="beginAudit">Begin Audit</button>
 
-</form>
+</section>
 
-<button onclick="viewRecords()" class="secondary">
-Audit Records
-</button>
+<section class="card">
+
+<h2>Audit Records</h2>
+
+<div id="ledger"></div>
+
+</section>
 
 </main>
 
-<script src="app.js?v=7"></script>
+
+<footer class="app-footer">
+
+<p>© AuditFlow Pro</p>
+<p>Structured Audit Instrument</p>
+
+</footer>
+
+
+<script src="app.js?v=7.0"></script>
+
+
+<script>
+
+if ('serviceWorker' in navigator) {
+
+window.addEventListener('load', () => {
+
+navigator.serviceWorker.register('service-worker.js?v=7.0');
+
+});
+
+}
+
+</script>
+
 
 </body>
+
 </html>
