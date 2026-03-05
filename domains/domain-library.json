@@ -1,1 +1,56 @@
-
+{
+  "version": "1.0",
+  "instrument": "AuditFlow Pro",
+  "domains": [
+    {
+      "id": "site-environment",
+      "file": "domains/core/site-environment.json",
+      "title": "Site & Environment"
+    },
+    {
+      "id": "life-safety",
+      "file": "domains/core/life-safety.json",
+      "title": "Life Safety"
+    },
+    {
+      "id": "fire-egress",
+      "file": "domains/core/fire-egress.json",
+      "title": "Fire & Egress"
+    },
+    {
+      "id": "structural-integrity",
+      "file": "domains/core/structural-integrity.json",
+      "title": "Structural Integrity"
+    },
+    {
+      "id": "electrical-mechanical",
+      "file": "domains/core/electrical-mechanical.json",
+      "title": "Electrical & Mechanical"
+    },
+    {
+      "id": "hazardous-substances",
+      "file": "domains/core/hazardous-substances.json",
+      "title": "Hazardous Substances"
+    },
+    {
+      "id": "operational-controls",
+      "file": "domains/core/operational-controls.json",
+      "title": "Operational Controls"
+    },
+    {
+      "id": "documentation-records",
+      "file": "domains/core/documentation-records.json",
+      "title": "Documentation & Records"
+    },
+    {
+      "id": "governance-oversight",
+      "file": "domains/core/governance-oversight.json",
+      "title": "Governance & Oversight"
+    },
+    {
+      "id": "training-competency",
+      "file": "domains/core/training-competency.json",
+      "title": "Training & Competency"
+    }
+  ]
+}
