@@ -2,96 +2,56 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>AuditFlow Pro</title>
 
-<link rel="stylesheet" href="styles.css?v=15.0">
-<link rel="manifest" href="manifest.json?v=15.0">
+<link rel="manifest" href="manifest.json?v=7">
+<link rel="stylesheet" href="styles.css?v=7">
+
 <meta name="theme-color" content="#0f172a">
 
 </head>
+
 <body>
 
-<header class="header">
-
-<div class="header-inner">
-
-<div class="brand">
-AuditFlow Pro
-<span>Exposure Determination Instrument</span>
-</div>
-
-<div class="version">
-Instrument Version v15.0
-</div>
-
-</div>
-
-<div class="gold-bar"></div>
-
+<header class="app-header">
+<h1>AuditFlow Pro</h1>
+<p>Institutional Exposure Determination Instrument</p>
 </header>
 
+<main class="container">
 
-<nav class="stage-bar">
+<form id="audit-registration">
 
-<span class="stage active">Registration</span>
-<span class="stage">Assessment</span>
-<span class="stage">Determination</span>
-<span class="stage">Executive Report</span>
-
-</nav>
-
-
-<main class="workspace">
-
-<section class="instrument-panel">
-
-<h1>Audit Registration</h1>
-
-<div class="form-grid">
-
-<div class="field">
 <label>Consultant</label>
-<input id="consultant" type="text">
-</div>
+<input type="text" id="consultant">
 
-<div class="field">
 <label>Organisation</label>
-<input id="organisation" type="text">
-</div>
+<input type="text" id="organisation">
 
-<div class="field">
 <label>Client / Site</label>
-<input id="clientSite" type="text">
-</div>
+<input type="text" id="client">
 
-<div class="field">
 <label>Audit Title</label>
-<input id="auditTitle" type="text">
-</div>
+<input type="text" id="auditTitle">
 
-<div class="field">
 <label>Assessment Date</label>
-<input id="assessmentDate" type="date">
-</div>
+<input type="date" id="assessmentDate">
 
-</div>
-
-<button id="startAudit" class="primary-button">
-Initiate Audit
+<button type="button" onclick="startAudit()">
+Register Instrument
 </button>
 
-</section>
+</form>
+
+<button onclick="viewRecords()" class="secondary">
+Audit Records
+</button>
 
 </main>
 
-<script src="app.js?v=15.0"></script>
-
-<script>
-if('serviceWorker' in navigator){
-navigator.serviceWorker.register('./service-worker.js?v=15.0')
-}
-</script>
+<script src="app.js?v=7"></script>
 
 </body>
 </html>
