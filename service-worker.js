@@ -1,40 +1,28 @@
-const CACHE_NAME="auditflow-v15.0"
+const CACHE_NAME = "auditflow-v7";
 
-const urls=[
-"./",
-"./index.html",
-"./assessment.html",
-"./determination.html",
-"./report.html",
-"./styles.css?v=15.0",
-"./app.js?v=15.0"
-]
+const urlsToCache = [
+"/",
+"/index.html",
+"/assessment.html",
+"/determination.html",
+"/report.html",
+"/styles.css",
+"/app.js",
+"/manifest.json"
+];
 
-self.addEventListener("install",e=>{
-self.skipWaiting()
-e.waitUntil(
-caches.open(CACHE_NAME).then(cache=>cache.addAll(urls))
-)
+self.addEventListener("install", event => {
+event.waitUntil(
+caches.open(CACHE_NAME).then(cache => {
+return cache.addAll(urlsToCache);
 })
+);
+});
 
-self.addEventListener("activate",e=>{
-e.waitUntil(
-caches.keys().then(keys=>{
-return Promise.all(
-keys.map(key=>{
-if(key!==CACHE_NAME){
-return caches.delete(key)
-}
+self.addEventListener("fetch", event => {
+event.respondWith(
+caches.match(event.request).then(response => {
+return response || fetch(event.request);
 })
-)
-})
-)
-})
-
-self.addEventListener("fetch",e=>{
-e.respondWith(
-fetch(e.request).catch(()=>{
-return caches.match(e.request)
-})
-)
-})
+);
+});
