@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
-const start=document.getElementById("startAudit")
+const startAudit=document.getElementById("startAudit")
 
-if(start){
+if(startAudit){
 
-start.onclick=()=>{
+startAudit.onclick=()=>{
 
-const audit={
+const auditData={
 consultant:document.getElementById("consultant").value,
 organisation:document.getElementById("organisation").value,
 client:document.getElementById("clientSite").value,
@@ -14,7 +14,7 @@ title:document.getElementById("auditTitle").value,
 date:document.getElementById("assessmentDate").value
 }
 
-localStorage.setItem("audit",JSON.stringify(audit))
+localStorage.setItem("auditData",JSON.stringify(auditData))
 localStorage.setItem("answers",JSON.stringify({}))
 
 window.location="assessment.html"
@@ -53,7 +53,7 @@ q.querySelector(".record").innerText="Recorded: "+answer
 
 }
 
-const determine=document.getElementById("determine")
+const determine=document.getElementById("determineExposure")
 
 if(determine){
 
@@ -64,8 +64,10 @@ const answers=JSON.parse(localStorage.getItem("answers")||"{}")
 let score=0
 
 Object.values(answers).forEach(a=>{
+
 if(a==="NO") score+=5
 if(a==="YES") score+=1
+
 })
 
 let classification="Stable"
@@ -74,10 +76,7 @@ if(score>=15) classification="Critical Exposure"
 else if(score>=10) classification="High Exposure"
 else if(score>=5) classification="Moderate Exposure"
 
-const result={
-classification,
-score
-}
+const result={classification,score}
 
 localStorage.setItem("result",JSON.stringify(result))
 
@@ -91,25 +90,33 @@ const classification=document.getElementById("classification")
 
 if(classification){
 
-const r=JSON.parse(localStorage.getItem("result")||"{}")
+const result=JSON.parse(localStorage.getItem("result")||"{}")
 
-classification.innerText=r.classification
-document.getElementById("score").innerText=r.score
+classification.innerText=result.classification
+document.getElementById("score").innerText=result.score
 
-const seal=document.getElementById("seal")
+const reportBtn=document.getElementById("generateReport")
 
-seal.onclick=()=>window.location="report.html"
+reportBtn.onclick=()=>window.location="report.html"
 
 }
 
-const report=document.getElementById("report")
+const reportContent=document.getElementById("reportContent")
 
-if(report){
+if(reportContent){
 
-const audit=JSON.parse(localStorage.getItem("audit")||"{}")
+const audit=JSON.parse(localStorage.getItem("auditData")||"{}")
 const result=JSON.parse(localStorage.getItem("result")||"{}")
 
-report.innerHTML=`
+const auditID="AFP-"+Date.now()
+
+reportContent.innerHTML=`
+
+<h2>Audit Reference</h2>
+<p>${auditID}</p>
+
+<h2>Audit Information</h2>
+
 <p><strong>Consultant:</strong> ${audit.consultant}</p>
 <p><strong>Organisation:</strong> ${audit.organisation}</p>
 <p><strong>Client / Site:</strong> ${audit.client}</p>
@@ -118,8 +125,11 @@ report.innerHTML=`
 
 <hr>
 
-<h2>Exposure Classification: ${result.classification}</h2>
-<p>Total Score: ${result.score}</p>
+<h2>Exposure Classification</h2>
+
+<p><strong>Result:</strong> ${result.classification}</p>
+<p><strong>Risk Score:</strong> ${result.score}</p>
+
 `
 
 }
