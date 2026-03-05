@@ -1,4 +1,4 @@
-const CACHE_NAME="auditflow-v13.0"
+const CACHE_NAME="auditflow-v15.0"
 
 const urls=[
 "./",
@@ -6,8 +6,8 @@ const urls=[
 "./assessment.html",
 "./determination.html",
 "./report.html",
-"./styles.css?v=13.0",
-"./app.js?v=13.0"
+"./styles.css?v=15.0",
+"./app.js?v=15.0"
 ]
 
 self.addEventListener("install",e=>{
