@@ -4,43 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Determination</title>
-<link rel="stylesheet" href="styles.css?v=13.0">
-</head>
 
+<link rel="stylesheet" href="styles.css?v=15.0">
+
+</head>
 <body>
 
 <header class="header">
+
 <div class="header-inner">
+
 <div class="brand">
 AuditFlow Pro
 <span>Exposure Determination Instrument</span>
 </div>
-<div class="version">v13.0</div>
+
+<div class="version">
+Instrument Version v15.0
 </div>
-<div class="gold"></div>
+
+</div>
+
+<div class="gold-bar"></div>
+
 </header>
 
-<div class="stage-bar">
+
+<nav class="stage-bar">
+
 <span class="stage">Registration</span>
 <span class="stage">Assessment</span>
 <span class="stage active">Determination</span>
-<span class="stage">Report</span>
-</div>
+<span class="stage">Executive Report</span>
+
+</nav>
+
 
 <main class="workspace">
-<div class="panel">
+
+<section class="instrument-panel">
 
 <h1>Exposure Determination</h1>
 
-<p><strong>Classification:</strong> <span id="classification"></span></p>
-<p><strong>Total Score:</strong> <span id="score"></span></p>
+<p><strong>Exposure Classification:</strong> <span id="classification"></span></p>
 
-<button id="seal" class="primary">View Report</button>
+<p><strong>Aggregate Risk Score:</strong> <span id="score"></span></p>
 
-</div>
+<button id="generateReport" class="primary-button">
+Generate Executive Report
+</button>
+
+</section>
+
 </main>
 
-<script src="app.js?v=13.0"></script>
+<script src="app.js?v=15.0"></script>
 
 </body>
 </html>
