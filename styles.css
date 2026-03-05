@@ -1,138 +1,41 @@
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-background:#eef1f4;
-color:#111827;
+body {
+font-family: system-ui, -apple-system, sans-serif;
+margin: 0;
+background: #f5f6fa;
+color: #111;
 }
 
-.header{
-background:#0f172a;
-color:white;
+.app-header {
+background: #0f172a;
+color: white;
+padding: 20px;
+text-align: center;
 }
 
-.header-inner{
-max-width:900px;
-margin:auto;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
+.container {
+padding: 20px;
+max-width: 700px;
+margin: auto;
 }
 
-.brand{
-font-size:20px;
-font-weight:600;
+input {
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 4px;
 }
 
-.brand span{
-display:block;
-font-size:12px;
-opacity:.7;
+button {
+width: 100%;
+padding: 12px;
+background: #0f172a;
+color: white;
+border: none;
+border-radius: 4px;
+margin-top: 10px;
 }
 
-.version{
-font-size:14px;
-opacity:.8;
-}
-
-.gold-bar{
-height:3px;
-background:#c7a64a;
-}
-
-.stage-bar{
-background:#1f2937;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:10px;
-}
-
-.stage{
-color:#9ca3af;
-font-size:14px;
-}
-
-.stage.active{
-color:white;
-border-bottom:2px solid #c7a64a;
-}
-
-.workspace{
-display:flex;
-justify-content:center;
-padding:30px;
-}
-
-.instrument-panel{
-background:white;
-max-width:650px;
-width:100%;
-padding:30px;
-border-radius:10px;
-border:1px solid #d1d5db;
-}
-
-.form-grid{
-display:grid;
-grid-template-columns:1fr;
-gap:14px;
-}
-
-.field{
-display:flex;
-flex-direction:column;
-}
-
-label{
-font-weight:600;
-margin-bottom:4px;
-}
-
-input{
-padding:12px;
-border:1px solid #d1d5db;
-border-radius:6px;
-font-size:16px;
-width:100%;
-box-sizing:border-box;
-}
-
-.primary-button{
-margin-top:22px;
-background:#0f172a;
-color:white;
-border:none;
-padding:14px;
-border-radius:8px;
-width:100%;
-font-size:16px;
-cursor:pointer;
-}
-
-.question{
-margin-top:20px;
-}
-
-.button-row{
-display:flex;
-gap:10px;
-margin-top:8px;
-}
-
-button{
-padding:10px 14px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.yes{background:#2e7d32;color:white;}
-.no{background:#c62828;color:white;}
-.na{background:#6b7280;color:white;}
-
-.record{
-font-size:13px;
-margin-top:6px;
-color:#555;
+button.secondary {
+background: #6b7280;
 }
